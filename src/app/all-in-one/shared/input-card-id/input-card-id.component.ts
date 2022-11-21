@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-input-card-id',
   templateUrl: './input-card-id.component.html',
-  styleUrls: ['./input-card-id.component.css'],
+  styleUrls: ['../../all-in-one.component.css'],
 })
 export class InputCardIdComponent implements OnInit {
   ssid: string;

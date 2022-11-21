@@ -1,0 +1,29 @@
+input[type="text"] {
+  width: 100%;
+  height: 80px;
+  /* opacity: 0.2; */
+  color: white;
+  background-color: #1969ae;
+  outline: none;
+  border: 2px solid #4c8abc;
+  border-radius: 5px;
+  font-size: 2.5rem;
+  text-align: center;
+  font-weight: 100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.keyboard {
+  background-color: #1969ae;
+  border: 2px solid #4c8abc;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.keyboard-item {
+  background-color: #3079ba;
+  border: 2px solid #538ec1;
+  margin: 3px;
+  border-radius: 3px;
+}

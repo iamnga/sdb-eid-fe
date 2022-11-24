@@ -1,57 +1,24 @@
-.show {
-  display: block;
+.o-0 {
+  opacity: 0;
 }
 
-.hide {
-  display: none;
-}
-
-video,
-canvas {
+.countdown {
+  width: 640px;
+  height: 480px;
+  border-radius: 15px;
   margin: 0px auto;
-  border-radius: 20px;
-  border: 5px solid #92b4e4;
+  display: table;
+  border: 2px solid rgb(147, 171, 245);
 }
 
-.snap-container {
-  margin-top: 16px;
-  margin-bottom: 16px;
+.countdown-text {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 7rem;
+  color: rgb(147, 171, 245);
 }
 
-.video-container {
-  padding-top: 5rem;
-}
-
-.btn {
-  width: 265px;
-  height: 80px;
-  font-size: 22px;
-  border-radius: 10px;
-  outline: none;
-}
-
-.btn-capture {
-  margin-right: 27px;
-  border: 2px solid #449ce4;
-  background: none;
-  color: white;
-}
-
-.btn-next {
-  background-color: #449ce4;
-  color: white;
-}
-
-.btn-exit {
-  color: white;
-  font-size: 22px;
-  font-weight: 100;
-  position: absolute;
-  bottom: 0;
-  border: none;
-  outline: none;
-  background-color: #2a71af;
-  width: 200px;
-  height: 60px;
-  border-top-right-radius: 30px;
+video {
+  border: 2px solid rgb(147, 171, 245);
+  border-radius: 15px;
 }

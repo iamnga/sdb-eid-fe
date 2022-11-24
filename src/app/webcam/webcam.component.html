@@ -1,0 +1,7 @@
+<div class="video-container">
+  <video #video [width]="WIDTH" [height]="HEIGHT" autoplay muted></video>
+  <div #canvas></div>
+  <div *ngIf="face != ''">
+    <img [src]="face" alt="" class="img img-fluid" />
+  </div>
+</div>

@@ -1,4 +1,79 @@
-<p>dash-board works!</p>
-<button class="btn btn-primary" routerLink="/aio/on-boarding/input-card-id">
-  On Boarding
-</button>
+<section class="dash-board">
+  <div class="container-fluid bg-white header">
+    <div class="p-3">
+      <div class="w-50 d-inline-block">
+        <div class="logo">
+          <img
+            src="../../../assets/all-in-one/shared/logo.png"
+            alt=""
+            class="img img-fluid w-25"
+          />
+        </div>
+      </div>
+      <div class="w-50 text-right d-inline-block contact-header">Liên hệ</div>
+    </div>
+  </div>
+  <div class="slick-wrapper">
+    <ngx-slick-carousel
+      class="carousel"
+      #slickModal="slick-carousel"
+      [config]="slideConfig"
+    >
+      <div ngxSlickItem *ngFor="let slide of slides" class="slide">
+        <img src="{{ slide.img }}" alt="" width="100%" />
+      </div>
+    </ngx-slick-carousel>
+  </div>
+  <div class="container position-relative">
+    <div class="row bg-white text-center p-4 tab-bar">
+      <div class="col-3" routerLink="/aio/on-boarding">
+        <div><span class="material-icons md-48"> person_add </span></div>
+        <div>Đăng ký tài khoản</div>
+      </div>
+      <div class="col-3">
+        <div><span class="material-icons md-48"> contact_mail </span></div>
+        <div>Cập nhật CCCD</div>
+      </div>
+      <div class="col-3">
+        <div><span class="material-icons md-48"> category </span></div>
+        <div>Sản phẩm dịch vụ</div>
+      </div>
+      <div class="col-3">
+        <div><span class="material-icons md-48"> sports_esports </span></div>
+        <div>Games lấy quà</div>
+      </div>
+    </div>
+  </div>
+  <div class="container mt-5 footer">
+    <img
+      src="../../../assets/all-in-one/dash-board/bo3-app.png"
+      class="img img-fluid"
+      alt=""
+    />
+  </div>
+</section>
+<!-- <section>
+  <div class="container">
+    <div class="row pt-5">
+      <div class="col-2">
+        <button class="btn btn-warning w-100" routerLink="/aio/on-boarding">
+          Mở tài khoản
+        </button>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-warning w-100" routerLink="/aio/update-card-id">
+          Cập nhật CCCD
+        </button>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-warning w-100">Sản phẩm dịch vụ</button>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-warning w-100">Tiện ích</button>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-warning w-100">Game lấy quà</button>
+      </div>
+    </div>
+  </div>
+</section> -->

@@ -1,4 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import * as faceapi from 'face-api.js';
 
 @Component({
   selector: 'app-capture-face',
@@ -6,70 +8,116 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['../../all-in-one.component.css', './capture-face.component.css'],
 })
 export class CaptureFaceComponent implements OnInit {
-  faceHash: any;
-  WIDTH = 557;
-  HEIGHT = 420;
-  typeCheck = 'face';
+  isUnderstood = false;
+  WIDTH = 640;
+  HEIGHT = 0;
+  face = '';
+  @ViewChild('video', { static: true }) public video: ElementRef;
+  @ViewChild('canvas', { static: true }) public canvasRef: ElementRef;
+  constructor(private elRef: ElementRef, private router: Router) {}
+  stream: any;
+  detection: any;
+  resizedDetections: any;
+  canvas: any;
+  canvasEl: any;
+  displaySize: any;
+  videoInput: any;
+  countDownTime = 3; //second
 
-  @ViewChild('video', { static: false })
-  public video: ElementRef;
-
-  @ViewChild('canvas', { static: false })
-  public canvas: ElementRef;
-
-  captures = '';
-  error: any;
-  isCaptured: boolean;
-
-  constructor() {}
-
-  ngOnInit(): void {
-    this.setupDevices();
+  async ngOnInit() {
+    localStorage.setItem('face-captured', '');
   }
 
-  async setupDevices() {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
+  startVideo() {
+    this.videoInput = this.video.nativeElement;
+
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: false })
+      .then((stream) => {
+        this.video.nativeElement.srcObject = stream;
+      })
+      .catch((err) => console.error(err));
+
+    this.detect_Faces();
+  }
+
+  async detect_Faces() {
+    this.elRef.nativeElement
+      .querySelector('video')
+      .addEventListener('play', async () => {
+        this.canvas = await faceapi.createCanvasFromMedia(this.videoInput);
+        this.canvasEl = this.canvasRef.nativeElement;
+        this.canvasEl.appendChild(this.canvas);
+        this.canvas.setAttribute('id', 'canvass');
+        this.canvas.setAttribute(
+          'style',
+          `position: fixed;
+          top: 0;
+          left: 0;`
+        );
+        this.displaySize = {
+          width: this.WIDTH,
+          height: this.HEIGHT,
+        };
+        faceapi.matchDimensions(this.canvas, this.displaySize);
+
+        var x = setInterval(async () => {
+          this.detection = await faceapi.detectAllFaces(
+            this.videoInput,
+            new faceapi.TinyFaceDetectorOptions({
+              scoreThreshold: 0.8,
+            })
+          );
+
+          const canvases = await faceapi.extractFaces(
+            this.videoInput,
+            this.detection
+          );
+
+          if (
+            this.detection.length > 0 &&
+            this.face == '' &&
+            canvases.length > 0
+          ) {
+            this.face = canvases[0].toDataURL('image/png');
+
+            localStorage.setItem('face-captured', this.face);
+
+            console.log('face-captured', this.face);
+
+            this.HEIGHT = 0;
+
+            clearInterval(x);
+
+            this.router.navigate(['/aio/on-boarding/input-finger']);
+          }
+        }, 100);
+      });
+  }
+
+  countdown() {
+    this.HEIGHT = 0;
+    var y = setInterval(async () => {
+      this.countDownTime--;
+      if (this.countDownTime == 0) {
+        this.HEIGHT = 480; // Show video box
+        await Promise.all([
+          faceapi.nets.tinyFaceDetector.loadFromUri('../../assets/models'),
+        ]).then(() => {
+          this.startVideo();
         });
-        if (stream) {
-          this.video.nativeElement.srcObject = stream;
-          this.video.nativeElement.play();
-          this.error = null;
-        } else {
-          this.error = 'You have no output video device';
-        }
-      } catch (e) {
-        this.error = e;
+        clearInterval(y);
       }
-    }
+    }, 1000);
   }
 
-  capture() {
-    if (this.isCaptured) {
-      this.isCaptured = false;
-    } else {
-      this.drawImageToCanvas(this.video.nativeElement);
-      this.captures = this.canvas.nativeElement.toDataURL('image/png');
-      this.isCaptured = true;
-    }
+  understood() {
+    this.isUnderstood = true;
+    this.countdown();
   }
 
-  removeCurrent() {
-    this.isCaptured = false;
-  }
-
-  setPhoto(idx: number) {
-    this.isCaptured = true;
-    var image = new Image();
-    image.src = this.captures[idx];
-    this.drawImageToCanvas(image);
-  }
-
-  drawImageToCanvas(image: any) {
-    this.canvas.nativeElement
-      .getContext('2d')
-      .drawImage(image, 0, 0, this.WIDTH, this.HEIGHT);
-  }
+  // doStore() {
+  //   localStorage.setItem('customer-face', this.face);
+  //   this._router.navigate(['/aio/on-boarding/input-finger']);
+  // }
 }

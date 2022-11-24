@@ -1,135 +1,14 @@
-<!--Step 1-->
-<section *ngIf="step == 1">
-  <h2>Đặt thẻ CCCD gắn chip vào thiết bị</h2>
-</section>
-<!--End Step 1-->
-
-<!--Step 2-->
-<section *ngIf="step == 2">
-  <h2>Chọn hình thức nhận dạng</h2>
-  <div>
-    <div class="form-check form-check-inline">
-      <input
-        class="form-check-input"
-        type="radio"
-        name="inlineRadioOptions"
-        id="inlineRadio1"
-        value="face"
-        checked="true"
-        (change)="onItemChange($event)"
-      />
-      <label class="form-check-label" for="inlineRadio1">Khuôn mặt</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input
-        class="form-check-input"
-        type="radio"
-        name="inlineRadioOptions"
-        id="inlineRadio2"
-        value="fingerprint"
-        (change)="onItemChange($event)"
-      />
-      <label class="form-check-label" for="inlineRadio2">Vân tay</label>
+<section class="">
+  <div class="container">
+    <div class="row pt-5">
+      <div class="col-2">
+        <button class="btn btn-warning w-100" routerLink="/aio">
+          All in one
+        </button>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-warning w-100">Physical</button>
+      </div>
     </div>
   </div>
 </section>
-<!--End Step 2-->
-
-<!--Step 3-->
-<section *ngIf="step == 3">
-  <!-- Face -->
-  <ng-container *ngIf="typeCheck == 'face'">
-    <h2>Chụp ảnh khuôn mặt</h2>
-    <div *ngIf="faceHash">
-      <img [src]="faceHash" class="img img-fluid w-25 mt-4" />
-    </div>
-
-    <div class="video-container" *ngIf="!error">
-      <video
-        [class.show]="!isCaptured"
-        [class.hide]="isCaptured"
-        #video
-        id="video"
-        [width]="WIDTH"
-        [height]="HEIGHT"
-        autoplay
-      ></video>
-      <canvas
-        [class.show]="isCaptured"
-        [class.hide]="!isCaptured"
-        #canvas
-        id="canvas"
-        [width]="WIDTH"
-        [height]="HEIGHT"
-      ></canvas>
-    </div>
-
-    <div class="snap-container">
-      <button class="btn btn-warning" *ngIf="!isCaptured" (click)="capture()">
-        Chụp ảnh
-      </button>
-      <button
-        class="btn btn-warning mr-3"
-        *ngIf="isCaptured"
-        (click)="removeCurrent()"
-      >
-        Chụp lại
-      </button>
-      <button
-        class="btn btn-primary"
-        *ngIf="isCaptured"
-        (click)="callMkCaptureFace()"
-      >
-        Xác nhận
-      </button>
-
-      <div *ngIf="error" class="text-danger mt-4">Error!</div>
-    </div>
-  </ng-container>
-
-  <!-- Finger -->
-
-  <ng-container *ngIf="typeCheck == 'fingerprint'">
-    <div *ngIf="!fpResponse.verifyResponse">
-      <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-    </div>
-    <div *ngIf="fpResponse.verifyResponse">
-      <img [src]="fpResponse.image" alt="" class="img img-fluid" />
-      <div *ngIf="fpResponse.verifyResponse.success">
-        {{ fpResponse.icaoResponse | json }}
-      </div>
-      <div *ngIf="!fpResponse.verifyResponse.success">
-        <div class="text-danger">
-          {{ fpResponse.verifyResponse.message }}
-        </div>
-      </div>
-    </div>
-
-    <button class="btn btn-warning mt-4" (click)="recallMkFingerPrint()">
-      Làm lại
-    </button>
-  </ng-container>
-</section>
-<!--End Step 3-->
-
-<!--Step 4-->
-<section *ngIf="step == 4">
-  <h2>Chụp ảnh 2 mặt CCCD</h2>
-  <!--<button class="btn-primary btn" (click)="resetQR">Tạo mới</button>-->
-  <div *ngIf="!faceHash">
-    <qrcode
-      [qrdata]="qrValue"
-      [width]="256"
-      [errorCorrectionLevel]="'M'"
-    ></qrcode>
-  </div>
-</section>
-<!--End Step 4-->
-
-<!--Next-->
-<section class="mt-4" *ngIf="!(step == 3 && typeCheck == 'face')">
-  <button class="btn-primary btn" (click)="next()">Tiếp tục</button>
-</section>
-<!--End Next-->

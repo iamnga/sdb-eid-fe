@@ -12,24 +12,23 @@ import { OnBoardingComponent } from './all-in-one/on-boarding/on-boarding.compon
 import { AllInOneComponent } from './all-in-one/all-in-one.component';
 import { InputFingerComponent } from './all-in-one/shared/input-finger/input-finger.component';
 import { CaptureFaceComponent } from './all-in-one/shared/capture-face/capture-face.component';
-import { InputCardIdComponent } from './all-in-one/shared/input-card-id/input-card-id.component';
 import { DashBoardComponent } from './all-in-one/dash-board/dash-board.component';
-import { CollectCardIdComponent } from './all-in-one/on-boarding/collect-card-id/collect-card-id.component';
 import { InputMobileNumberComponent } from './all-in-one/shared/input-mobile-number/input-mobile-number.component';
 import { VerifyCustomerInfoComponent } from './all-in-one/shared/verify-customer-info/verify-customer-info.component';
 import { FillInfoComponent } from './all-in-one/on-boarding/fill-info/fill-info.component';
 import { AccountAndAlertComponent } from './all-in-one/on-boarding/account-and-alert/account-and-alert.component';
 import { VerifyOtpComponent } from './all-in-one/shared/verify-otp/verify-otp.component';
 import { EndComponent } from './all-in-one/on-boarding/end/end.component';
-import { FeedBackComponent } from './all-in-one/shared/feed-back/feed-back.component';
-
+import { CollectCardIdComponent } from './all-in-one/shared/collect-card-id/collect-card-id.component';
+import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-id.component';
+import { WebcamComponent } from './webcam/webcam.component';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     CollectComponent,
     OnBoardingComponent,
-    InputCardIdComponent,
     CaptureFaceComponent,
     InputFingerComponent,
     AllInOneComponent,
@@ -41,9 +40,16 @@ import { FeedBackComponent } from './all-in-one/shared/feed-back/feed-back.compo
     AccountAndAlertComponent,
     VerifyOtpComponent,
     EndComponent,
-    FeedBackComponent,
+    UpdateCardIdComponent,
+    WebcamComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, QRCodeModule, HttpClientModule],
+  imports: [
+    SlickCarouselModule,
+    BrowserModule,
+    AppRoutingModule,
+    QRCodeModule,
+    HttpClientModule,
+  ],
   providers: [WebsocketService],
   bootstrap: [AppComponent],
 })

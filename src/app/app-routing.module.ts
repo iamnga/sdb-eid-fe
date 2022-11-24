@@ -3,20 +3,20 @@ import { RouterModule, Routes } from '@angular/router';
 import { AllInOneComponent } from './all-in-one/all-in-one.component';
 import { DashBoardComponent } from './all-in-one/dash-board/dash-board.component';
 import { AccountAndAlertComponent } from './all-in-one/on-boarding/account-and-alert/account-and-alert.component';
-import { CollectCardIdComponent } from './all-in-one/on-boarding/collect-card-id/collect-card-id.component';
 import { EndComponent } from './all-in-one/on-boarding/end/end.component';
 import { FillInfoComponent } from './all-in-one/on-boarding/fill-info/fill-info.component';
 
 import { OnBoardingComponent } from './all-in-one/on-boarding/on-boarding.component';
 import { CaptureFaceComponent } from './all-in-one/shared/capture-face/capture-face.component';
-import { FeedBackComponent } from './all-in-one/shared/feed-back/feed-back.component';
-import { InputCardIdComponent } from './all-in-one/shared/input-card-id/input-card-id.component';
+import { CollectCardIdComponent } from './all-in-one/shared/collect-card-id/collect-card-id.component';
 import { InputFingerComponent } from './all-in-one/shared/input-finger/input-finger.component';
 import { InputMobileNumberComponent } from './all-in-one/shared/input-mobile-number/input-mobile-number.component';
 import { VerifyCustomerInfoComponent } from './all-in-one/shared/verify-customer-info/verify-customer-info.component';
 import { VerifyOtpComponent } from './all-in-one/shared/verify-otp/verify-otp.component';
+import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-id.component';
 import { CollectComponent } from './collect/collect.component';
 import { HomeComponent } from './home/home.component';
+import { WebcamComponent } from './webcam/webcam.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -40,12 +40,8 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'input-card-id',
+            redirectTo: 'capture-face',
             pathMatch: 'full',
-          },
-          {
-            path: 'input-card-id',
-            component: InputCardIdComponent,
           },
           {
             path: 'capture-face',
@@ -83,14 +79,50 @@ const routes: Routes = [
             path: 'end',
             component: EndComponent,
           },
+        ],
+      },
+      {
+        path: 'update-card-id',
+        component: UpdateCardIdComponent,
+        children: [
           {
-            path: 'feed-back',
-            component: FeedBackComponent,
+            path: '',
+            redirectTo: 'capture-face',
+            pathMatch: 'full',
+          },
+          {
+            path: 'capture-face',
+            component: CaptureFaceComponent,
+          },
+          {
+            path: 'input-finger',
+            component: InputFingerComponent,
+          },
+          {
+            path: 'collect-card-id',
+            component: CollectCardIdComponent,
+          },
+          {
+            path: 'input-mobile-number',
+            component: InputMobileNumberComponent,
+          },
+          {
+            path: 'verify-customer-info',
+            component: VerifyCustomerInfoComponent,
+          },
+          {
+            path: 'verify-otp',
+            component: VerifyOtpComponent,
+          },
+          {
+            path: 'end',
+            component: EndComponent,
           },
         ],
       },
     ],
   },
+  { path: 'webcam', component: WebcamComponent },
 ];
 
 @NgModule({

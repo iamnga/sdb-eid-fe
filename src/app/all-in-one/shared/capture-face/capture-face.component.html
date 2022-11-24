@@ -1,61 +1,57 @@
-<!-- Step line -->
-<div class="pt-5">
-  <img
-    src="../../../../assets/all-in-one/on-boarding/step-line-collect-info.png"
-    alt=""
-    class="img img-fluid"
-  />
-</div>
-<!-- End Step line -->
-
-<!-- Handle -->
-<div class="capture-box">
-  <!-- Face -->
-  <div *ngIf="faceHash">
-    <img [src]="faceHash" class="img img-fluid w-25 mt-4" />
+<section>
+  <div class="container-fluid bg-white header">
+    <div class="p-3">
+      <div class="w-50 d-inline-block">
+        <div class="logo">
+          <img
+            src="../../../assets/all-in-one/shared/logo.png"
+            alt=""
+            class="img img-fluid w-25"
+          />
+        </div>
+      </div>
+      <div class="w-50 text-right d-inline-block contact-header">Liên hệ</div>
+    </div>
   </div>
-
-  <div class="video-container" *ngIf="!error">
+</section>
+<section *ngIf="!isUnderstood">
+  <div class="text-center pt-5">
+    <img
+      src="../../../../assets/all-in-one/on-boarding/tip-capture.png"
+      class="img img-fluid"
+      alt=""
+    />
+    <br />
+    <button class="btn btn-primary mt-5" (click)="understood()">
+      Tôi đã hiểu
+    </button>
+  </div>
+</section>
+<section *ngIf="isUnderstood && countDownTime > 0" class="py-5">
+  <div class="text-center">
+    <div class="countdown" *ngIf="countDownTime > 0">
+      <div class="countdown-text">
+        {{ countDownTime }}
+      </div>
+    </div>
+  </div>
+</section>
+<section [ngClass]="{ 'o-0': !isUnderstood || face != '' }" class="py-5">
+  <div class="video-container text-center">
     <video
-      [class.show]="!isCaptured"
-      [class.hide]="isCaptured"
+      [ngClass]="{ 'o-0': countDownTime > 0 }"
       #video
-      id="video"
       [width]="WIDTH"
       [height]="HEIGHT"
       autoplay
+      muted
     ></video>
-    <canvas
-      [class.show]="isCaptured"
-      [class.hide]="!isCaptured"
-      #canvas
-      id="canvas"
-      [width]="WIDTH - 10"
-      [height]="HEIGHT - 10"
-    ></canvas>
+    <div #canvas></div>
   </div>
+</section>
 
-  <div class="snap-container text-center pt-3">
-    <div>
-      <button class="btn btn-capture" (click)="capture()">
-        {{ isCaptured ? "Chụp lại" : "Chụp ảnh" }}
-      </button>
-      <!-- <button
-        class="btn btn-warning mr-3"
-        *ngIf="isCaptured"
-        (click)="removeCurrent()"
-      >
-        Chụp lại
-      </button> -->
-      <button class="btn btn-next" [disabled]="!isCaptured">Tiếp tục</button>
-
-      <div *ngIf="error" class="text-danger mt-4">Error!</div>
-    </div>
+<!-- <section class="py-5 text-center">
+  <div *ngIf="face != ''">
+    <img [src]="face" alt="" class="img img-fluid" />
   </div>
-</div>
-
-<button class="btn-exit">Thoát</button>
-
-<!-- <button routerLink="/aio/on-boarding/input-finger" class="btn btn-primary">
-  Xác nhận
-</button> -->
+</section> -->

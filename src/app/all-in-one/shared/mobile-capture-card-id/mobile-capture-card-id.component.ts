@@ -3,13 +3,16 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-mobile-capture-card-id',
   templateUrl: './mobile-capture-card-id.component.html',
-  styleUrls: ['./mobile-capture-card-id.component.css']
+  styleUrls: ['./mobile-capture-card-id.component.css'],
 })
 export class MobileCaptureCardIdComponent implements OnInit {
+  step = 2;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  next() {
+    this.step++;
   }
-
 }

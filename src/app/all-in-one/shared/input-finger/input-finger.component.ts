@@ -21,8 +21,8 @@ export class InputFingerComponent implements OnInit {
       this.showCheckGif = true;
       setTimeout(() => {
         this.router.navigate(['/aio/shared/collect-card-id']);
-      }, 2000);
-    }, 3000);
+      }, 3000);
+    }, 5000);
   }
 
   callMkFingerPrint() {

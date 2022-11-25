@@ -18,6 +18,7 @@ import { VerifyOtpComponent } from './all-in-one/shared/verify-otp/verify-otp.co
 import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-id.component';
 import { CollectComponent } from './collect/collect.component';
 import { HomeComponent } from './home/home.component';
+import { MkComponent } from './mk/mk.component';
 import { WebcamComponent } from './webcam/webcam.component';
 
 const routes: Routes = [
@@ -114,6 +115,10 @@ const routes: Routes = [
     ],
   },
   { path: 'webcam', component: WebcamComponent },
+  {
+    path: 'mk',
+    component: MkComponent,
+  },
 ];
 
 @NgModule({

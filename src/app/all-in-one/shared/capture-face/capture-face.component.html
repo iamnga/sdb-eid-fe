@@ -12,28 +12,28 @@
     </button>
   </div>
 </section>
-<section *ngIf="isUnderstood && countDownTime > 0" class="py-5">
-  <div class="text-center">
+<section class="py-5">
+  <div class="text-center capture-box">
+    <div class="video-container text-center">
+      <video #video [width]="WIDTH" [height]="HEIGHT" autoplay muted></video>
+      <div #canvas></div>
+    </div>
     <div class="countdown" *ngIf="countDownTime > 0">
       <div class="countdown-text">
-        {{ countDownTime }}
+        <ng-container *ngIf="isLoadingCountDown">
+          <i class="fa fa-spinner fa-spin"></i>
+        </ng-container>
+        <ng-container *ngIf="!isLoadingCountDown">
+          {{ countDownTime }}
+        </ng-container>
       </div>
     </div>
   </div>
 </section>
-<section [ngClass]="{ 'o-0': !isUnderstood || face != '' }" class="py-5">
-  <div class="video-container text-center">
-    <video
-      [ngClass]="{ 'o-0': countDownTime > 0 }"
-      #video
-      [width]="WIDTH"
-      [height]="HEIGHT"
-      autoplay
-      muted
-    ></video>
-    <div #canvas></div>
-  </div>
-</section>
+<section
+  [ngClass]="{ 'o-0': !isUnderstood || face != '' }"
+  class="py-5"
+></section>
 
 <!-- <section class="py-5 text-center">
   <div *ngIf="face != ''">

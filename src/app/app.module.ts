@@ -26,6 +26,8 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { HeaderComponent } from './all-in-one/shared/header/header.component';
 import { MobileCaptureCardIdComponent } from './all-in-one/shared/mobile-capture-card-id/mobile-capture-card-id.component';
 import { SharedComponent } from './all-in-one/shared/shared.component';
+import { MkComponent } from './mk/mk.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,6 +50,7 @@ import { SharedComponent } from './all-in-one/shared/shared.component';
     HeaderComponent,
     MobileCaptureCardIdComponent,
     SharedComponent,
+    MkComponent,
   ],
   imports: [
     SlickCarouselModule,
@@ -55,6 +58,7 @@ import { SharedComponent } from './all-in-one/shared/shared.component';
     AppRoutingModule,
     QRCodeModule,
     HttpClientModule,
+    FormsModule,
   ],
   providers: [WebsocketService],
   bootstrap: [AppComponent],

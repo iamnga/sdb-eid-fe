@@ -1,26 +1,28 @@
 <app-aio-header></app-aio-header>
 <section>
   <div class="container text-center pt-5">
-    <div *ngIf="showFingerGif">
-      <h1>Đọc CCCD và quét vân tay</h1>
+    <div>
+      <h1>
+        {{ showFingerGif ? "Đọc CCCD và quét vân tay" : "Xác thực thành công" }}
+      </h1>
     </div>
     <ng-container *ngIf="showFingerGif">
       <div>
         <h5>Quý khách vui lòng đặt CCCD và vân tay lên thiết bị scan</h5>
       </div>
       <div class="row pt-5">
-        <div class="col-6">
+        <div class="col-6 text-right">
           <img
             src="../../../../assets/all-in-one/shared/input-card-id.png"
             alt=""
-            class="img img-fluid"
+            class="img img-fluid w-75"
           />
         </div>
-        <div class="col-6">
+        <div class="col-6 text-left">
           <img
             src="../../../../assets/all-in-one/shared/input-finger.png"
             alt=""
-            class="img img-fluid"
+            class="img img-fluid w-75"
           />
         </div>
       </div>

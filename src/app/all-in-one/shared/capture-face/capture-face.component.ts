@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import * as faceapi from 'face-api.js';
 
@@ -7,10 +13,10 @@ import * as faceapi from 'face-api.js';
   templateUrl: './capture-face.component.html',
   styleUrls: ['../../all-in-one.component.css', './capture-face.component.css'],
 })
-export class CaptureFaceComponent implements OnInit {
-  isUnderstood = false;
+export class CaptureFaceComponent implements OnInit, AfterViewInit {
+  isUnderstood = true;
   WIDTH = 640;
-  HEIGHT = 0;
+  HEIGHT = 480;
   face = '';
   @ViewChild('video', { static: true }) public video: ElementRef;
   @ViewChild('canvas', { static: true }) public canvasRef: ElementRef;
@@ -22,10 +28,21 @@ export class CaptureFaceComponent implements OnInit {
   canvasEl: any;
   displaySize: any;
   videoInput: any;
-  countDownTime = 3; //second
+  countDownTime = 4; //second
+  endCountDown = false;
+  isLoadingCountDown = true;
 
   async ngOnInit() {
     localStorage.setItem('face-captured', '');
+    await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri('../../assets/models'),
+    ]).then(() => {
+      this.startVideo();
+    });
+  }
+
+  ngAfterViewInit() {
+    // this.countdown();
   }
 
   startVideo() {
@@ -61,6 +78,8 @@ export class CaptureFaceComponent implements OnInit {
         };
         faceapi.matchDimensions(this.canvas, this.displaySize);
 
+        this.countdown();
+
         var x = setInterval(async () => {
           this.detection = await faceapi.detectAllFaces(
             this.videoInput,
@@ -77,7 +96,8 @@ export class CaptureFaceComponent implements OnInit {
           if (
             this.detection.length > 0 &&
             this.face == '' &&
-            canvases.length > 0
+            canvases.length > 0 &&
+            this.endCountDown
           ) {
             this.face = canvases[0].toDataURL('image/png');
 
@@ -85,7 +105,11 @@ export class CaptureFaceComponent implements OnInit {
 
             console.log('face-captured', this.face);
 
-            this.HEIGHT = 0;
+            const mediaStream = this.video.nativeElement.srcObject;
+
+            const tracks = mediaStream.getTracks();
+
+            tracks[0].stop();
 
             clearInterval(x);
 
@@ -96,16 +120,12 @@ export class CaptureFaceComponent implements OnInit {
   }
 
   countdown() {
-    this.HEIGHT = 0;
-    var y = setInterval(async () => {
-      this.countDownTime--;
+    var y = setInterval(() => {
+      this.isLoadingCountDown = false;
+      this.countDownTime = this.countDownTime - 1;
+      console.log(this.countDownTime);
       if (this.countDownTime == 0) {
-        this.HEIGHT = 480; // Show video box
-        await Promise.all([
-          faceapi.nets.tinyFaceDetector.loadFromUri('../../assets/models'),
-        ]).then(() => {
-          this.startVideo();
-        });
+        this.endCountDown = true;
         clearInterval(y);
       }
     }, 1000);
@@ -116,8 +136,8 @@ export class CaptureFaceComponent implements OnInit {
     this.countdown();
   }
 
-  // doStore() {
-  //   localStorage.setItem('customer-face', this.face);
-  //   this._router.navigate(['/aio/on-boarding/input-finger']);
-  // }
+  stopVideo() {
+    this.elRef.nativeElement.querySelector('video')[0].pause();
+    this.elRef.nativeElement.querySelector('video')[0].source = '';
+  }
 }

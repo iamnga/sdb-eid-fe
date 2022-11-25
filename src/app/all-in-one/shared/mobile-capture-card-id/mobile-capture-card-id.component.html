@@ -1,1 +1,58 @@
-<p>mobile-capture-card-id works!</p>
+<app-aio-header></app-aio-header>
+<section *ngIf="step == 1">
+  <div class="container pt-3">
+    <h3 class="text-center">Hướng dẫn chụp CCCD</h3>
+    <div class="row mt-3">
+      <div class="col-12">
+        <div class="item">
+          <div class="d-inline-block px-2">
+            <span class="material-icons"> description </span>
+          </div>
+          <div class="d-inline-block">
+            Sử dụng giấy tờ gốc, không scan, không copy
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12">
+        <div class="item">
+          <div class="d-inline-block px-2">
+            <span class="material-icons"> lightbulb </span>
+          </div>
+          <div class="d-inline-block">
+            Chụp ảnh trong môi trường ánh sáng tốt...
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12">
+        <div class="item">
+          <div class="d-inline-block px-2">
+            <span class="material-icons"> collections </span>
+          </div>
+          <div class="d-inline-block">Đảm bảo hình ảnh rõ nét và nằm ...</div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12">
+        Bằng việc bấm Tiến hành chụp, quý khách đã đồng ý với Điều khoản và Điều
+        kiện sử dụng của Sacombank
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12">
+        <button class="btn btn-primary w-100" (click)="next()">
+          Bắt đầu chụp
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="step == 2">
+  <div class="container pt-3">Chụp mặt trước CCCD</div>
+  <div></div>
+</section>

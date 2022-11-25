@@ -23,6 +23,9 @@ import { CollectCardIdComponent } from './all-in-one/shared/collect-card-id/coll
 import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-id.component';
 import { WebcamComponent } from './webcam/webcam.component';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
+import { HeaderComponent } from './all-in-one/shared/header/header.component';
+import { MobileCaptureCardIdComponent } from './all-in-one/shared/mobile-capture-card-id/mobile-capture-card-id.component';
+import { SharedComponent } from './all-in-one/shared/shared.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +45,9 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
     EndComponent,
     UpdateCardIdComponent,
     WebcamComponent,
+    HeaderComponent,
+    MobileCaptureCardIdComponent,
+    SharedComponent,
   ],
   imports: [
     SlickCarouselModule,

@@ -1,19 +1,73 @@
+<app-aio-header></app-aio-header>
 <section>
-  <div class="container-fluid bg-white header">
-    <div class="p-3">
-      <div class="w-50 d-inline-block">
-        <div class="logo">
+  <div class="container text-center pt-5">
+    <div *ngIf="showFingerGif">
+      <h1>Đọc CCCD và quét vân tay</h1>
+    </div>
+    <ng-container *ngIf="showFingerGif">
+      <div>
+        <h5>Quý khách vui lòng đặt CCCD và vân tay lên thiết bị scan</h5>
+      </div>
+      <div class="row pt-5">
+        <div class="col-6">
           <img
-            src="../../../assets/all-in-one/shared/logo.png"
+            src="../../../../assets/all-in-one/shared/input-card-id.png"
             alt=""
-            class="img img-fluid w-25"
+            class="img img-fluid"
+          />
+        </div>
+        <div class="col-6">
+          <img
+            src="../../../../assets/all-in-one/shared/input-finger.png"
+            alt=""
+            class="img img-fluid"
           />
         </div>
       </div>
-      <div class="w-50 text-right d-inline-block contact-header">Liên hệ</div>
+      <div class="pt-4">
+        <img
+          src="../../../../assets/all-in-one/shared/fingerprint-scan.gif"
+          class="gif"
+          alt=""
+        />
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!showFingerGif">
+      <div class="pt-4">
+        <img
+          src="../../../../assets/all-in-one/shared/check.gif"
+          class="gif"
+          alt=""
+        />
+      </div>
+    </ng-container>
+    <!-- <div *ngIf="!fpResponse.verifyResponse" class="pt-4">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
     </div>
+    <div *ngIf="fpResponse.verifyResponse">
+      <img [src]="fpResponse.image" alt="" class="img img-fluid" />
+      <div *ngIf="fpResponse.verifyResponse.success">
+        {{ fpResponse.icaoResponse | json }}
+      </div>
+      <div *ngIf="!fpResponse.verifyResponse.success">
+        <div class="text-danger">
+          {{ fpResponse.verifyResponse.message }}
+        </div>
+        <button class="btn btn-warning mx-2" (click)="recallMkFingerPrint()">
+          Làm lại
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <button
+        routerLink="/aio/shared/collect-card-id"
+        class="btn btn-primary mx-2"
+      >
+        Tiếp tục
+      </button>
+    </div> -->
   </div>
 </section>
-<button routerLink="/aio/on-boarding/collect-card-id" class="btn btn-primary">
-  Tiếp tục
-</button>

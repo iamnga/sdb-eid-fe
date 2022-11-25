@@ -11,6 +11,8 @@ import { CaptureFaceComponent } from './all-in-one/shared/capture-face/capture-f
 import { CollectCardIdComponent } from './all-in-one/shared/collect-card-id/collect-card-id.component';
 import { InputFingerComponent } from './all-in-one/shared/input-finger/input-finger.component';
 import { InputMobileNumberComponent } from './all-in-one/shared/input-mobile-number/input-mobile-number.component';
+import { MobileCaptureCardIdComponent } from './all-in-one/shared/mobile-capture-card-id/mobile-capture-card-id.component';
+import { SharedComponent } from './all-in-one/shared/shared.component';
 import { VerifyCustomerInfoComponent } from './all-in-one/shared/verify-customer-info/verify-customer-info.component';
 import { VerifyOtpComponent } from './all-in-one/shared/verify-otp/verify-otp.component';
 import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-id.component';
@@ -40,29 +42,9 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'capture-face',
-            pathMatch: 'full',
+            component: OnBoardingComponent,
           },
-          {
-            path: 'capture-face',
-            component: CaptureFaceComponent,
-          },
-          {
-            path: 'input-finger',
-            component: InputFingerComponent,
-          },
-          {
-            path: 'collect-card-id',
-            component: CollectCardIdComponent,
-          },
-          {
-            path: 'input-mobile-number',
-            component: InputMobileNumberComponent,
-          },
-          {
-            path: 'verify-customer-info',
-            component: VerifyCustomerInfoComponent,
-          },
+
           {
             path: 'fill-info',
             component: FillInfoComponent,
@@ -70,10 +52,6 @@ const routes: Routes = [
           {
             path: 'account-and-alert',
             component: AccountAndAlertComponent,
-          },
-          {
-            path: 'verify-otp',
-            component: VerifyOtpComponent,
           },
           {
             path: 'end',
@@ -87,8 +65,21 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'capture-face',
-            pathMatch: 'full',
+            component: UpdateCardIdComponent,
+          },
+          {
+            path: 'end',
+            component: EndComponent,
+          },
+        ],
+      },
+      {
+        path: 'shared',
+        component: SharedComponent,
+        children: [
+          {
+            path: '',
+            component: SharedComponent,
           },
           {
             path: 'capture-face',
@@ -115,8 +106,8 @@ const routes: Routes = [
             component: VerifyOtpComponent,
           },
           {
-            path: 'end',
-            component: EndComponent,
+            path: 'mobile-capture-card-id',
+            component: MobileCaptureCardIdComponent,
           },
         ],
       },

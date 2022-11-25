@@ -89,7 +89,7 @@ export class CaptureFaceComponent implements OnInit {
 
             clearInterval(x);
 
-            this.router.navigate(['/aio/on-boarding/input-finger']);
+            this.router.navigate(['/aio/shared/input-finger']);
           }
         }, 100);
       });

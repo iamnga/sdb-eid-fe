@@ -1,7 +1,24 @@
-<p>collect-card-id works!</p>
-<button
-  routerLink="/aio/on-boarding/input-mobile-number"
-  class="btn btn-primary"
->
-  Tiếp tục
-</button>
+<app-aio-header></app-aio-header>
+<section>
+  <div class="container py-5 text-center">
+    <div>
+      <h1>Quét mã QR</h1>
+      <h5>Scan QR để tiếp tục trên điện thoại của Quý khách</h5>
+    </div>
+    <div class="mt-4">
+      <qrcode
+        [qrdata]="qrValue"
+        [width]="256"
+        [errorCorrectionLevel]="'M'"
+      ></qrcode>
+    </div>
+    <div class="mt-4">
+      <button
+        routerLink="/aio/on-boarding/input-mobile-number"
+        class="btn btn-primary"
+      >
+        Tiếp tục
+      </button>
+    </div>
+  </div>
+</section>

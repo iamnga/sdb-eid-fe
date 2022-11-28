@@ -12,9 +12,9 @@
     </button>
   </div>
 </section>
-<section class="py-5">
+<section class="py-5 animate__animated animate__zoomIn">
   <div class="text-center capture-box">
-    <div class="video-container text-center">
+    <div class="video-container text-center" [ngClass]="{ 'o-0': captured }">
       <video #video [width]="WIDTH" [height]="HEIGHT" autoplay muted></video>
       <div #canvas></div>
     </div>
@@ -28,12 +28,19 @@
         </ng-container>
       </div>
     </div>
+    <div class="captured-img" *ngIf="captured">
+      <img
+        [src]="captured"
+        class="img img-fluid animate__animated animate__pulse"
+        alt=""
+      />
+    </div>
+  </div>
+  <div class="text-center py-3" *ngIf="captured">
+    <button class="btn btn-light mx-2" (click)="reCapture()">Chụp lại</button>
+    <button class="btn btn-primary mx-2" (click)="next()">Tiếp tục</button>
   </div>
 </section>
-<section
-  [ngClass]="{ 'o-0': !isUnderstood || face != '' }"
-  class="py-5"
-></section>
 
 <!-- <section class="py-5 text-center">
   <div *ngIf="face != ''">

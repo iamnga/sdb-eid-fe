@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ServiceStep } from 'src/app/models/enum';
+import { AioService } from 'src/app/services/aio.service';
 
 @Component({
   selector: 'app-input-mobile-number',
@@ -9,7 +11,13 @@ import { Component, OnInit } from '@angular/core';
   ],
 })
 export class InputMobileNumberComponent implements OnInit {
-  constructor() {}
+  constructor(private aioService: AioService) {
+    aioService.currentStep = ServiceStep.InputMobileNumber;
+  }
 
   ngOnInit(): void {}
+
+  next() {
+    this.aioService.next();
+  }
 }

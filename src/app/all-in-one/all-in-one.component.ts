@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ServiceStep } from '../models/enum';
+import { AioService } from '../services/aio.service';
 
 @Component({
   selector: 'app-all-in-one',
@@ -6,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./all-in-one.component.css'],
 })
 export class AllInOneComponent implements OnInit {
-  constructor() {}
+  constructor(private aioSvc: AioService) {
+    aioSvc.currentStep = ServiceStep.Start;
+  }
 
   ngOnInit(): void {}
 }

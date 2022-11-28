@@ -1,44 +1,8 @@
-<!-- Step line -->
-<div class="pt-5">
-  <img
-    src="../../../../assets/all-in-one/on-boarding/step-line-collect-info.png"
-    alt=""
-    class="img img-fluid"
-  />
-</div>
-<!-- End Step line -->
+<app-aio-header></app-aio-header>
 
-<!-- Handle -->
-<div class="container-fluid pt-5">
-  <div class="row">
-    <div class="col-4 pl-5">
-      <img
-        src="../../../../assets/all-in-one/on-boarding/chat-input-mobile-number.png"
-        alt=""
-      />
-    </div>
-    <div class="col-4 text-center">
-      <div class="text-white py-4"><h1>Số điện thoại</h1></div>
-      <div>
-        <input type="text" />
-      </div>
-      <div class="mt-5 keyboard">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-4 text-center keyboard-item">1</div>
-            <div class="col-4 text-center keyboard-item">2</div>
-            <div class="col-4 text-center keyboard-item">3</div>
-          </div>
-        </div>
-      </div>
-    </div>
+<section>
+  <div class="container text-center">
+    <div class="py-5">Nhập số điện thoại</div>
+    <button class="btn btn-primary" (click)="next()">Tiếp tục</button>
   </div>
-</div>
-<!-- End Handle -->
-
-<!-- <button
-  routerLink="/aio/on-boarding/verify-customer-info"
-  class="btn btn-primary"
->
-  Tiếp tục
-</button> -->
+</section>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ServiceStep } from 'src/app/models/enum';
 import { FingerResponse } from 'src/app/models/mk';
+import { AioService } from 'src/app/services/aio.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 
 @Component({
@@ -12,7 +14,9 @@ export class InputFingerComponent implements OnInit {
   fpResponse: FingerResponse = new FingerResponse();
   showFingerGif = true;
   showCheckGif = false;
-  constructor(private router: Router) {}
+  constructor(private aioSvc: AioService) {
+    aioSvc.currentStep = ServiceStep.InputFinger;
+  }
 
   ngOnInit(): void {
     this.callMkFingerPrint();
@@ -20,7 +24,7 @@ export class InputFingerComponent implements OnInit {
       this.showFingerGif = false;
       this.showCheckGif = true;
       setTimeout(() => {
-        this.router.navigate(['/aio/shared/collect-card-id']);
+        this.aioSvc.next();
       }, 3000);
     }, 5000);
   }

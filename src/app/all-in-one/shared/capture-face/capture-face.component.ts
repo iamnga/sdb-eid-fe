@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import * as faceapi from 'face-api.js';
+import { ServiceStep } from 'src/app/models/enum';
+import { AioService } from 'src/app/services/aio.service';
 
 @Component({
   selector: 'app-capture-face',
@@ -20,7 +22,9 @@ export class CaptureFaceComponent implements OnInit, AfterViewInit {
   face = '';
   @ViewChild('video', { static: true }) public video: ElementRef;
   @ViewChild('canvas', { static: true }) public canvasRef: ElementRef;
-  constructor(private elRef: ElementRef, private router: Router) {}
+  constructor(private elRef: ElementRef, private aioSvc: AioService) {
+    aioSvc.currentStep = ServiceStep.CaptureFace;
+  }
   stream: any;
   detection: any;
   resizedDetections: any;
@@ -113,7 +117,7 @@ export class CaptureFaceComponent implements OnInit, AfterViewInit {
 
             clearInterval(x);
 
-            this.router.navigate(['/aio/shared/input-finger']);
+            this.aioSvc.next();
           }
         }, 100);
       });

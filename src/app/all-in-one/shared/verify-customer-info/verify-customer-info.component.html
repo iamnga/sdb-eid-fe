@@ -1,4 +1,60 @@
-<p>verify-customer-info works!</p>
-<button routerLink="/aio/on-boarding/fill-info" class="btn btn-primary">
-  Tiếp tục
-</button>
+<app-aio-header></app-aio-header>
+<section>
+  <div class="container">
+    <div class="text-center py-5">
+      <h1>Xác nhận thông tin</h1>
+      <h5>Quý khách vui lòng kiểm tra lại thông tin cá nhân</h5>
+    </div>
+    <div class="row p-3 bg-white box">
+      <div class="col-6">
+        <div>
+          <table>
+            <tr>
+              <td>Họ và tên</td>
+              <td class="font-weight-bold">TRAN MINH HOANG LONG</td>
+            </tr>
+            <tr>
+              <td>Số điện thoại</td>
+              <td class="font-weight-bold">0979 327 455</td>
+            </tr>
+            <tr>
+              <td>Giới tính</td>
+              <td class="font-weight-bold">Nam</td>
+            </tr>
+            <tr>
+              <td>Ngày sinh</td>
+              <td class="font-weight-bold">16/03/1995</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-6">
+        <div>
+          <table>
+            <tr>
+              <td>Số CCCD</td>
+              <td class="font-weight-bold">231053235256</td>
+            </tr>
+            <tr>
+              <td>Ngày cấp</td>
+              <td class="font-weight-bold">06/05/2022</td>
+            </tr>
+            <tr>
+              <td>Nơi cấp</td>
+              <td class="font-weight-bold">CCS QLHC về TTXH</td>
+            </tr>
+            <tr>
+              <td>Địa chỉ thường trú</td>
+              <td class="font-weight-bold">
+                268 Nam Kỳ Khởi Nghĩa, P.8, Q.3, TP.HCM
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="text-center pt-5">
+      <button class="btn btn-primary" (click)="confirm()">Xác nhận</button>
+    </div>
+  </div>
+</section>

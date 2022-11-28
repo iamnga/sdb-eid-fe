@@ -28,6 +28,7 @@ import { MobileCaptureCardIdComponent } from './all-in-one/shared/mobile-capture
 import { SharedComponent } from './all-in-one/shared/shared.component';
 import { MkComponent } from './mk/mk.component';
 import { FormsModule } from '@angular/forms';
+import { AioService } from './services/aio.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +61,7 @@ import { FormsModule } from '@angular/forms';
     HttpClientModule,
     FormsModule,
   ],
-  providers: [WebsocketService],
+  providers: [WebsocketService, AioService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

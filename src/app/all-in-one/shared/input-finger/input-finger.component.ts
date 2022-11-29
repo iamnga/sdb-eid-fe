@@ -19,14 +19,14 @@ export class InputFingerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.callMkFingerPrint();
-    setTimeout(() => {
-      this.showFingerGif = false;
-      this.showCheckGif = true;
-      setTimeout(() => {
-        this.aioSvc.next();
-      }, 3000);
-    }, 5000);
+    // this.callMkFingerPrint();
+    // setTimeout(() => {
+    //   this.showFingerGif = false;
+    //   this.showCheckGif = true;
+    //   setTimeout(() => {
+    //     this.aioSvc.next();
+    //   }, 3000);
+    // }, 5000);
   }
 
   callMkFingerPrint() {
@@ -43,5 +43,9 @@ export class InputFingerComponent implements OnInit {
   recallMkFingerPrint() {
     this.fpResponse = new FingerResponse();
     this.callMkFingerPrint();
+  }
+
+  next() {
+    this.aioSvc.next();
   }
 }

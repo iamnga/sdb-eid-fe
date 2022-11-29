@@ -1,0 +1,57 @@
+.btn-back {
+  color: #0058a0;
+}
+
+.step-circle {
+  height: 2.5rem;
+  width: 2.5rem;
+  margin: 0px auto;
+  border-radius: 2rem;
+  background-color: white;
+  color: #0058a0;
+  line-height: 2.5rem;
+  font-size: 1rem;
+}
+
+.step-circle.active {
+  background-color: #0058a0;
+  color: white;
+}
+
+.step-text {
+  margin-top: 1rem;
+  color: black;
+}
+
+.step-text.active {
+  color: #0058a0;
+}
+
+.line {
+  height: 1px;
+  background-color: #b9c0c6;
+}
+
+.line.active {
+  background-color: #0058a0;
+}
+
+.col-2 {
+  padding: 0px !important;
+}
+
+.step-line {
+  position: absolute;
+  top: 20px;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
+.stepper-box {
+  position: relative;
+}
+
+.step-line .col {
+  padding: 0px !important;
+}

@@ -1,4 +1,5 @@
 <app-aio-header></app-aio-header>
+<app-aio-back-and-stepper [currentStep]="1"></app-aio-back-and-stepper>
 <section *ngIf="!isUnderstood">
   <div class="text-center pt-5">
     <img
@@ -12,7 +13,10 @@
     </button>
   </div>
 </section>
-<section class="py-5 animate__animated animate__zoomIn">
+<section class="animate__animated animate__zoomIn">
+  <div class="pb-5 text-center">
+    <h3>Camera đang chụp ảnh...</h3>
+  </div>
   <div class="text-center capture-box">
     <div class="video-container text-center" [ngClass]="{ 'o-0': captured }">
       <video #video [width]="WIDTH" [height]="HEIGHT" autoplay muted></video>

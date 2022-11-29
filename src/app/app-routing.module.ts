@@ -7,6 +7,7 @@ import { EndComponent } from './all-in-one/on-boarding/end/end.component';
 import { FillInfoComponent } from './all-in-one/on-boarding/fill-info/fill-info.component';
 
 import { OnBoardingComponent } from './all-in-one/on-boarding/on-boarding.component';
+import { BackAndStepperComponent } from './all-in-one/shared/back-and-stepper/back-and-stepper.component';
 import { CaptureFaceComponent } from './all-in-one/shared/capture-face/capture-face.component';
 import { CollectCardIdComponent } from './all-in-one/shared/collect-card-id/collect-card-id.component';
 import { InputFingerComponent } from './all-in-one/shared/input-finger/input-finger.component';
@@ -108,6 +109,10 @@ const routes: Routes = [
           {
             path: 'mobile-capture-card-id',
             component: MobileCaptureCardIdComponent,
+          },
+          {
+            path: 'back-and-stepper',
+            component: BackAndStepperComponent,
           },
         ],
       },

@@ -1,8 +1,40 @@
 <app-aio-header></app-aio-header>
+<app-aio-back-and-stepper [currentStep]="3"></app-aio-back-and-stepper>
 
 <section>
   <div class="container text-center">
-    <div class="py-5">Nhập số điện thoại</div>
-    <button class="btn btn-primary" (click)="next()">Tiếp tục</button>
+    <div>
+      <h3 class="mb-4 font-weight-bold">
+        Quý khách vui lòng nhập số điện thoại
+      </h3>
+    </div>
+    <div class="text-center keyboard-box">
+      <div><input type="text" /></div>
+      <div class="keyboard-panel bg-white mt-3">
+        <table>
+          <tr>
+            <td><button class="btn-keyboard">1</button></td>
+            <td><button class="btn-keyboard">2</button></td>
+            <td><button class="btn-keyboard">3</button></td>
+          </tr>
+          <tr>
+            <td><button class="btn-keyboard">4</button></td>
+            <td><button class="btn-keyboard">5</button></td>
+            <td><button class="btn-keyboard">6</button></td>
+          </tr>
+          <tr>
+            <td><button class="btn-keyboard">7</button></td>
+            <td><button class="btn-keyboard">8</button></td>
+            <td><button class="btn-keyboard">9</button></td>
+          </tr>
+          <tr>
+            <td><button class="btn-keyboard">Xóa</button></td>
+            <td><button class="btn-keyboard">0</button></td>
+            <td><button class="btn-disabled" [disabled]="true">+</button></td>
+          </tr>
+        </table>
+      </div>
+      <button class="btn-next mt-4" (click)="next()">Tiếp tục</button>
+    </div>
   </div>
 </section>

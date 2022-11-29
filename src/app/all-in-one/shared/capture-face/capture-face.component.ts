@@ -98,7 +98,7 @@ export class CaptureFaceComponent implements OnInit {
       );
 
       if (
-        this.detection.length > 0 &&
+        this.detection.length == 1 &&
         canvases.length > 0 &&
         this.endCountDown &&
         this.captured == ''

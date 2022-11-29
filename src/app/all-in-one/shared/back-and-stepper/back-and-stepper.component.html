@@ -1,0 +1,51 @@
+<section>
+  <div class="container-fluid p-5">
+    <div class="row">
+      <div class="col-2">
+        <button class="btn btn-light btn-back" routerLink="/aio/dash-board">
+          <i class="fa fa-long-arrow-left mr-1" aria-hidden="true"></i> Trang
+          chủ
+        </button>
+      </div>
+      <div class="col-8 stepper-box">
+        <div class="row step-line">
+          <div
+            class="col"
+            *ngFor="
+              let item of stepLines;
+              let i = index;
+              let first = first;
+              let last = last
+            "
+          >
+            <ng-container *ngIf="!first && !last">
+              <div
+                class="line"
+                [ngClass]="{ active: i + 1 < currentStep * 2 }"
+              ></div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="stepper row text-center">
+          <div class="col" *ngFor="let item of steps; let i = index">
+            <div>
+              <div
+                class="step-circle"
+                [ngClass]="{ active: currentStep >= item.stepNumber }"
+              >
+                {{ item.stepNumber }}
+              </div>
+            </div>
+            <div
+              class="step-text"
+              [ngClass]="{ active: currentStep >= item.stepNumber }"
+            >
+              {{ item.label }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-2"></div>
+    </div>
+  </div>
+</section>

@@ -1,7 +1,6 @@
-input[type="text"] {
+/* input[type="text"] {
   width: 100%;
   height: 80px;
-  /* opacity: 0.2; */
   color: white;
   background-color: #1969ae;
   outline: none;
@@ -12,18 +11,73 @@ input[type="text"] {
   font-weight: 100;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+} */
+
+.keyboard-box {
+  max-width: 450px;
+  margin: 0px auto;
 }
 
-.keyboard {
-  background-color: #1969ae;
-  border: 2px solid #4c8abc;
-  border-radius: 5px;
-  padding: 0.5rem;
+input[type="text"] {
+  width: 100%;
+  height: 55px;
+  border-radius: 6px;
+  outline: none;
+  border: 1px solid #dcdcdc;
+  font-size: 2rem;
+  text-align: center;
 }
-
 .keyboard-item {
-  background-color: #3079ba;
-  border: 2px solid #538ec1;
-  margin: 3px;
-  border-radius: 3px;
+  border: 1px solid #2a81d0;
+  border-radius: 4px;
+  height: 60px;
+}
+
+.keyboard-panel {
+  width: 100%;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  padding: 5px;
+  background-color: #f8f8f8;
+}
+table {
+  width: 100%;
+  border-radius: 6px;
+}
+
+td {
+  width: 33.33%;
+  height: 70px;
+  padding: 5px;
+  border: 3px solid none;
+}
+
+.btn-keyboard,
+.btn-disabled,
+.btn-next {
+  width: 100%;
+  height: 100%;
+  outline: none;
+  border: 1px solid #2a81d0;
+  border-radius: 4px;
+  color: #2a81d0;
+  background-color: white;
+  font-size: 1.2rem;
+}
+
+.btn-keyboard:hover,
+.btn-keyboard:active {
+  background-color: #2a81d0;
+  color: white;
+  transition: ease-in-out 0.3s;
+}
+
+.btn-disabled:disabled {
+  opacity: 0.5;
+}
+
+.btn-next {
+  background-color: #2a81d0;
+  color: white;
+  height: 60px;
 }

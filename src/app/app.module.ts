@@ -29,6 +29,8 @@ import { SharedComponent } from './all-in-one/shared/shared.component';
 import { MkComponent } from './mk/mk.component';
 import { FormsModule } from '@angular/forms';
 import { AioService } from './services/aio.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BackAndStepperComponent } from './all-in-one/shared/back-and-stepper/back-and-stepper.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,6 +54,7 @@ import { AioService } from './services/aio.service';
     MobileCaptureCardIdComponent,
     SharedComponent,
     MkComponent,
+    BackAndStepperComponent,
   ],
   imports: [
     SlickCarouselModule,
@@ -60,6 +63,7 @@ import { AioService } from './services/aio.service';
     QRCodeModule,
     HttpClientModule,
     FormsModule,
+    BrowserAnimationsModule,
   ],
   providers: [WebsocketService, AioService],
   bootstrap: [AppComponent],

@@ -40,7 +40,7 @@ video {
   border-radius: 15px;
   margin: 0px auto;
   display: table;
-  border: 2px solid rgb(147, 171, 245);
+  /* border: 2px solid rgb(147, 171, 245); */
   position: absolute;
   top: 0px;
   transform: translateX(-50%);

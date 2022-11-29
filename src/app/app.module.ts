@@ -31,6 +31,8 @@ import { FormsModule } from '@angular/forms';
 import { AioService } from './services/aio.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BackAndStepperComponent } from './all-in-one/shared/back-and-stepper/back-and-stepper.component';
+import { CaptureGuideComponent } from './all-in-one/shared/capture-guide/capture-guide.component';
+import { KeyboardNumberComponent } from './all-in-one/shared/keyboard-number/keyboard-number.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,6 +57,8 @@ import { BackAndStepperComponent } from './all-in-one/shared/back-and-stepper/ba
     SharedComponent,
     MkComponent,
     BackAndStepperComponent,
+    CaptureGuideComponent,
+    KeyboardNumberComponent,
   ],
   imports: [
     SlickCarouselModule,

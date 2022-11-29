@@ -1,21 +1,17 @@
 <app-aio-header></app-aio-header>
 <app-aio-back-and-stepper [currentStep]="1"></app-aio-back-and-stepper>
-<section *ngIf="!isUnderstood">
-  <div class="text-center pt-5">
-    <img
-      src="../../../../assets/all-in-one/on-boarding/tip-capture.png"
-      class="img img-fluid"
-      alt=""
-    />
-    <br />
-    <button class="btn btn-primary mt-5" (click)="understood()">
-      Tôi đã hiểu
-    </button>
-  </div>
-</section>
-<section class="animate__animated animate__zoomIn">
+<section>
   <div class="pb-5 text-center">
-    <h3>Camera đang chụp ảnh...</h3>
+    <ng-container *ngIf="!captured">
+      <h3 class="animate__animated animate__fadeIn">
+        Vui lòng nhìn thẳng vào camera...
+      </h3>
+    </ng-container>
+    <ng-container *ngIf="!isLoadingCountDown && captured">
+      <h3 class="animate__animated animate__fadeIn">
+        Quý khách vui lòng kiểm tra lại ảnh đã chụp
+      </h3>
+    </ng-container>
   </div>
   <div class="text-center capture-box">
     <div class="video-container text-center" [ngClass]="{ 'o-0': captured }">

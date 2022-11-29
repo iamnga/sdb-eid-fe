@@ -7,7 +7,7 @@ import { Service, ServiceStep } from '../models/enum';
 })
 export class AioService {
   currentSerice = Service.None;
-  currentStep = ServiceStep.Start;
+  currentStep = ServiceStep.DashBoard;
   constructor(private router: Router) {}
   next() {
     if ((this.currentSerice = Service.OnBoarding)) {

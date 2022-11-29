@@ -9,7 +9,7 @@ import { AioService } from '../services/aio.service';
 })
 export class AllInOneComponent implements OnInit {
   constructor(private aioSvc: AioService) {
-    aioSvc.currentStep = ServiceStep.Start;
+    aioSvc.currentStep = ServiceStep.DashBoard;
   }
 
   ngOnInit(): void {}

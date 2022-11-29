@@ -5,7 +5,8 @@ export enum Service {
 }
 
 export enum ServiceStep {
-  Start,
+  DashBoard,
+  CaptureGuide,
   CaptureFace,
   InputFinger,
   CollectCardId,

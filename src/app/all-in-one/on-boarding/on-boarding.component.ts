@@ -17,7 +17,11 @@ export class OnBoardingComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.aioSvc.currentStep);
     switch (this.aioSvc.currentStep) {
-      case ServiceStep.Start: {
+      case ServiceStep.DashBoard: {
+        this.router.navigate(['/aio/shared/capture-guide']);
+        break;
+      }
+      case ServiceStep.CaptureGuide: {
         this.router.navigate(['/aio/shared/capture-face']);
         break;
       }

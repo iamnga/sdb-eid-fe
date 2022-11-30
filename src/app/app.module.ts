@@ -27,12 +27,20 @@ import { HeaderComponent } from './all-in-one/shared/header/header.component';
 import { MobileCaptureCardIdComponent } from './all-in-one/shared/mobile-capture-card-id/mobile-capture-card-id.component';
 import { SharedComponent } from './all-in-one/shared/shared.component';
 import { MkComponent } from './mk/mk.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AioService } from './services/aio.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BackAndStepperComponent } from './all-in-one/shared/back-and-stepper/back-and-stepper.component';
 import { CaptureGuideComponent } from './all-in-one/shared/capture-guide/capture-guide.component';
 import { KeyboardNumberComponent } from './all-in-one/shared/keyboard-number/keyboard-number.component';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,8 +76,21 @@ import { KeyboardNumberComponent } from './all-in-one/shared/keyboard-number/key
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatButtonModule,
   ],
-  providers: [WebsocketService, AioService],
+  providers: [
+    WebsocketService,
+    AioService,
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: 'outline' },
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -14,5 +14,21 @@ export enum ServiceStep {
   VerifyCustomerInfo,
   FillInfo,
   AccountAndAlert,
+  VerifyOtp,
   End,
+}
+
+export enum AccountType {
+  None,
+  Phone,
+  DOB,
+  CardId,
+  Custom,
+  Random,
+}
+
+export enum AlertType {
+  None,
+  OnlySPay,
+  SmsAndSPay,
 }

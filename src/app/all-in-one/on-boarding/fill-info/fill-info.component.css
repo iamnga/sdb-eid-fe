@@ -1,0 +1,21 @@
+.box {
+  border-radius: 1rem;
+}
+
+.table-add-info td {
+  padding: 1rem;
+}
+
+table,
+.table-add-info td,
+.table-add-info mat-form-field {
+  width: 100%;
+}
+
+.table-address td {
+  width: 50% !important;
+}
+
+.table-add-info .mat-checkbox {
+  opacity: 0;
+}

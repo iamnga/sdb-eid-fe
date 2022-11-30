@@ -1,8 +1,35 @@
 <app-aio-header></app-aio-header>
+<app-aio-back-and-stepper
+  [currentStep]="3"
+  [isShowStepper]="false"
+></app-aio-back-and-stepper>
 
 <section>
-  <div class="container text-center">
-    <div class="py-5">End</div>
-    <button class="btn btn-primary" (click)="confirm()">Tiếp tục</button>
+  <div class="container">
+    <div class="text-center">
+      <h3 class="font-weight-bold mb-4">
+        Vui lòng quét để xem thông tin tài khoản
+      </h3>
+    </div>
+
+    <div class="row bg-white rounded p-4">
+      <div class="col-4">
+        <div class="mb-3">Họ và tên</div>
+        <div><b> TRAN MINH HOANG LONG</b></div>
+      </div>
+      <div class="col-4">
+        <div class="mb-3">Số tài khoản</div>
+        <div class="mb-3"><b> 060972057702</b></div>
+        <div>Ngày hiệu lực 04/03/2012</div>
+      </div>
+      <div class="col-4">
+        <div class="mb-3">Chi nhánh</div>
+        <div class="mb-3"><b> Sacombank Hội Sở</b></div>
+        <div>266-268 Nam Kỳ Khởi Nghĩa, P. 8, Q.3, TP.HCM</div>
+      </div>
+    </div>
+    <div class="text-center py-4">
+      <h4>Mời Quý khách đánh giá trải nghiệm dịch vụ</h4>
+    </div>
   </div>
 </section>

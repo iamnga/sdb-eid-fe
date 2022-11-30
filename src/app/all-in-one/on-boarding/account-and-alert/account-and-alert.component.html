@@ -1,8 +1,145 @@
 <app-aio-header></app-aio-header>
+<app-aio-back-and-stepper [currentStep]="4"></app-aio-back-and-stepper>
 
 <section>
-  <div class="container text-center">
-    <div class="py-5">Chọn tài khoản và thông báo</div>
-    <button class="btn btn-primary" (click)="confirm()">Tiếp tục</button>
+  <div class="container">
+    <div class="text-center">
+      <h3 class="font-weight-bold mb-4">
+        Lựa chọn tài khoản VND số đẹp (miễn phí)
+      </h3>
+    </div>
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-4">
+        <div
+          class="bg-white p-3 account-type mb-4"
+          [ngClass]="{ active: currentAccountType == accountType.Phone }"
+          (click)="selectAccountType(accountType.Phone)"
+        >
+          <div class="d-inline-block">
+            <span
+              class="account-type-label"
+              [ngClass]="{ active: currentAccountType == accountType.Phone }"
+              >Số điện thoại</span
+            >
+          </div>
+          <div class="d-inline-block float-right text-secondary">
+            938 483 697
+          </div>
+        </div>
+        <div
+          class="bg-white p-3 account-type mb-4"
+          (click)="selectAccountType(accountType.CardId)"
+          [ngClass]="{ active: currentAccountType == accountType.CardId }"
+        >
+          <div class="d-inline-block">
+            <span
+              class="account-type-label"
+              [ngClass]="{ active: currentAccountType == accountType.CardId }"
+              >Số CCCD</span
+            >
+          </div>
+          <div class="d-inline-block float-right text-secondary">
+            15071000030
+          </div>
+        </div>
+        <div
+          class="bg-white p-3 account-type"
+          (click)="selectAccountType(accountType.Random)"
+          [ngClass]="{ active: currentAccountType == accountType.Random }"
+        >
+          <div class="d-inline-block">
+            <span
+              class="account-type-label"
+              [ngClass]="{ active: currentAccountType == accountType.Random }"
+              >Ngân hàng tạo tự động</span
+            >
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div
+          class="bg-white p-3 account-type mb-4"
+          (click)="selectAccountType(accountType.DOB)"
+          [ngClass]="{ active: currentAccountType == accountType.DOB }"
+        >
+          <div class="d-inline-block">
+            <span
+              class="account-type-label"
+              [ngClass]="{ active: currentAccountType == accountType.DOB }"
+              >Ngày tháng năm sinh</span
+            >
+          </div>
+          <div class="d-inline-block float-right text-secondary">9031995</div>
+        </div>
+        <div
+          class="bg-white p-3 account-type"
+          (click)="selectAccountType(accountType.Custom)"
+          [ngClass]="{ active: currentAccountType == accountType.Custom }"
+        >
+          <div class="d-inline-block">
+            <span
+              class="account-type-label"
+              [ngClass]="{ active: currentAccountType == accountType.Custom }"
+              >Số tài khoản tự chọn</span
+            >
+          </div>
+          <div class="d-inline-block float-right text-secondary">Nhập số</div>
+        </div>
+      </div>
+      <div class="col-2"></div>
+    </div>
+    <div class="text-center py-4">
+      <h3 class="font-weight-bold">Đăng kí báo giao dịch tự động</h3>
+    </div>
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-4">
+        <div
+          class="bg-white p-3 account-type mb-4"
+          (click)="selectAlertType(alertType.OnlySPay)"
+          [ngClass]="{ active: currentAlertType == alertType.OnlySPay }"
+        >
+          <div class="d-inline-block">
+            <span
+              class="account-type-label"
+              [ngClass]="{ active: currentAlertType == alertType.OnlySPay }"
+              >Ứng dụng Sacombank Pay</span
+            >
+          </div>
+          <div class="d-inline-block float-right text-secondary">Miễn phí</div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div
+          class="bg-white p-3 account-type mb-4"
+          (click)="selectAlertType(alertType.SmsAndSPay)"
+          [ngClass]="{ active: currentAlertType == alertType.SmsAndSPay }"
+        >
+          <div class="d-inline-block">
+            <span
+              class="account-type-label"
+              [ngClass]="{ active: currentAlertType == alertType.SmsAndSPay }"
+              >SMS và Sacombank Pay</span
+            >
+          </div>
+          <div class="d-inline-block float-right text-secondary">Có phí</div>
+        </div>
+      </div>
+      <div class="col-2"></div>
+    </div>
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-8">
+        <mat-checkbox [color]="'primary'" class="example-margin"
+          >Tôi đã đọc và đồng ý với Điều khoản và Điều kiện mở và sử dụng tài
+          khoản của Sacombank</mat-checkbox
+        >
+      </div>
+      <div class="col-2"></div>
+    </div>
+    <div class="text-center pt-5">
+      <button class="btn btn-primary" (click)="confirm()">Xác nhận</button>
+    </div>
   </div>
 </section>

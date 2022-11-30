@@ -8,6 +8,7 @@ import { AioService } from 'src/app/services/aio.service';
 })
 export class BackAndStepperComponent implements OnInit {
   @Input() currentStep = 1;
+  @Input() isShowStepper = true;
   steps: Stepper[] = [
     { stepNumber: 1, label: 'Chụp hình khuôn mặt' },
     { stepNumber: 2, label: 'Xác thực CCCD & vân tay' },

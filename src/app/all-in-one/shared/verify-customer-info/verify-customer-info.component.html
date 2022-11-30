@@ -7,7 +7,7 @@
       <h5 class="mb-4">Quý khách vui lòng kiểm tra lại thông tin cá nhân</h5>
     </div>
     <div class="row p-3 bg-white box">
-      <div class="col-6">
+      <div class="col-6 left">
         <div>
           <table>
             <tr>
@@ -48,6 +48,44 @@
               <td>Địa chỉ thường trú</td>
               <td class="font-weight-bold">
                 268 Nam Kỳ Khởi Nghĩa, P.8, Q.3, TP.HCM
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <hr />
+      <div class="col-12 pt-4 mt-4">
+        <div>
+          <table class="fill-table">
+            <tr>
+              <td class="w-50">
+                <mat-checkbox [color]="'primary'"
+                  >Địa chỉ liên lạc trùng với địa chỉ thường trú</mat-checkbox
+                >
+              </td>
+              <td class="w-50 pl-3">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Nhập địa chỉ liên lạc</mat-label>
+                  <input matInput required />
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <td class="w-50">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Nhập email của bạn</mat-label>
+                  <input matInput required />
+                </mat-form-field>
+              </td>
+              <td class="w-50 pl-3">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Vui lòng chọn nghề nghiệp</mat-label>
+                  <mat-select>
+                    <mat-option value="one">Chây đơ</mat-option>
+                    <mat-option value="two">Thợ code</mat-option>
+                    <mat-option value="two">King</mat-option>
+                  </mat-select>
+                </mat-form-field>
               </td>
             </tr>
           </table>

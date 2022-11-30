@@ -51,11 +51,31 @@ td {
 }
 
 .btn-keyboard:hover {
-  background-color: #2a81d0;
-  color: white;
-  transition: ease-in-out 0.3s;
+  animation: changeColor ease-in-out 0.3s;
 }
 
 .btn-disabled:disabled {
   opacity: 0.5;
+}
+
+@keyframes changeColor {
+  0% {
+    background-color: #2a81d0;
+    color: white;
+  }
+  25% {
+    background-color: #2a81d0;
+    color: white;
+  }
+  50% {
+    background-color: #2a81d0;
+    color: white;
+  }
+  75% {
+    background-color: #2a81d0;
+    color: white;
+  }
+  100% {
+    background-color: white;
+  }
 }

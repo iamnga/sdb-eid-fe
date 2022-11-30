@@ -5,3 +5,26 @@
 .box td {
   padding: 1rem;
 }
+
+mat-checkbox,
+mat-form-field,
+mat-option {
+  font-family: "Manrope", sans-serif !important;
+}
+
+.fill-table,
+.fill-table tr {
+  width: 100%;
+}
+
+.fill-table td {
+  padding: 0px 1rem;
+}
+
+.col-12 {
+  border-top: 2px solid #f0f2f7;
+}
+
+.left {
+  border-right: 2px solid #f0f2f7;
+}

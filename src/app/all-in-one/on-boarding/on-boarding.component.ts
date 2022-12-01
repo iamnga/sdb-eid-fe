@@ -43,13 +43,13 @@ export class OnBoardingComponent implements OnInit {
     //     break;
     //   }
     //   case ServiceStep.VerifyCustomerInfo: {
-    //     this.router.navigate(['/aio/on-boarding/fill-info']);
-    //     break;
-    //   }
-    //   case ServiceStep.FillInfo: {
     //     this.router.navigate(['/aio/on-boarding/account-and-alert']);
     //     break;
     //   }
+    //   // case ServiceStep.FillInfo: {
+    //   //   this.router.navigate(['/aio/on-boarding/account-and-alert']);
+    //   //   break;
+    //   // }
     //   case ServiceStep.AccountAndAlert: {
     //     this.router.navigate(['/aio/on-boarding/end']);
     //     break;

@@ -17,6 +17,7 @@ import { MobileCaptureCardIdComponent } from './all-in-one/shared/mobile-capture
 import { SharedComponent } from './all-in-one/shared/shared.component';
 import { VerifyCustomerInfoComponent } from './all-in-one/shared/verify-customer-info/verify-customer-info.component';
 import { VerifyOtpComponent } from './all-in-one/shared/verify-otp/verify-otp.component';
+import { VirtualKeyboardComponent } from './all-in-one/shared/virtual-keyboard/virtual-keyboard.component';
 import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-id.component';
 import { CollectComponent } from './collect/collect.component';
 import { HomeComponent } from './home/home.component';
@@ -118,6 +119,10 @@ const routes: Routes = [
           {
             path: 'back-and-stepper',
             component: BackAndStepperComponent,
+          },
+          {
+            path: 'vk',
+            component: VirtualKeyboardComponent,
           },
         ],
       },

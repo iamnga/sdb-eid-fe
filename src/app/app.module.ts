@@ -40,6 +40,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
+import { VirtualKeyboardComponent } from './all-in-one/shared/virtual-keyboard/virtual-keyboard.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { InputEmailComponent } from './all-in-one/shared/dialog/input-email/input-email.component';
+import { ContactAddressComponent } from './all-in-one/shared/dialog/contact-address/contact-address.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +71,9 @@ import { MatButtonModule } from '@angular/material/button';
     BackAndStepperComponent,
     CaptureGuideComponent,
     KeyboardNumberComponent,
+    VirtualKeyboardComponent,
+    InputEmailComponent,
+    ContactAddressComponent,
   ],
   imports: [
     SlickCarouselModule,
@@ -82,6 +89,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatSelectModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatDialogModule,
   ],
   providers: [
     WebsocketService,

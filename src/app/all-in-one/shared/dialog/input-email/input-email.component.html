@@ -1,0 +1,20 @@
+<div class="text-right mb-4">
+  <mat-icon matSuffix (click)="dialogRef.close(data)">close</mat-icon>
+</div>
+<div class="mb-3 text-center">
+  <h4>Email</h4>
+  <div>
+    <ng-container *ngIf="!err">&nbsp;</ng-container>
+    <ng-container *ngIf="err"
+      ><div class="text-danger">
+        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{ err }}
+      </div></ng-container
+    >
+  </div>
+</div>
+<app-aio-virtual-keyboard
+  (onChangeEvent)="onChangeEvent($event)"
+  (onKeyPressEvent)="onKeyPressEvent($event)"
+  [title]="'Email'"
+  [value]="email"
+></app-aio-virtual-keyboard>

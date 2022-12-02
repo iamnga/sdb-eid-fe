@@ -1,0 +1,23 @@
+<div class="text-right">
+  <mat-icon matSuffix (click)="dialogRef.close(data)">close</mat-icon>
+</div>
+<div class="text-center">
+  <h4>{{ title }}</h4>
+</div>
+
+<mat-dialog-content class="job-panel pt-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-4" *ngFor="let item of jobs">
+        <div
+          class="bg-white p-3 account-type mb-4 active"
+          (click)="setJob(item.name)"
+        >
+          <div class="d-inline-block">
+            <span class="account-type-label active">{{ item.name }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

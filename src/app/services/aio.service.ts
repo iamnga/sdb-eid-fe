@@ -22,6 +22,7 @@ export class AioService {
       residenceAddress: '268 Nam Kỳ Khởi Nghĩa, P.8, Q.3, TP.HCM',
       email: '',
       contactAddress: '',
+      job: '',
     };
   }
   next() {

@@ -105,13 +105,13 @@ export class CaptureFaceComponent implements OnInit {
       ) {
         this.captured = canvases[0].toDataURL('image/png');
 
-        localStorage.setItem('face-captured', this.captured);
-
         console.log('face-captured', this.captured);
 
         console.log('rect', canvases2[0].toDataURL('image/png'));
 
         this.captured = canvases2[0].toDataURL('image/png');
+
+        localStorage.setItem('face-captured', this.captured);
 
         clearInterval(x);
       }

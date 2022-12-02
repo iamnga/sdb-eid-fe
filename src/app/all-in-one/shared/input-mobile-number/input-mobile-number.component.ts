@@ -28,7 +28,7 @@ export class InputMobileNumberComponent implements OnInit {
   }
 
   handleInputNumber(key: string) {
-    if (key == '11') {
+    if (key == 'c') {
       this.mobileNumber = this.mobileNumber.substring(
         0,
         this.mobileNumber.length - 1

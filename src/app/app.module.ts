@@ -44,6 +44,8 @@ import { VirtualKeyboardComponent } from './all-in-one/shared/virtual-keyboard/v
 import { MatDialogModule } from '@angular/material/dialog';
 import { InputEmailComponent } from './all-in-one/shared/dialog/input-email/input-email.component';
 import { ContactAddressComponent } from './all-in-one/shared/dialog/contact-address/contact-address.component';
+import { JobComponent } from './all-in-one/shared/dialog/job/job.component';
+import { AlertComponent } from './all-in-one/shared/dialog/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +76,8 @@ import { ContactAddressComponent } from './all-in-one/shared/dialog/contact-addr
     VirtualKeyboardComponent,
     InputEmailComponent,
     ContactAddressComponent,
+    JobComponent,
+    AlertComponent,
   ],
   imports: [
     SlickCarouselModule,

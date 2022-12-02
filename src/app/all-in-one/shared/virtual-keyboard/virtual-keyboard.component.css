@@ -85,3 +85,28 @@ input {
 .mat-form-field-infix {
   border-top: 0.5em solid transparent !important;
 }
+
+.inner-addon {
+  position: relative;
+  width: 50%;
+}
+
+.inner-addon i {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+.left-addon i {
+  left: 0px;
+}
+.right-addon i {
+  right: 0px;
+}
+
+.left-addon input {
+  padding-left: 30px;
+}
+.right-addon input {
+  padding-right: 30px;
+}

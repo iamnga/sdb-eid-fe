@@ -9,4 +9,5 @@ export class CustomerInfo {
   residenceAddress: string;
   contactAddress: string;
   email: string;
+  job: string;
 }

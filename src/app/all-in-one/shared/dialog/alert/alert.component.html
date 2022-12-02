@@ -1,0 +1,25 @@
+<ng-container *ngIf="data.template == template.Simple">
+  <div class="text-right">
+    <mat-icon matSuffix (click)="dialogRef.close()">close</mat-icon>
+  </div>
+  <div class="text-center .exist-account">
+    <h3>{{ data.title }}</h3>
+    <div class="py-4" [innerHTML]="data.content"></div>
+  </div>
+</ng-container>
+<ng-container *ngIf="data.template == template.ExistAccount">
+  <div class="text-right">
+    <mat-icon matSuffix (click)="dialogRef.close()">close</mat-icon>
+  </div>
+  <div class="text-center .exist-account">
+    <h3>Thông báo</h3>
+    <div class="py-4">
+      Tài khoản Quý khách chọn hiện đã có người sử dụng. <br />
+      Vui lòng chọn số Tài khoản khác
+    </div>
+    <button class="btn btn-back mx-2" (click)="action('back')">Trở về</button>
+    <button class="btn btn-next mx-2" (click)="action('again')">
+      Nhập số khác
+    </button>
+  </div>
+</ng-container>

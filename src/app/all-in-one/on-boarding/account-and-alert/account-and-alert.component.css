@@ -29,3 +29,57 @@
 .mat-checkbox-background {
   background-color: black !important;
 }
+
+.table-rule td {
+  vertical-align: top;
+  padding: 1rem 0.5rem;
+  font-size: 20px;
+}
+
+.keyboard-box {
+  max-width: 450px;
+  margin: 0px auto;
+}
+
+input[type="text"] {
+  width: 100%;
+  height: 55px;
+  border-radius: 6px;
+  outline: none;
+  border: 1px solid #dcdcdc;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.btn-next,
+.btn-back {
+  width: 100%;
+  height: 60px;
+  outline: none;
+  border: 1px solid #2a81d0;
+  border-radius: 4px;
+  color: white;
+  background-color: #2a81d0;
+  font-size: 1.2rem;
+}
+
+.btn-next:hover {
+  background-color: #1966af;
+}
+.btn-next:disabled:hover {
+  background-color: #2a81d0;
+}
+
+.btn-next:disabled {
+  opacity: 0.5;
+}
+
+.btn-back {
+  background-color: white;
+  border: 1px solid #2a81d0;
+  color: #2a81d0;
+}
+
+mat-checkbox {
+  font-family: "Manrope", sans-serif !important;
+}

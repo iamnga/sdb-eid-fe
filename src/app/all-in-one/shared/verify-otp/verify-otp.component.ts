@@ -27,7 +27,7 @@ export class VerifyOtpComponent implements OnInit {
 
   handleInputNumber(key: string) {
     console.log(key);
-    if (key == '11') {
+    if (key == 'c') {
       this.otp.splice(-1);
       console.log(this.otp);
     } else {

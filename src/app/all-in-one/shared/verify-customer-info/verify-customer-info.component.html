@@ -2,9 +2,29 @@
 <app-aio-back-and-stepper [currentStep]="3"></app-aio-back-and-stepper>
 <section>
   <div class="container">
-    <div class="text-center">
+    <!-- <div class="text-center">
       <h3 class="font-weight-bold mb-4">Xác nhận thông tin</h3>
       <h5 class="mb-4">Quý khách vui lòng kiểm tra lại thông tin cá nhân</h5>
+    </div> -->
+    <div class="row pb-3">
+      <div class="col-6 p-0">
+        <h3 class="font-weight-bold mb-2">Xác nhận thông tin</h3>
+        Quý khách kiểm tra lại thông tin và nhập các thông tin còn thiếu
+      </div>
+      <div class="col-6 img-info text-right p-0">
+        <img [src]="face" alt="" />
+        <img
+          class="ml-3"
+          src="../../../../assets/all-in-one/shared/img/front-card.png"
+          alt=""
+        />
+
+        <img
+          class="ml-3"
+          src="../../../../assets/all-in-one/shared/img/back-card.png"
+          alt=""
+        />
+      </div>
     </div>
     <div class="row p-3 bg-white box">
       <div class="col-6 left">
@@ -58,7 +78,7 @@
         </div>
       </div>
       <hr />
-      <div class="col-12 pt-4 mt-4">
+      <div class="col-12 pt-2 mt-4">
         <div>
           <table class="fill-table">
             <tr>
@@ -96,15 +116,17 @@
                   }}</ng-container>
                 </div>
               </td>
-              <td class="w-50 pl-3">
+              <td class="w-50 pl-3" (click)="openJobDialog()">
                 <div class="fill-input ml-3">
-                  <ng-container
+                  <ng-container *ngIf="!aioSvc.cusInfo.job"
                     >Vui lòng chọn nghề nghiệp
                     <span class="float-right pr-3">
                       <i class="fa fa-angle-down" aria-hidden="true"></i>
                     </span>
                   </ng-container>
-                  <!-- <ng-container *ngIf="email">{{ email }}</ng-container> -->
+                  <ng-container *ngIf="aioSvc.cusInfo.job">{{
+                    aioSvc.cusInfo.job
+                  }}</ng-container>
                 </div>
               </td>
             </tr>
@@ -113,7 +135,17 @@
       </div>
     </div>
     <div class="text-center pt-5">
-      <button class="btn btn-primary" (click)="confirm()">Xác nhận</button>
+      <button
+        class="btn-next"
+        (click)="confirm()"
+        [disabled]="
+          !aioSvc.cusInfo.email ||
+          !aioSvc.cusInfo.job ||
+          !aioSvc.cusInfo.contactAddress
+        "
+      >
+        Xác nhận
+      </button>
     </div>
   </div>
 </section>

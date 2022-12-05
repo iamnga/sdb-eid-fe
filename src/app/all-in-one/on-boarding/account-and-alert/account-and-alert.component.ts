@@ -62,7 +62,7 @@ export class AccountAndAlertComponent implements OnInit {
 
   back() {
     this.isCustomAccount = false;
-    this.currentAccountType = this.accountType.None;
+    if (!this.customAccount) this.currentAccountType = this.accountType.None;
   }
 
   handleInputNumber(key: string) {
@@ -144,6 +144,7 @@ export class AccountAndAlertComponent implements OnInit {
       this.isCustomAccount = false;
       this.customAccount = this.customAccountTemp;
       this.currentAccountNumber = this.customAccount;
+      console.log(this.customAccount);
     }
   }
 

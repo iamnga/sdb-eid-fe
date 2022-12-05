@@ -15,6 +15,7 @@ export class EndComponent implements OnInit {
   ngOnInit(): void {}
 
   confirm() {
+    this.aioSvc.release();
     this.aioSvc.next();
   }
 }

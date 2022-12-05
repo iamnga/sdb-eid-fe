@@ -150,7 +150,12 @@
       <button
         class="btn btn-next w-25"
         (click)="confirm()"
-        [disabled]="!currentAccountType || !currentAlertType || !tc"
+        [disabled]="
+          !currentAccountType ||
+          !currentAlertType ||
+          !tc ||
+          !currentAccountNumber
+        "
       >
         Tiếp tục
       </button>

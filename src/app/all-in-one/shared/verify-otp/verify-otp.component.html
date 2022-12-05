@@ -15,6 +15,9 @@
           *ngFor="let item of arrOtp; last as last; let i = index"
           [ngClass]="{ last: last }"
           [value]="showOtp(i)"
+          disabled
+          readonly
+          autofocus="false"
         />
       </div>
       <app-keyboard-number

@@ -10,6 +10,8 @@ export class AioService {
   currentSerice = Service.None;
   currentStep = ServiceStep.DashBoard;
   cusInfo: CustomerInfo = new CustomerInfo();
+  isProcessing = false;
+
   constructor(private router: Router) {
     this.cusInfo = {
       name: 'TRAN MINH HOANG LONG',
@@ -29,6 +31,29 @@ export class AioService {
     if ((this.currentSerice = Service.OnBoarding)) {
       this.router.navigate(['/aio/on-boarding']);
     }
+  }
+
+  create() {
+    this.isProcessing = true;
+  }
+
+  release() {
+    this.isProcessing = false;
+    this.currentSerice = Service.None;
+    this.currentStep = ServiceStep.DashBoard;
+    this.cusInfo = {
+      name: 'TRAN MINH HOANG LONG',
+      phone: '0979 327 455',
+      gender: 'Nam',
+      dob: '16/03/1995',
+      idNo: '231053235256',
+      dateOfIssuance: '06/05/2022',
+      dateOfExpiry: '06/05/2040',
+      residenceAddress: '268 Nam Kỳ Khởi Nghĩa, P.8, Q.3, TP.HCM',
+      email: '',
+      contactAddress: '',
+      job: '',
+    };
   }
 }
 

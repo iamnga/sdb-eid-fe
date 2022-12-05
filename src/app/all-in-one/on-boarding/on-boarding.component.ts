@@ -14,13 +14,16 @@ export class OnBoardingComponent implements OnInit {
 
   constructor(private router: Router, private aioSvc: AioService) {
     aioSvc.currentSerice = Service.OnBoarding;
+    if (!this.aioSvc.isProcessing) {
+      this.aioSvc.create();
+    }
   }
 
   ngOnInit(): void {
     console.log(this.aioSvc.currentStep);
     if (!environment.production)
-      this.router.navigate(['/aio/on-boarding/account-and-alert']);
-    //this.router.navigate(['/aio/shared/verify-customer-info']);
+      //this.router.navigate(['/aio/on-boarding/account-and-alert']);
+      this.router.navigate(['/aio/shared/verify-customer-info']);
     else {
       switch (this.aioSvc.currentStep) {
         case ServiceStep.DashBoard: {

@@ -15,13 +15,13 @@
         <img [src]="face" alt="" />
         <img
           class="ml-3"
-          src="../../../../assets/all-in-one/shared/img/front-card.png"
+          src="assets/all-in-one/shared/img/front-card.png"
           alt=""
         />
 
         <img
           class="ml-3"
-          src="../../../../assets/all-in-one/shared/img/back-card.png"
+          src="assets/all-in-one/shared/img/back-card.png"
           alt=""
         />
       </div>
@@ -99,7 +99,7 @@
                     Địa chỉ liên lạc
                   </ng-container>
                   <ng-container *ngIf="aioSvc.cusInfo.contactAddress">
-                    {{ aioSvc.cusInfo.contactAddress | slice: 0:50 }}
+                    {{ aioSvc.cusInfo.contactAddress | slice : 0 : 50 }}
                     {{ aioSvc.cusInfo.contactAddress.length > 50 ? "..." : "" }}
                   </ng-container>
                 </div>

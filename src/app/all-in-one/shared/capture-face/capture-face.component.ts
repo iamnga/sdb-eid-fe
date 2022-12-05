@@ -145,7 +145,7 @@ export class CaptureFaceComponent implements OnInit {
 
   async startCapture() {
     await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri('../../assets/models'),
+      faceapi.nets.tinyFaceDetector.loadFromUri('assets/models'),
     ]).then(() => {
       this.startVideo();
     });

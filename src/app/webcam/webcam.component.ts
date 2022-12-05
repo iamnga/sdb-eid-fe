@@ -28,7 +28,7 @@ export class WebcamComponent implements OnInit {
 
   async ngOnInit() {
     await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri('../../assets/models'),
+      faceapi.nets.tinyFaceDetector.loadFromUri('assets/models'),
     ]).then(() => {
       this.startVideo();
     });

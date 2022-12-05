@@ -1,5 +1,7 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { AllInOneRequest } from '../models/aio';
 import { CustomerInfo } from '../models/customer-info';
 import { Service, ServiceStep } from '../models/enum';
 
@@ -12,7 +14,7 @@ export class AioService {
   cusInfo: CustomerInfo = new CustomerInfo();
   isProcessing = false;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private http: HttpClient) {
     this.cusInfo = {
       name: 'TRAN MINH HOANG LONG',
       phone: '0979 327 455',
@@ -35,6 +37,7 @@ export class AioService {
 
   create() {
     this.isProcessing = true;
+    this.getProvinces();
   }
 
   release() {
@@ -54,6 +57,53 @@ export class AioService {
       contactAddress: '',
       job: '',
     };
+  }
+
+  // API
+
+  getSessionId() {
+    // this.http.post()
+
+    this.http
+      .get(
+        'https://cardtest.sacombank.com.vn:9448/cardservice/api/banner-cards/Home'
+      )
+      .subscribe(
+        (rs) => {
+          console.log(rs);
+        },
+        (err) => {}
+      );
+  }
+
+  getProvinces() {
+    let req = new AllInOneRequest();
+    let header = new HttpHeaders();
+
+    const headerDict = {
+      'Content-Type': 'application/json',
+      Accept: '*/*',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Origin': '*',
+    };
+
+    // const requestOptions = {
+    //   headers: new Headers(headerDict),
+    // };
+
+    header.append('Access-Control-Allow-Origin', '*');
+    req.refNumber = '123456';
+    req.refDateTime = new Date().toISOString().replace('Z', '');
+    this.http
+      .post('https://cardtest.sacombank.com.vn:9443/digizone/provinces', req, {
+        headers: new HttpHeaders(headerDict),
+      })
+      .subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (err) => {}
+      );
   }
 }
 

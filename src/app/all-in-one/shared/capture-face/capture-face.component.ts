@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import * as faceapi from 'face-api.js';
 import { ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
@@ -8,7 +14,7 @@ import { interval, Subscription } from 'rxjs';
   templateUrl: './capture-face.component.html',
   styleUrls: ['../../all-in-one.component.css', './capture-face.component.css'],
 })
-export class CaptureFaceComponent implements OnInit {
+export class CaptureFaceComponent implements OnInit, OnDestroy {
   isUnderstood = true;
   WIDTH = 640;
   HEIGHT = 480;
@@ -32,6 +38,7 @@ export class CaptureFaceComponent implements OnInit {
 
   ngOnInit() {
     localStorage.setItem('face-captured', '');
+    this.aioSvc.updateLogStep();
     this.startCapture();
   }
 
@@ -53,15 +60,15 @@ export class CaptureFaceComponent implements OnInit {
       .querySelector('video')
       .addEventListener('play', async () => {
         this.canvas = await faceapi.createCanvasFromMedia(this.videoInput);
-        this.canvasEl = this.canvasRef.nativeElement;
-        this.canvasEl.appendChild(this.canvas);
-        this.canvas.setAttribute('id', 'canvass');
-        this.canvas.setAttribute(
-          'style',
-          `position: fixed;
-          top: 0;
-          left: 0;`
-        );
+        // this.canvasEl = this.canvasRef.nativeElement;
+        // this.canvasEl.appendChild(this.canvas);
+        // this.canvas.setAttribute('id', 'canvass');
+        // this.canvas.setAttribute(
+        //   'style',
+        //   `position: fixed;
+        //   top: 0;
+        //   left: 0;`
+        // );
 
         this.doDetect();
       });
@@ -76,46 +83,49 @@ export class CaptureFaceComponent implements OnInit {
 
     this.countdown();
 
-    var x = setInterval(async () => {
-      console.log('run detect: ', x);
-      this.detection = await faceapi.detectAllFaces(
-        this.videoInput,
-        new faceapi.TinyFaceDetectorOptions({
-          scoreThreshold: 0.8,
-        })
-      );
+    setTimeout(() => {
+      var x = setInterval(async () => {
+        console.log('run detect: ', x);
+        this.detection = await faceapi.detectAllFaces(
+          this.videoInput,
+          new faceapi.TinyFaceDetectorOptions({
+            scoreThreshold: 0.8,
+          })
+        );
 
-      let canvases = await faceapi.extractFaces(
-        this.videoInput,
-        this.detection
-      );
+        let canvases = await faceapi.extractFaces(
+          this.videoInput,
+          this.detection
+        );
 
-      let regionsToExtract = [new faceapi.Rect(0, 0, this.WIDTH, this.HEIGHT)];
+        let regionsToExtract = [
+          new faceapi.Rect(0, 0, this.WIDTH, this.HEIGHT),
+        ];
 
-      let canvases2 = await faceapi.extractFaces(
-        this.videoInput,
-        regionsToExtract
-      );
+        let canvases2 = await faceapi.extractFaces(
+          this.videoInput,
+          regionsToExtract
+        );
 
-      if (
-        this.detection.length == 1 &&
-        canvases.length > 0 &&
-        this.endCountDown &&
-        this.captured == ''
-      ) {
-        this.captured = canvases[0].toDataURL('image/png');
+        if (
+          this.detection.length == 1 &&
+          canvases.length > 0 &&
+          this.captured == ''
+        ) {
+          this.captured = canvases[0].toDataURL('image/png');
 
-        console.log('face-captured', this.captured);
+          console.log('face-captured', this.captured);
 
-        console.log('rect', canvases2[0].toDataURL('image/png'));
+          console.log('rect', canvases2[0].toDataURL('image/png'));
 
-        this.captured = canvases2[0].toDataURL('image/png');
+          this.captured = canvases2[0].toDataURL('image/png');
 
-        localStorage.setItem('face-captured', this.captured);
+          localStorage.setItem('face-captured', this.captured);
 
-        clearInterval(x);
-      }
-    }, 100);
+          clearInterval(x);
+        }
+      }, 200);
+    }, 4000);
   }
 
   countdown() {
@@ -152,6 +162,10 @@ export class CaptureFaceComponent implements OnInit {
   }
 
   next() {
+    this.aioSvc.next();
+  }
+
+  ngOnDestroy() {
     let mediaStream = this.video.nativeElement.srcObject;
 
     let tracks = mediaStream.getTracks();
@@ -159,6 +173,5 @@ export class CaptureFaceComponent implements OnInit {
     console.log(tracks.length);
 
     tracks[0].stop();
-    this.aioSvc.next();
   }
 }

@@ -21,6 +21,10 @@ export class BackAndStepperComponent implements OnInit {
   constructor(private aioSvc: AioService) {}
 
   ngOnInit(): void {}
+
+  goHome() {
+    this.aioSvc.release();
+  }
 }
 
 export class Stepper {

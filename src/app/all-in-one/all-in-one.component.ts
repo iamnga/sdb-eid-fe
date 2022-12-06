@@ -8,9 +8,7 @@ import { AioService } from '../services/aio.service';
   styleUrls: ['./all-in-one.component.css'],
 })
 export class AllInOneComponent implements OnInit {
-  constructor(private aioSvc: AioService) {
-    aioSvc.currentStep = ServiceStep.DashBoard;
-  }
+  constructor(public aioSvc: AioService) {}
 
   ngOnInit(): void {}
 }

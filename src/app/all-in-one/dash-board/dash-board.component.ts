@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ServiceStep } from 'src/app/models/enum';
+import { Router } from '@angular/router';
+import { Service, ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
 
 @Component({
@@ -8,12 +9,39 @@ import { AioService } from 'src/app/services/aio.service';
   styleUrls: ['./dash-board.component.css'],
 })
 export class DashBoardComponent implements OnInit {
-  constructor(private aioSvc: AioService) {
+  service = Service;
+  constructor(public aioSvc: AioService, private router: Router) {
     aioSvc.currentStep = ServiceStep.DashBoard;
-    this.aioSvc.release();
   }
 
   ngOnInit(): void {}
+
+  startService(serviceCd: any) {
+    this.aioSvc.currentSerice = serviceCd;
+    this.aioSvc.isProcessing = true;
+    console.log('serviceCd', serviceCd);
+    this.aioSvc.getSessionId().subscribe(
+      (result: any) => {
+        this.aioSvc.isProcessing = false;
+        if (result) {
+          console.log(result);
+          if (result.respCode != '00') {
+            this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
+          } else {
+            this.aioSvc.sessionID = result.data.sessionId;
+            if (serviceCd == this.service.OnBoarding)
+              this.router.navigate(['/aio/on-boarding']);
+          }
+        } else {
+          this.aioSvc.alert(`Có lỗi xảy ra: getSessionId`);
+        }
+      },
+      (err) => {
+        this.aioSvc.isProcessing = false;
+        this.aioSvc.alert(`Có lỗi xảy ra: ${err}`);
+      }
+    );
+  }
 
   slides = [
     {

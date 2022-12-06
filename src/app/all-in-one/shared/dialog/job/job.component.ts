@@ -1,5 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AddressData, Occupations } from 'src/app/models/aio';
+import { AioService } from 'src/app/services/aio.service';
 
 @Component({
   selector: 'app-job',
@@ -8,23 +10,18 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class JobComponent implements OnInit {
   title = 'Nghề nghiệp';
-  currentJob = '';
+  currentOccupation = '';
 
   constructor(
     public dialogRef: MatDialogRef<JobComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string
+    @Inject(MAT_DIALOG_DATA) public data: Occupations[],
+    private aioSvc: AioService
   ) {}
 
   ngOnInit(): void {}
 
-  setJob(job: string) {
-    this.currentJob = job;
-    this.dialogRef.close(this.currentJob);
+  setOccupations(occ: string) {
+    this.currentOccupation = occ;
+    this.dialogRef.close(this.currentOccupation);
   }
-
-  jobs = [
-    { code: 1, name: 'Kỹ sư phần mềm' },
-    { code: 2, name: 'Giáo viên' },
-    { code: 3, name: 'Doanh nhân' },
-  ];
 }

@@ -13,7 +13,7 @@
   </div>
   <div class="container position-relative">
     <div class="row bg-white text-center p-4 tab-bar">
-      <div class="col-3" routerLink="/aio/on-boarding">
+      <div class="col-3" (click)="startService(service.OnBoarding)">
         <div><span class="material-icons md-48"> person_add </span></div>
         <div>Đăng ký tài khoản</div>
       </div>
@@ -39,28 +39,3 @@
     />
   </div>
 </section>
-<!-- <section>
-  <div class="container">
-    <div class="row pt-5">
-      <div class="col-2">
-        <button class="btn btn-warning w-100" routerLink="/aio/on-boarding">
-          Mở tài khoản
-        </button>
-      </div>
-      <div class="col-2">
-        <button class="btn btn-warning w-100" routerLink="/aio/update-card-id">
-          Cập nhật CCCD
-        </button>
-      </div>
-      <div class="col-2">
-        <button class="btn btn-warning w-100">Sản phẩm dịch vụ</button>
-      </div>
-      <div class="col-2">
-        <button class="btn btn-warning w-100">Tiện ích</button>
-      </div>
-      <div class="col-2">
-        <button class="btn btn-warning w-100">Game lấy quà</button>
-      </div>
-    </div>
-  </div>
-</section> -->

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AllInOneResponse, GetSessionIdResponseData } from 'src/app/models/aio';
 import { Service, ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
 import { environment } from 'src/environments/environment';
@@ -10,16 +11,19 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./on-boarding.component.css'],
 })
 export class OnBoardingComponent implements OnInit {
-  ssid = '';
-
   constructor(private router: Router, private aioSvc: AioService) {
     aioSvc.currentSerice = Service.OnBoarding;
-    if (!this.aioSvc.isProcessing) {
-      this.aioSvc.create();
-    }
+    // if (!this.aioSvc.isProcessing) {
+    //   // this.aioSvc.create();
+    //   this.aioSvc.isProcessing = true;
+    // }
   }
 
   ngOnInit(): void {
+    this.handleNavigate();
+  }
+
+  handleNavigate() {
     console.log(this.aioSvc.currentStep);
     if (!environment.production)
       //this.router.navigate(['/aio/on-boarding/account-and-alert']);
@@ -54,10 +58,6 @@ export class OnBoardingComponent implements OnInit {
           this.router.navigate(['/aio/on-boarding/account-and-alert']);
           break;
         }
-        // case ServiceStep.FillInfo: {
-        //   this.router.navigate(['/aio/on-boarding/account-and-alert']);
-        //   break;
-        // }
         case ServiceStep.AccountAndAlert: {
           this.router.navigate(['/aio/shared/verify-otp']);
           break;

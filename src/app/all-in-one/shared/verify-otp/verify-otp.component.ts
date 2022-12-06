@@ -1,4 +1,9 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
+import {
+  RequestOtpRequestData,
+  VerifyOtpRequestData,
+} from 'src/app/models/aio';
 import { ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
 
@@ -15,7 +20,28 @@ export class VerifyOtpComponent implements OnInit {
   constructor(private aioSvc: AioService) {
     aioSvc.currentStep = ServiceStep.VerifyOtp;
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.aioSvc.updateLogStep();
+    this.requestOtp();
+  }
+
+  requestOtp() {
+    let data = new RequestOtpRequestData();
+    data.customerID = '352229667';
+    data.cifNo = '1';
+    data.authType = '3';
+    data.customerType = '1';
+    data.mobileNo = '0349444440';
+    data.channel = 'DigiZone';
+    data.smsContent = 'NGANN';
+
+    this.aioSvc.requestOtp(data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {}
+    );
+  }
 
   confirm() {
     this.aioSvc.next();

@@ -28,4 +28,5 @@
 
 .job-panel {
   width: 70vw;
+  min-height: 50vh;
 }

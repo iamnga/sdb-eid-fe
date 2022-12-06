@@ -16,6 +16,5 @@ export class EndComponent implements OnInit {
 
   confirm() {
     this.aioSvc.release();
-    this.aioSvc.next();
   }
 }

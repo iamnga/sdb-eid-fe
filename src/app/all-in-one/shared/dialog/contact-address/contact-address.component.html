@@ -1,77 +1,83 @@
-<div class="text-right">
-  <mat-icon matSuffix (click)="dialogRef.close(data)">close</mat-icon>
-</div>
-<div class="container">
-  <div class="row">
-    <div class="col-2 pl-2" (click)="back()">
-      <i class="fa fa-long-arrow-left fa-2x" aria-hidden="true"></i>
-    </div>
-    <div class="col-8 text-center">
-      <h4>{{ title }}</h4>
-    </div>
-    <div class="col-2"></div>
+<section *ngIf="provinces.length > 0">
+  <div class="text-right">
+    <mat-icon matSuffix (click)="dialogRef.close(data)">close</mat-icon>
   </div>
-</div>
-<mat-dialog-content
-  class="contact-address-panel"
-  [ngClass]="{ 'pt-4': step < 4 }"
->
   <div class="container">
     <div class="row">
-      <ng-container *ngIf="step == 1">
-        <div class="col-4" *ngFor="let item of provinces">
-          <div
-            class="bg-white p-3 account-type mb-4 active"
-            (click)="getDistrict(item.name)"
-          >
-            <div class="d-inline-block">
-              <span class="account-type-label active">{{ item.name }}</span>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="step == 2">
-        <div class="col-4" *ngFor="let item of districts">
-          <div
-            class="bg-white p-3 account-type mb-4 active"
-            (click)="getWard(item.name)"
-          >
-            <div class="d-inline-block">
-              <span class="account-type-label active">{{ item.name }}</span>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-
-      <ng-container *ngIf="step == 3">
-        <div class="col-4" *ngFor="let item of wards">
-          <div
-            class="bg-white p-3 account-type mb-4 active"
-            (click)="getAddressDetail(item.name)"
-          >
-            <div class="d-inline-block">
-              <span class="account-type-label active">{{ item.name }}</span>
-            </div>
-          </div>
-        </div>
-      </ng-container>
+      <div class="col-2 pl-2" (click)="back()">
+        <i
+          *ngIf="step > 1"
+          class="fa fa-long-arrow-left fa-2x"
+          aria-hidden="true"
+        ></i>
+      </div>
+      <div class="col-8 text-center">
+        <h4>{{ title }}</h4>
+      </div>
+      <div class="col-2"></div>
     </div>
   </div>
-  <ng-container *ngIf="step == 4">
-    <div class="text-center">
-      <div class="mb-2 mt-4">
-        <ng-container *ngIf="!err">&nbsp;</ng-container>
-        <ng-container *ngIf="err"
-          ><div class="text-danger">
-            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-            {{ err }}
-          </div></ng-container
-        >
+  <mat-dialog-content
+    class="contact-address-panel"
+    [ngClass]="{ 'pt-4': step < 4 }"
+  >
+    <div class="container">
+      <div class="row">
+        <ng-container *ngIf="step == 1">
+          <div class="col-4" *ngFor="let item of provinces">
+            <div
+              class="bg-white p-3 account-type mb-4 active"
+              (click)="getDistrict(item)"
+            >
+              <div class="d-inline-block">
+                <span class="account-type-label active">{{ item.name }}</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="step == 2">
+          <div class="col-4" *ngFor="let item of districts">
+            <div
+              class="bg-white p-3 account-type mb-4 active"
+              (click)="getWard(item)"
+            >
+              <div class="d-inline-block">
+                <span class="account-type-label active">{{ item.name }}</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="step == 3">
+          <div class="col-4" *ngFor="let item of wards">
+            <div
+              class="bg-white p-3 account-type mb-4 active"
+              (click)="getAddressDetail(item)"
+            >
+              <div class="d-inline-block">
+                <span class="account-type-label active">{{ item.name }}</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
       </div>
-      <app-aio-virtual-keyboard
-        (onChangeEvent)="onChangeEvent($event)"
-        (onKeyPressEvent)="onKeyPressEvent($event)"
-      ></app-aio-virtual-keyboard>
     </div>
-  </ng-container>
-</mat-dialog-content>
+    <ng-container *ngIf="step == 4">
+      <div class="text-center">
+        <div class="mb-2 mt-4">
+          <ng-container *ngIf="!err">&nbsp;</ng-container>
+          <ng-container *ngIf="err"
+            ><div class="text-danger">
+              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+              {{ err }}
+            </div></ng-container
+          >
+        </div>
+        <app-aio-virtual-keyboard
+          (onChangeEvent)="onChangeEvent($event)"
+          (onKeyPressEvent)="onKeyPressEvent($event)"
+        ></app-aio-virtual-keyboard>
+      </div>
+    </ng-container>
+  </mat-dialog-content>
+</section>

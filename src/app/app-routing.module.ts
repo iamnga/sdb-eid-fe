@@ -4,7 +4,6 @@ import { AllInOneComponent } from './all-in-one/all-in-one.component';
 import { DashBoardComponent } from './all-in-one/dash-board/dash-board.component';
 import { AccountAndAlertComponent } from './all-in-one/on-boarding/account-and-alert/account-and-alert.component';
 import { EndComponent } from './all-in-one/on-boarding/end/end.component';
-import { FillInfoComponent } from './all-in-one/on-boarding/fill-info/fill-info.component';
 
 import { OnBoardingComponent } from './all-in-one/on-boarding/on-boarding.component';
 import { BackAndStepperComponent } from './all-in-one/shared/back-and-stepper/back-and-stepper.component';
@@ -49,10 +48,6 @@ const routes: Routes = [
             component: OnBoardingComponent,
           },
           {
-            path: 'fill-info',
-            component: FillInfoComponent,
-          },
-          {
             path: 'account-and-alert',
             component: AccountAndAlertComponent,
           },
@@ -80,10 +75,6 @@ const routes: Routes = [
         path: 'shared',
         component: SharedComponent,
         children: [
-          {
-            path: '',
-            component: SharedComponent,
-          },
           {
             path: 'capture-guide',
             component: CaptureGuideComponent,

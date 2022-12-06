@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { InputEmailComponent } from '../dialog/input-email/input-email.component';
 import { ContactAddressComponent } from '../dialog/contact-address/contact-address.component';
 import { JobComponent } from '../dialog/job/job.component';
+import { Occupations } from 'src/app/models/aio';
 
 @Component({
   selector: 'app-verify-customer-info',
@@ -14,6 +15,8 @@ import { JobComponent } from '../dialog/job/job.component';
 export class VerifyCustomerInfoComponent implements OnInit {
   isLikeResidenceAddress = false;
   face = '';
+  occupations: Occupations[] = [];
+
   // email = '';
   constructor(public aioSvc: AioService, public dialog: MatDialog) {
     aioSvc.currentStep = ServiceStep.VerifyCustomerInfo;
@@ -22,6 +25,9 @@ export class VerifyCustomerInfoComponent implements OnInit {
   ngOnInit(): void {
     let faceC = localStorage.getItem('face-captured');
     this.face = faceC ? faceC : '';
+    this.aioSvc.updateLogStep();
+    this.getOccupations();
+    this.aioSvc.cusInfo.email = 'minhngaag@gmail.com';
   }
 
   confirm() {
@@ -40,6 +46,22 @@ export class VerifyCustomerInfoComponent implements OnInit {
 
   recieveInputKeyBoard(event: any) {
     console.log(event);
+  }
+
+  getOccupations() {
+    this.aioSvc.isProcessing = true;
+    this.aioSvc.getOccupations().subscribe(
+      (res: any) => {
+        console.log(res);
+        this.aioSvc.isProcessing = false;
+        if (res.data.occupations) {
+          this.occupations = res.data.occupations;
+        }
+      },
+      (err) => {
+        this.aioSvc.isProcessing = false;
+      }
+    );
   }
 
   openInputEmailDialog() {
@@ -68,7 +90,7 @@ export class VerifyCustomerInfoComponent implements OnInit {
 
   openJobDialog() {
     const dialogRef = this.dialog.open(JobComponent, {
-      data: this.aioSvc.cusInfo.job,
+      data: this.occupations,
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

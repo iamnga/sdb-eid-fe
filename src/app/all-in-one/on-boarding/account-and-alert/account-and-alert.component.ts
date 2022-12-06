@@ -4,6 +4,7 @@ import { AioService } from 'src/app/services/aio.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertComponent } from '../../shared/dialog/alert/alert.component';
 import { Alert, Template } from 'src/app/models/alert';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-and-alert',
@@ -22,7 +23,11 @@ export class AccountAndAlertComponent implements OnInit {
   currentAccountNumber = '';
   tc = false;
 
-  constructor(private aioSvc: AioService, public dialog: MatDialog) {
+  constructor(
+    private aioSvc: AioService,
+    public dialog: MatDialog,
+    private router: Router
+  ) {
     aioSvc.currentStep = ServiceStep.AccountAndAlert;
   }
 

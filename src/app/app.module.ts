@@ -15,7 +15,6 @@ import { CaptureFaceComponent } from './all-in-one/shared/capture-face/capture-f
 import { DashBoardComponent } from './all-in-one/dash-board/dash-board.component';
 import { InputMobileNumberComponent } from './all-in-one/shared/input-mobile-number/input-mobile-number.component';
 import { VerifyCustomerInfoComponent } from './all-in-one/shared/verify-customer-info/verify-customer-info.component';
-import { FillInfoComponent } from './all-in-one/on-boarding/fill-info/fill-info.component';
 import { AccountAndAlertComponent } from './all-in-one/on-boarding/account-and-alert/account-and-alert.component';
 import { VerifyOtpComponent } from './all-in-one/shared/verify-otp/verify-otp.component';
 import { EndComponent } from './all-in-one/on-boarding/end/end.component';
@@ -46,7 +45,7 @@ import { InputEmailComponent } from './all-in-one/shared/dialog/input-email/inpu
 import { ContactAddressComponent } from './all-in-one/shared/dialog/contact-address/contact-address.component';
 import { JobComponent } from './all-in-one/shared/dialog/job/job.component';
 import { AlertComponent } from './all-in-one/shared/dialog/alert/alert.component';
-
+import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +59,6 @@ import { AlertComponent } from './all-in-one/shared/dialog/alert/alert.component
     CollectCardIdComponent,
     InputMobileNumberComponent,
     VerifyCustomerInfoComponent,
-    FillInfoComponent,
     AccountAndAlertComponent,
     VerifyOtpComponent,
     EndComponent,
@@ -94,6 +92,7 @@ import { AlertComponent } from './all-in-one/shared/dialog/alert/alert.component
     MatCheckboxModule,
     MatButtonModule,
     MatDialogModule,
+    NgxLoadingModule.forRoot({ animationType: ngxLoadingAnimationTypes.pulse }),
   ],
   providers: [
     WebsocketService,

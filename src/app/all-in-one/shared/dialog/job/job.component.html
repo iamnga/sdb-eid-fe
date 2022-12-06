@@ -8,10 +8,10 @@
 <mat-dialog-content class="job-panel pt-4">
   <div class="container">
     <div class="row">
-      <div class="col-4" *ngFor="let item of jobs">
+      <div class="col-4" *ngFor="let item of data">
         <div
           class="bg-white p-3 account-type mb-4 active"
-          (click)="setJob(item.name)"
+          (click)="setOccupations(item.name)"
         >
           <div class="d-inline-block">
             <span class="account-type-label active">{{ item.name }}</span>

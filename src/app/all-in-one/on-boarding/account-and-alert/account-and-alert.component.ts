@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AlertComponent } from '../../shared/dialog/alert/alert.component';
 import { Alert, Template } from 'src/app/models/alert';
 import { Router } from '@angular/router';
+import { ifft } from '@tensorflow/tfjs-core';
 
 @Component({
   selector: 'app-account-and-alert',
@@ -31,12 +32,12 @@ export class AccountAndAlertComponent implements OnInit {
     aioSvc.currentStep = ServiceStep.AccountAndAlert;
   }
 
-  ngOnInit(): void {}
+  ngOnInit() {}
 
   selectAccountType(type: any) {
     this.currentAccountType = type;
     if (type == this.accountType.Phone) {
-      this.currentAccountNumber = '938 483 697';
+      this.currentAccountNumber = '938483697';
     }
     if (type == this.accountType.DOB) {
       this.currentAccountNumber = '9031995';
@@ -61,8 +62,14 @@ export class AccountAndAlertComponent implements OnInit {
   }
 
   confirm() {
-    this.aioSvc.next();
-    //Call to verify
+    if (
+      this.currentAccountType != this.accountType.Custom &&
+      this.currentAccountType != this.accountType.Random
+    ) {
+      this.checkAccount(this.currentAccountNumber);
+    } else {
+      this.aioSvc.next();
+    }
   }
 
   back() {
@@ -139,28 +146,65 @@ export class AccountAndAlertComponent implements OnInit {
   }
 
   verifyCustomAccount() {
-    console.log(this.customAccountTemp);
-
-    if (this.customAccountTemp == '888888') {
-      this.alert('exist');
-    } else if (this.customAccountTemp == '8888889') {
-      this.alert('premium');
-    } else {
-      this.isCustomAccount = false;
-      this.customAccount = this.customAccountTemp;
-      this.currentAccountNumber = this.customAccount;
-      console.log(this.customAccount);
-    }
+    this.checkAccount(this.customAccountTemp);
   }
 
-  alert(type: string) {
+  checkAccount(accountNo: string) {
+    this.aioSvc.isProcessing = true;
+    this.aioSvc.checkAccount(accountNo).subscribe(
+      (res: any) => {
+        this.aioSvc.isProcessing = false;
+        if (res.respCode == '00') {
+          console.log(res.data);
+          if (res.data.accountExist) {
+            this.alert();
+          } else if (res.data.price > 0) {
+            this.alert(res.data.price);
+          } else {
+            if (this.currentAccountType == this.accountType.Custom) {
+              this.customAccount = this.customAccountTemp;
+              this.currentAccountNumber = this.customAccount;
+              this.isCustomAccount = false;
+            } else {
+              //Store info alert - accountNo - accountType
+              this.aioSvc.next();
+            }
+          }
+        } else {
+          this.aioSvc.updateLogStep(
+            '',
+            res.respCode,
+            res.respDescription,
+            'checkAccount'
+          );
+          this.aioSvc.alert(`Có lỗi xảy ra checkAccount`);
+        }
+      },
+      (err) => {
+        this.aioSvc.isProcessing = false;
+        this.aioSvc.updateLogStep('', '01', 'HttpError', 'checkAccount');
+        this.aioSvc.alert(`Có lỗi xảy ra checkAccount`);
+        console.log(err);
+      }
+    );
+  }
+
+  numberWithCommas(x: number) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  alert(price: number = 0) {
     let data = new Alert();
 
-    if (type == 'exist') data.template = Template.ExistAccount;
-    if (type == 'premium') {
-      data.template = Template.Simple;
-      data.title = 'Thông báo';
-      data.content = `Tài khoản Quý khách chọn có giá XXXX.<br> Vui lòng liên hệ quầy giao dịch để thanh toán phí <br>trước khi mở Tài khoản hoặc lựa chọn Tài khoản khác`;
+    data.template = Template.Simple;
+    data.title = 'Thông báo';
+    if (price > 0) {
+      data.content = `Tài khoản Quý khách chọn có giá <b>${this.numberWithCommas(
+        price
+      )}</b> <u>đ</u>.<br> Vui lòng liên hệ quầy giao dịch để thanh toán phí <br>trước khi mở Tài khoản hoặc lựa chọn Tài khoản khác`;
+    } else {
+      data.content = `Tài khoản Quý khách chọn hiện đã có người sử dụng. <br />
+      Vui lòng chọn số Tài khoản khác`;
     }
 
     const dialogRef = this.dialog.open(AlertComponent, {

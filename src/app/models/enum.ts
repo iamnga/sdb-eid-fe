@@ -13,6 +13,7 @@ export enum ServiceStep {
   InputMobileNumber,
   VerifyCustomerInfo,
   AccountAndAlert,
+  RequestOtp,
   VerifyOtp,
   End,
 }

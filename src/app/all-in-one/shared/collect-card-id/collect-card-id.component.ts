@@ -22,12 +22,24 @@ export class CollectCardIdComponent implements OnInit {
     this.genQR();
   }
 
+  checkCustomerByIdNo() {
+    this.aioSvc.checkCustomerByIdNo('').subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
   genQR() {
     this.ssid = new Date().getTime();
     this.qrValue = this.baseUrl + 'collect/' + this.ssid;
   }
 
   next() {
-    this.aioSvc.next();
+    this.checkCustomerByIdNo();
+    // this.aioSvc.next();
   }
 }

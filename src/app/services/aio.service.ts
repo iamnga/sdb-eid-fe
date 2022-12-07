@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import {
   AllInOneRequest,
   CheckCustomerRequestData,
+  CustomerEnroll,
   RequestOtpRequestData,
   UpdateLogStepData,
   VerifyOtpRequestData,
@@ -29,12 +30,12 @@ export class AioService {
   deviceID = '00000001';
   sessionID = 'd';
   refNumber = '';
+  customerEnrollInfo: CustomerEnroll;
 
   headerDict = {
     'Content-Type': 'application/json;ngann',
     Accept: '*/*',
     'Access-Control-Allow-Origin': '*',
-    Origin: 'http://localhost:4200/',
   };
 
   constructor(
@@ -56,12 +57,6 @@ export class AioService {
       contactAddress: '',
       job: '',
     };
-  }
-  next() {
-    console.log(this.currentStep);
-    if ((this.currentSerice = Service.OnBoarding)) {
-      this.router.navigate(['/aio/on-boarding']);
-    }
   }
 
   create() {
@@ -104,6 +99,20 @@ export class AioService {
     });
   }
 
+  uploadFace(face: string) {
+    let req = this.newRequest({ input: face });
+    return this.http.post(this.apiUrl + 'upload-face', req, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
+  uploadFrontID(img: string) {
+    let req = this.newRequest({ input: img });
+    return this.http.post(this.apiUrl + 'upload-frontID', req, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
   verifyEmail(email: string) {
     let req = this.newRequest({ email: email });
     return this.http.post(this.apiUrl + 'verify-email', req, {
@@ -111,13 +120,21 @@ export class AioService {
     });
   }
 
-  checkAccount(accountNo: string, accountType: string) {
+  checkAccount(accountNo: string) {
     let req = this.newRequest({
       accountNo: accountNo,
-      accountType: accountType,
-      sessionID: this.sessionID,
     });
     return this.http.post(this.apiUrl + 'check-account', req, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
+  checkCustomerByIdNo(customerID: string) {
+    let req = this.newRequest({
+      legalId: customerID,
+      legalIdType: '1',
+    });
+    return this.http.post(this.apiUrl + 'check-customer', req, {
       headers: new HttpHeaders(this.headerDict),
     });
   }
@@ -132,6 +149,13 @@ export class AioService {
   verifyOtp(data: VerifyOtpRequestData) {
     let req = this.newRequest(data);
     return this.http.post(this.apiUrl + 'verify-otp', req, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
+  customerEnroll(data: CustomerEnroll) {
+    let req = this.newRequest(data);
+    return this.http.post(this.apiUrl + 'create-customer', req, {
       headers: new HttpHeaders(this.headerDict),
     });
   }
@@ -240,6 +264,65 @@ export class AioService {
     req.data = data;
 
     return JSON.stringify(req);
+  }
+
+  next() {
+    this.updateLogStep();
+    if (!environment.production)
+      //this.router.navigate(['/aio/on-boarding/account-and-alert']);
+      this.router.navigate(['/aio/shared/verify-customer-info']);
+    else {
+      if (this.currentSerice == Service.OnBoarding) {
+        switch (this.currentStep) {
+          case ServiceStep.DashBoard: {
+            this.router.navigate(['/aio/shared/capture-guide']);
+            //this.router.navigate(['/aio/on-boarding/account-and-alert']);
+            //this.router.navigate(['/aio/shared/verify-customer-info']);
+            break;
+          }
+          case ServiceStep.CaptureGuide: {
+            this.router.navigate(['/aio/shared/capture-face']);
+            break;
+          }
+          case ServiceStep.CaptureFace: {
+            this.router.navigate(['/aio/shared/input-finger']);
+            break;
+          }
+          case ServiceStep.InputFinger: {
+            this.router.navigate(['/aio/shared/collect-card-id']);
+            break;
+          }
+          case ServiceStep.CollectCardId: {
+            this.router.navigate(['/aio/shared/input-mobile-number']);
+            break;
+          }
+          case ServiceStep.InputMobileNumber: {
+            this.router.navigate(['/aio/shared/verify-customer-info']);
+            break;
+          }
+          case ServiceStep.VerifyCustomerInfo: {
+            this.router.navigate(['/aio/on-boarding/account-and-alert']);
+            break;
+          }
+          case ServiceStep.AccountAndAlert: {
+            this.router.navigate(['/aio/shared/verify-otp']);
+            break;
+          }
+          case ServiceStep.VerifyOtp: {
+            this.router.navigate(['/aio/on-boarding/end']);
+            break;
+          }
+          case ServiceStep.End: {
+            this.router.navigate(['/aio']);
+            break;
+          }
+          default: {
+            this.router.navigate(['/aio']);
+            break;
+          }
+        }
+      }
+    }
   }
 }
 

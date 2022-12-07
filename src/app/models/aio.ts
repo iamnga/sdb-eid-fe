@@ -67,3 +67,47 @@ export class RequestOtpRequestData {
   channel: string;
   smsContent: string;
 }
+
+export class CustomerInfo {
+  customerID: string;
+  customerType: string;
+  categoryCustomer: string;
+  fullName: string;
+  email: string;
+  gender: string;
+  dob: string;
+  mobileNo: string;
+  issueDate: string;
+  expireDate: string;
+  issuePlace: string;
+  address: string;
+  jobCode: string;
+  towncountry: string;
+  contactAddress: AddressInfo;
+  residentialAddress: AddressInfo;
+  country: string;
+  nationality: string;
+}
+
+export class AddressInfo {
+  provinceCode: string;
+  provinceName: string;
+  districtCode: string;
+  districtName: string;
+  wardCode: string;
+  wardName: string;
+  street: string;
+}
+
+export class RegisterAlert {
+  methodAlert: string;
+}
+
+export class CustomerEnroll {
+  prefixNumberAccount: string;
+  accountCurrency: string;
+  accountType: string;
+  customerInfo: CustomerInfo;
+  registerAlert: RegisterAlert;
+  branchCode: string;
+}

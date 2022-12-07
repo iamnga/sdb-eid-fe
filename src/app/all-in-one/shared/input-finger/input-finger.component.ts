@@ -29,6 +29,17 @@ export class InputFingerComponent implements OnInit {
     // }, 5000);
   }
 
+  checkCustomerByIdNo(customerId: string) {
+    this.aioSvc.checkCustomerByIdNo(customerId).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
   callMkFingerPrint() {
     let websocketService = new WebsocketService();
     websocketService.messages.subscribe((msg) => {
@@ -46,6 +57,7 @@ export class InputFingerComponent implements OnInit {
   }
 
   next() {
-    this.aioSvc.next();
+    this.checkCustomerByIdNo('352229667');
+    // this.aioSvc.next();
   }
 }

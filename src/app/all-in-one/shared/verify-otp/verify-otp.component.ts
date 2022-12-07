@@ -1,6 +1,8 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
+import { endianness } from 'os';
 import {
+  CustomerEnroll,
   RequestOtpRequestData,
   VerifyOtpRequestData,
 } from 'src/app/models/aio';
@@ -14,14 +16,12 @@ import { AioService } from 'src/app/services/aio.service';
 })
 export class VerifyOtpComponent implements OnInit {
   otp: Array<string> = [];
-
   arrOtp = [...Array(6).keys()];
 
-  constructor(private aioSvc: AioService) {
+  constructor(private aioSvc: AioService, private elem: ElementRef) {
     aioSvc.currentStep = ServiceStep.VerifyOtp;
   }
   ngOnInit(): void {
-    this.aioSvc.updateLogStep();
     this.requestOtp();
   }
 
@@ -36,12 +36,55 @@ export class VerifyOtpComponent implements OnInit {
     data.smsContent = 'NGANN';
 
     this.aioSvc.requestOtp(data).subscribe(
-      (res) => {
+      (res: any) => {
         console.log(res);
+        if (res.respCode) {
+          if (res.respCode != '00') {
+            this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
+          }
+        } else {
+          this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
+        }
       },
-      (err) => {}
+      (err) => {
+        this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
+      }
     );
   }
+
+  verifyOtp() {
+    let data = new VerifyOtpRequestData();
+    data.authCode = this.otp.join('');
+    data.customerID = '352229667';
+    data.cifNo = '1';
+    data.authType = '3';
+    data.customerType = '1';
+    data.mobileNo = '0349444440';
+    data.serviceType = 'OA';
+
+    this.aioSvc.verifyOtp(data).subscribe(
+      (res: any) => {
+        console.log(res);
+        if (res.respCode) {
+          if (res.respCode != '00') {
+            this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
+          } else {
+          }
+        } else {
+          this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
+        }
+      },
+      (err) => {
+        this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
+      }
+    );
+  }
+
+  customerEnroll() {
+    let data = new CustomerEnroll();
+  }
+
+  getOtp() {}
 
   confirm() {
     this.aioSvc.next();

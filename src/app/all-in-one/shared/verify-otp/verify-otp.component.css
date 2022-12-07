@@ -36,3 +36,11 @@
 .otp-item.last {
   margin-right: 0px;
 }
+
+.btn-next:disabled:hover {
+  background-color: #2a81d0;
+}
+
+.btn-next:disabled {
+  opacity: 0.5;
+}

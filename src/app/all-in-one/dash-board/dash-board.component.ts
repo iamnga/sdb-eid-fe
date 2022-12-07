@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {
+  AddressInfo,
+  CustomerEnroll,
+  CustomerInfo,
+  RegisterAlert,
+} from 'src/app/models/aio';
 import { Service, ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
 
@@ -29,8 +35,8 @@ export class DashBoardComponent implements OnInit {
             this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
           } else {
             this.aioSvc.sessionID = result.data.sessionId;
-            if (serviceCd == this.service.OnBoarding)
-              this.router.navigate(['/aio/on-boarding']);
+            this.customerEnroll();
+            // this.aioSvc.next();
           }
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra: getSessionId`);
@@ -41,6 +47,53 @@ export class DashBoardComponent implements OnInit {
         this.aioSvc.alert(`Có lỗi xảy ra: ${err}`);
       }
     );
+  }
+
+  customerEnroll() {
+    let data = new CustomerEnroll();
+    data.branchCode = 'VN001';
+    data.accountCurrency = '704';
+    data.accountType = 'R';
+
+    let cusInfo = new CustomerInfo();
+    cusInfo.address = '268 Nam Ky Khoi Nghia';
+    cusInfo.categoryCustomer = 'N';
+    cusInfo.country = 'VN';
+    cusInfo.customerID = '352229666';
+    cusInfo.customerType = '1';
+    cusInfo.dob = '19950125';
+    cusInfo.email = 'minhngaag@gmail.com';
+    cusInfo.expireDate = '20340916';
+    cusInfo.issueDate = '20180909';
+    cusInfo.fullName = 'NGUYEN VAN A';
+    cusInfo.gender = 'M';
+    cusInfo.jobCode = '51';
+    cusInfo.mobileNo = '0349444444';
+    cusInfo.nationality = 'Viet Nam';
+    cusInfo.towncountry = 'Nam Ky Khoi Nghia';
+    cusInfo.issuePlace = 'CTCCSQLHCVTTXH';
+
+    let residentialAddress = new AddressInfo();
+    residentialAddress.provinceCode = '5000';
+    residentialAddress.provinceName = 'Thanh pho Ho chi Minh';
+    residentialAddress.districtCode = '5014';
+    residentialAddress.districtName = 'Quan Tan Phu';
+    residentialAddress.wardCode = '27010';
+    residentialAddress.wardName = 'Phuong Tan Son Nhi';
+    residentialAddress.street = '28 Tan Son Nhi';
+
+    cusInfo.residentialAddress = residentialAddress;
+    cusInfo.contactAddress = residentialAddress;
+    data.customerInfo = cusInfo;
+
+    let registerAlert = new RegisterAlert();
+    registerAlert.methodAlert = 'P';
+
+    data.registerAlert = registerAlert;
+
+    this.aioSvc.customerEnroll(data).subscribe((res) => {
+      console.log(res);
+    });
   }
 
   slides = [

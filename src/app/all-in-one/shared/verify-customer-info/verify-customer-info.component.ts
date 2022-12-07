@@ -25,7 +25,6 @@ export class VerifyCustomerInfoComponent implements OnInit {
   ngOnInit(): void {
     let faceC = localStorage.getItem('face-captured');
     this.face = faceC ? faceC : '';
-    this.aioSvc.updateLogStep();
     this.getOccupations();
     this.aioSvc.cusInfo.email = 'minhngaag@gmail.com';
   }

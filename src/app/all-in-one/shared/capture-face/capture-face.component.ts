@@ -38,7 +38,6 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     localStorage.setItem('face-captured', '');
-    this.aioSvc.updateLogStep();
     this.startCapture();
   }
 
@@ -60,16 +59,6 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
       .querySelector('video')
       .addEventListener('play', async () => {
         this.canvas = await faceapi.createCanvasFromMedia(this.videoInput);
-        // this.canvasEl = this.canvasRef.nativeElement;
-        // this.canvasEl.appendChild(this.canvas);
-        // this.canvas.setAttribute('id', 'canvass');
-        // this.canvas.setAttribute(
-        //   'style',
-        //   `position: fixed;
-        //   top: 0;
-        //   left: 0;`
-        // );
-
         this.doDetect();
       });
   }
@@ -162,7 +151,50 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   }
 
   next() {
-    this.aioSvc.next();
+    this.aioSvc.isProcessing = true;
+    this.aioSvc.uploadFace(this.captured).subscribe(
+      (res) => {
+        console.log(res);
+        this.getBase64ImageFromUrl('https://i.ibb.co/2kqhPp9/front.jpg')
+          .then((result: any) => {
+            console.log(result);
+            this.aioSvc.uploadFrontID(result).subscribe(
+              (res2) => {
+                console.log(res2);
+              },
+              (err) => {
+                this.aioSvc.isProcessing = false;
+              }
+            );
+          })
+          .catch((err) => console.error(err));
+      },
+      (err) => {
+        this.aioSvc.isProcessing = false;
+      }
+    );
+    //this.aioSvc.next();
+  }
+
+  async getBase64ImageFromUrl(imageUrl: any) {
+    var res = await fetch(imageUrl);
+    var blob = await res.blob();
+
+    return new Promise((resolve, reject) => {
+      var reader = new FileReader();
+      reader.addEventListener(
+        'load',
+        function () {
+          resolve(reader.result);
+        },
+        false
+      );
+
+      reader.onerror = () => {
+        return reject(this);
+      };
+      reader.readAsDataURL(blob);
+    });
   }
 
   ngOnDestroy() {

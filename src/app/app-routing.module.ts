@@ -39,23 +39,31 @@ const routes: Routes = [
         path: 'dash-board',
         component: DashBoardComponent,
       },
+      // {
+      //   path: 'on-boarding',
+      //   component: OnBoardingComponent,
+      //   children: [
+      //     {
+      //       path: '',
+      //       component: OnBoardingComponent,
+      //     },
+      //     {
+      //       path: 'account-and-alert',
+      //       component: AccountAndAlertComponent,
+      //     },
+      //     {
+      //       path: 'end',
+      //       component: EndComponent,
+      //     },
+      //   ],
+      // },
       {
-        path: 'on-boarding',
-        component: OnBoardingComponent,
-        children: [
-          {
-            path: '',
-            component: OnBoardingComponent,
-          },
-          {
-            path: 'account-and-alert',
-            component: AccountAndAlertComponent,
-          },
-          {
-            path: 'end',
-            component: EndComponent,
-          },
-        ],
+        path: 'on-boarding/account-and-alert',
+        component: AccountAndAlertComponent,
+      },
+      {
+        path: 'on-boarding/end',
+        component: EndComponent,
       },
       {
         path: 'update-card-id',

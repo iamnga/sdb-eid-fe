@@ -1,4 +1,4 @@
-export class CustomerInfo {
+export class CustomerInfo2 {
   name: string;
   phone: string;
   gender: string;

@@ -46,6 +46,11 @@ import { ContactAddressComponent } from './all-in-one/shared/dialog/contact-addr
 import { JobComponent } from './all-in-one/shared/dialog/job/job.component';
 import { AlertComponent } from './all-in-one/shared/dialog/alert/alert.component';
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
+import { LottieModule } from 'ngx-lottie';
+import player from 'lottie-web';
+export function playerFactory() {
+  return player;
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -93,6 +98,7 @@ import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
     MatButtonModule,
     MatDialogModule,
     NgxLoadingModule.forRoot({ animationType: ngxLoadingAnimationTypes.pulse }),
+    LottieModule.forRoot({ player: playerFactory }),
   ],
   providers: [
     WebsocketService,

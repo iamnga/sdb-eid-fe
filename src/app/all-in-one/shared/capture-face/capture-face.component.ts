@@ -78,7 +78,8 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
         this.detection = await faceapi.detectAllFaces(
           this.videoInput,
           new faceapi.TinyFaceDetectorOptions({
-            scoreThreshold: 0.8,
+            inputSize: 608,
+            scoreThreshold: 0.7,
           })
         );
 
@@ -113,7 +114,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
 
           clearInterval(x);
         }
-      }, 200);
+      }, 100);
     }, 4000);
   }
 
@@ -151,29 +152,29 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   }
 
   next() {
-    this.aioSvc.isProcessing = true;
-    this.aioSvc.uploadFace(this.captured).subscribe(
-      (res) => {
-        console.log(res);
-        this.getBase64ImageFromUrl('https://i.ibb.co/2kqhPp9/front.jpg')
-          .then((result: any) => {
-            console.log(result);
-            this.aioSvc.uploadFrontID(result).subscribe(
-              (res2) => {
-                console.log(res2);
-              },
-              (err) => {
-                this.aioSvc.isProcessing = false;
-              }
-            );
-          })
-          .catch((err) => console.error(err));
-      },
-      (err) => {
-        this.aioSvc.isProcessing = false;
-      }
-    );
-    //this.aioSvc.next();
+    // this.aioSvc.isProcessing = true;
+    // this.aioSvc.uploadFace(this.captured).subscribe(
+    //   (res) => {
+    //     console.log(res);
+    //     this.getBase64ImageFromUrl('https://i.ibb.co/2kqhPp9/front.jpg')
+    //       .then((result: any) => {
+    //         console.log(result);
+    //         this.aioSvc.uploadFrontID(result).subscribe(
+    //           (res2) => {
+    //             console.log(res2);
+    //           },
+    //           (err) => {
+    //             this.aioSvc.isProcessing = false;
+    //           }
+    //         );
+    //       })
+    //       .catch((err) => console.error(err));
+    //   },
+    //   (err) => {
+    //     this.aioSvc.isProcessing = false;
+    //   }
+    // );
+    this.aioSvc.next();
   }
 
   async getBase64ImageFromUrl(imageUrl: any) {
@@ -200,10 +201,12 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     let mediaStream = this.video.nativeElement.srcObject;
 
-    let tracks = mediaStream.getTracks();
+    if (mediaStream) {
+      let tracks = mediaStream.getTracks();
 
-    console.log(tracks.length);
+      console.log(tracks.length);
 
-    tracks[0].stop();
+      tracks[0].stop();
+    }
   }
 }

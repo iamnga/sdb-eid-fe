@@ -25,7 +25,7 @@ export class AccountAndAlertComponent implements OnInit {
   tc = false;
 
   constructor(
-    private aioSvc: AioService,
+    public aioSvc: AioService,
     public dialog: MatDialog,
     private router: Router
   ) {
@@ -68,7 +68,7 @@ export class AccountAndAlertComponent implements OnInit {
     ) {
       this.checkAccount(this.currentAccountNumber);
     } else {
-      this.aioSvc.next();
+      this.next();
     }
   }
 
@@ -97,56 +97,61 @@ export class AccountAndAlertComponent implements OnInit {
   validateCustomAccount() {
     let first = this.customAccountTemp.substring(0, 1);
     let length = this.customAccountTemp.length;
-    console.log('first: ' + first + ' - ' + 'length: ' + length);
-    this.rules[1].valid = length > 0 ? true : false;
+    this.rules[0].valid = length > 5 && length < 10 ? true : false;
+    this.rules[1].valid = length > 0 && first != '7' ? true : false;
 
-    if (length > 5 && length < 13) {
-      this.rules[0].valid = true;
-      this.rules[2].valid = true;
-      this.rules[3].valid = true;
-      this.rules[4].valid = true;
-      if (first != '7') {
-        this.rules[2].valid = true;
-      } else {
-        this.rules[2].valid = false;
-      }
+    // if (length > 5 && length < 13) {
+    //   this.rules[0].valid = true;
+    //   this.rules[1].valid = true;
+    //   this.rules[3].valid = true;
+    //   this.rules[4].valid = true;
+    //   if (first != '7') {
+    //     this.rules[2].valid = true;
+    //   } else {
+    //     this.rules[2].valid = false;
+    //   }
 
-      if (length == 10) {
-        if (/[7890]{1}/.test(first)) {
-          this.rules[3].valid = true;
-        } else {
-          this.rules[3].valid = false;
-        }
-      } else {
-        this.rules[3].valid = true;
-      }
-      if (length == 12) {
-        if (first != '0') {
-          this.rules[4].valid = true;
-        } else {
-          this.rules[4].valid = false;
-        }
-      }
-    } else {
-      this.rules[0].valid = false;
-      this.rules[2].valid = false;
-      this.rules[3].valid = false;
-      this.rules[4].valid = false;
-    }
+    //   if (length == 10) {
+    //     if (/[7890]{1}/.test(first)) {
+    //       this.rules[3].valid = true;
+    //     } else {
+    //       this.rules[3].valid = false;
+    //     }
+    //   } else {
+    //     this.rules[3].valid = true;
+    //   }
+    //   if (length == 12) {
+    //     if (first != '0') {
+    //       this.rules[4].valid = true;
+    //     } else {
+    //       this.rules[4].valid = false;
+    //     }
+    //   }
+    // } else {
+    //   this.rules[0].valid = false;
+    //   this.rules[2].valid = false;
+    //   this.rules[3].valid = false;
+    //   this.rules[4].valid = false;
+    // }
 
     this.isValidCustomAccount =
-      this.rules[0].valid &&
-      this.rules[1].valid &&
-      this.rules[2].valid &&
-      this.rules[3].valid &&
-      this.rules[4].valid
-        ? true
-        : false;
+      this.rules[0].valid && this.rules[1].valid ? true : false;
     console.log(this.isValidCustomAccount);
   }
 
   verifyCustomAccount() {
     this.checkAccount(this.customAccountTemp);
+  }
+
+  next() {
+    this.aioSvc.registerAlert.methodAlert = this.currentAlertType;
+    this.aioSvc.customerEnrollInfo.accountType =
+      this.currentAccountType == AccountType.Random ? 'R' : 'O';
+    this.aioSvc.customerEnrollInfo.accountCurrency = '704';
+    this.aioSvc.customerEnrollInfo.prefixNumberAccount =
+      this.currentAccountNumber;
+    this.aioSvc.customerEnrollInfo.branchCode = 'VN001';
+    this.aioSvc.next();
   }
 
   checkAccount(accountNo: string) {
@@ -166,8 +171,7 @@ export class AccountAndAlertComponent implements OnInit {
               this.currentAccountNumber = this.customAccount;
               this.isCustomAccount = false;
             } else {
-              //Store info alert - accountNo - accountType
-              this.aioSvc.next();
+              this.next();
             }
           }
         } else {
@@ -223,20 +227,29 @@ export class AccountAndAlertComponent implements OnInit {
   }
 
   rules = [
-    { text: 'Độ dài tối thiểu 6 chữ số tối đa 12 chữ số;', valid: false },
-    { text: 'Không chứa chữ và ký tự đặc biệt;', valid: false },
+    { text: 'Độ dài tối thiểu 6 chữ số tối đa 9 chữ số;', valid: false },
     { text: 'Không bắt đầu bằng số 7;', valid: false },
-    {
-      text: 'Không bắt đầu bằng số 1 đến 6 nếu chuỗi số TKTT là 10 số;',
-      valid: false,
-    },
-    {
-      text: 'Không bắt đầu bằng số 0 nếu chuỗi số TKTT là 12 số;',
-      valid: false,
-    },
     {
       text: 'Dãy số miễn phí không có tối thiểu 1/2 dãy số liên tục có chứa cặp thần tài(39,79), phát lộc (68,86), số thứ tự, số tiến, số trùng, số lặp, số gánh, số soi gương.',
       valid: true,
     },
   ];
+
+  // rules = [
+  //   { text: 'Độ dài tối thiểu 6 chữ số tối đa 12 chữ số;', valid: false },
+  //   { text: 'Không chứa chữ và ký tự đặc biệt;', valid: false },
+  //   { text: 'Không bắt đầu bằng số 7;', valid: false },
+  //   {
+  //     text: 'Không bắt đầu bằng số 1 đến 6 nếu chuỗi số TKTT là 10 số;',
+  //     valid: false,
+  //   },
+  //   {
+  //     text: 'Không bắt đầu bằng số 0 nếu chuỗi số TKTT là 12 số;',
+  //     valid: false,
+  //   },
+  //   {
+  //     text: 'Dãy số miễn phí không có tối thiểu 1/2 dãy số liên tục có chứa cặp thần tài(39,79), phát lộc (68,86), số thứ tự, số tiến, số trùng, số lặp, số gánh, số soi gương.',
+  //     valid: true,
+  //   },
+  // ];
 }

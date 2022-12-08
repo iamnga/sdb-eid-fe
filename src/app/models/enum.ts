@@ -28,7 +28,7 @@ export enum AccountType {
 }
 
 export enum AlertType {
-  None,
-  OnlySPay,
-  SmsAndSPay,
+  None = '',
+  OnlySPay = 'P',
+  SmsAndSPay = 'A',
 }

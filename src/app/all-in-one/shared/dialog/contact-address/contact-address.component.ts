@@ -1,6 +1,13 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  AfterViewInit,
+  ChangeDetectorRef,
+  AfterContentInit,
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AddressData } from 'src/app/models/aio';
+import { AddressData, AddressInfo } from 'src/app/models/aio';
 import { AioService } from 'src/app/services/aio.service';
 
 @Component({
@@ -13,6 +20,7 @@ export class ContactAddressComponent implements OnInit {
   currentPro: AddressData;
   currentDis: AddressData;
   currentWard: AddressData;
+  addressInfo = new AddressInfo();
   addressDetail: string;
   contactAddress = '';
   step = 1;
@@ -22,30 +30,13 @@ export class ContactAddressComponent implements OnInit {
   wards: AddressData[] = [];
   constructor(
     public dialogRef: MatDialogRef<ContactAddressComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string,
-    private aioSvc: AioService
+    @Inject(MAT_DIALOG_DATA) public data: AddressData[],
+    private aioSvc: AioService,
+    private cdref: ChangeDetectorRef
   ) {}
-  ngOnInit(): void {
-    this.getProvinces();
-  }
 
-  getProvinces() {
-    this.aioSvc.isProcessing = true;
-    this.aioSvc.getProvinces().subscribe(
-      (res: any) => {
-        this.aioSvc.isProcessing = false;
-        console.log(res);
-        if (res.data.provinces) {
-          this.provinces = res.data.provinces;
-        } else {
-          this.aioSvc.alert(`Có lỗi xảy ra getProvinces`);
-        }
-      },
-      (err) => {
-        this.aioSvc.isProcessing = false;
-        this.aioSvc.alert(`Có lỗi xảy ra getProvinces ${err}`);
-      }
-    );
+  ngOnInit() {
+    this.provinces = this.data;
   }
 
   getDistrict(pro: AddressData) {
@@ -121,21 +112,20 @@ export class ContactAddressComponent implements OnInit {
   }
 
   validateAdressDetail() {
-    if (this.addressDetail) {
+    if (this.addressDetail && this.addressDetail.length > 5) {
       this.err = '';
-      this.contactAddress =
-        this.addressDetail +
-        ', ' +
-        this.currentWard.name +
-        ', ' +
-        this.currentDis.name +
-        ', ' +
-        this.currentPro.name;
 
-      console.log(this.contactAddress);
-      this.dialogRef.close(this.contactAddress);
+      this.addressInfo.provinceCode = this.currentPro.code;
+      this.addressInfo.provinceName = this.currentPro.name;
+      this.addressInfo.districtCode = this.currentDis.code;
+      this.addressInfo.districtName = this.currentDis.name;
+      this.addressInfo.wardCode = this.currentWard.code;
+      this.addressInfo.wardName = this.currentWard.name;
+      this.addressInfo.street = this.addressDetail;
+
+      this.dialogRef.close(this.addressInfo);
     } else {
-      this.err = 'Vui lòng không bỏ trống';
+      this.err = 'Địa chỉ tối thiểu 6 ký tự';
       this.contactAddress = '';
     }
   }

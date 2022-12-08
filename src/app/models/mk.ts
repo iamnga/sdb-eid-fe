@@ -28,7 +28,7 @@ class ICaoResponseData {
   dateOfIssuance: string;
   gender: string;
   faceImage: string;
-  fingerImage: string;
+  fingerImages: string;
   dg13: Dg13Data;
   validationResult: ValidationResult;
 }
@@ -43,8 +43,7 @@ class Dg13Data {
   religion: string;
   placeOfOrigin: string;
   residenceAddress: string;
-  personalSpecificI: string;
-  dentification: string;
+  personalSpecificIdentification: string;
   dateOfIssuance: string;
   dateOfExpiry: string;
   motherName: string;

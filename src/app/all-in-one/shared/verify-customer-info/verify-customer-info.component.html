@@ -32,19 +32,23 @@
           <table>
             <tr>
               <td>Họ và tên</td>
-              <td class="font-weight-bold">{{ aioSvc.cusInfo.name }}</td>
+              <td class="font-weight-bold">
+                {{ aioSvc.customerInfo.fullName }}
+              </td>
             </tr>
             <tr>
               <td>Số điện thoại</td>
-              <td class="font-weight-bold">{{ aioSvc.cusInfo.phone }}</td>
+              <td class="font-weight-bold">
+                {{ aioSvc.customerInfo.mobileNo }}
+              </td>
             </tr>
             <tr>
               <td>Giới tính</td>
-              <td class="font-weight-bold">{{ aioSvc.cusInfo.gender }}</td>
+              <td class="font-weight-bold">{{ aioSvc.customerInfo.gender }}</td>
             </tr>
             <tr>
               <td>Ngày sinh</td>
-              <td class="font-weight-bold">{{ aioSvc.cusInfo.dob }}</td>
+              <td class="font-weight-bold">{{ aioSvc.customerInfo.dob }}</td>
             </tr>
           </table>
         </div>
@@ -54,24 +58,24 @@
           <table>
             <tr>
               <td>Số CCCD</td>
-              <td class="font-weight-bold">{{ aioSvc.cusInfo.idNo }}</td>
+              <td class="font-weight-bold">
+                {{ aioSvc.customerInfo.customerID }}
+              </td>
             </tr>
             <tr>
               <td>Ngày cấp</td>
               <td class="font-weight-bold">
-                {{ aioSvc.cusInfo.dateOfIssuance }}
+                {{ aioSvc.customerInfo.issueDate }}
               </td>
             </tr>
             <tr>
-              <td>Ngày hết hạn</td>
-              <td class="font-weight-bold">
-                {{ aioSvc.cusInfo.dateOfExpiry }}
-              </td>
+              <td>Nơi cấp</td>
+              <td class="font-weight-bold">CTCCSQLHCVTTXH</td>
             </tr>
             <tr>
               <td>Địa chỉ thường trú</td>
               <td class="font-weight-bold">
-                {{ aioSvc.cusInfo.residenceAddress }}
+                {{ aioSvc.customerInfo.address }}
               </td>
             </tr>
           </table>
@@ -95,12 +99,12 @@
                   class="fill-input ml-3"
                   (click)="openContactAddressDialog()"
                 >
-                  <ng-container *ngIf="!aioSvc.cusInfo.contactAddress">
+                  <ng-container *ngIf="!contactAddress">
                     Địa chỉ liên lạc
                   </ng-container>
-                  <ng-container *ngIf="aioSvc.cusInfo.contactAddress">
-                    {{ aioSvc.cusInfo.contactAddress | slice : 0 : 50 }}
-                    {{ aioSvc.cusInfo.contactAddress.length > 50 ? "..." : "" }}
+                  <ng-container *ngIf="contactAddress">
+                    {{ contactAddress | slice : 0 : 50 }}
+                    {{ contactAddress.length > 50 ? "..." : "" }}
                   </ng-container>
                 </div>
               </td>
@@ -108,24 +112,24 @@
             <tr>
               <td class="w-50" (click)="openInputEmailDialog()">
                 <div class="fill-input">
-                  <ng-container *ngIf="!aioSvc.cusInfo.email"
+                  <ng-container *ngIf="!aioSvc.customerInfo.email"
                     >Nhập email của bạn</ng-container
                   >
-                  <ng-container *ngIf="aioSvc.cusInfo.email">{{
-                    aioSvc.cusInfo.email
+                  <ng-container *ngIf="aioSvc.customerInfo.email">{{
+                    aioSvc.customerInfo.email
                   }}</ng-container>
                 </div>
               </td>
               <td class="w-50 pl-3" (click)="openJobDialog()">
                 <div class="fill-input ml-3">
-                  <ng-container *ngIf="!aioSvc.cusInfo.job"
+                  <ng-container *ngIf="!this.currentOcc"
                     >Vui lòng chọn nghề nghiệp
                     <span class="float-right pr-3">
                       <i class="fa fa-angle-down" aria-hidden="true"></i>
                     </span>
                   </ng-container>
-                  <ng-container *ngIf="aioSvc.cusInfo.job">{{
-                    aioSvc.cusInfo.job
+                  <ng-container *ngIf="this.currentOcc">{{
+                    this.currentOcc.name
                   }}</ng-container>
                 </div>
               </td>
@@ -139,9 +143,9 @@
         class="btn-next"
         (click)="confirm()"
         [disabled]="
-          !aioSvc.cusInfo.email ||
-          !aioSvc.cusInfo.job ||
-          !aioSvc.cusInfo.contactAddress
+          !aioSvc.customerInfo.email ||
+          !aioSvc.customerInfo.jobCode ||
+          !contactAddress
         "
       >
         Xác nhận

@@ -8,4 +8,5 @@ export class Alert {
 export enum Template {
   Simple,
   ExistAccount,
+  FingerPrintFailed,
 }

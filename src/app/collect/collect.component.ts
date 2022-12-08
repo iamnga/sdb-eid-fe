@@ -1,41 +1,37 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+import { AioService } from '../services/aio.service';
 
 @Component({
   selector: 'app-collect',
   templateUrl: './collect.component.html',
 })
-export class CollectComponent {
-  constructor(private sanitizer: DomSanitizer) {}
-  image: string | SafeUrl;
+export class CollectComponent implements OnInit {
+  deviceID = '';
+  sessionID = '';
+  constructor(
+    private sanitizer: DomSanitizer,
+    private actRoute: ActivatedRoute,
+    private aioSvc: AioService
+  ) {
+    this.deviceID = this.actRoute.snapshot.params['deviceid'];
+    this.sessionID = this.actRoute.snapshot.params['sessionid'];
+  }
 
-  fileChange(event: any) {
-    this.image = this.sanitizer.bypassSecurityTrustUrl(
-      window.URL.createObjectURL(event.target.files[0])
+  ngOnInit() {
+    this.aioSvc.verifySessionID(this.deviceID, this.sessionID).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {}
     );
   }
+  // image: string | SafeUrl;
+
+  // fileChange(event: any) {
+  //   this.image = this.sanitizer.bypassSecurityTrustUrl(
+  //     window.URL.createObjectURL(event.target.files[0])
+  //   );
+  // }
 }
-
-//import { Component, Inject } from '@angular/core';
-//import { HttpClient } from '@angular/common/http';
-
-//@Component({
-//  selector: 'app-fetch-data',
-//  templateUrl: './fetch-data.component.html'
-//})
-//export class FetchDataComponent {
-//  public forecasts: WeatherForecast[];
-
-//  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-//    http.get<WeatherForecast[]>(baseUrl + 'weatherforecast').subscribe(result => {
-//      this.forecasts = result;
-//    }, error => console.error(error));
-//  }
-//}
-
-//interface WeatherForecast {
-//  date: string;
-//  temperatureC: number;
-//  temperatureF: number;
-//  summary: string;
-//}

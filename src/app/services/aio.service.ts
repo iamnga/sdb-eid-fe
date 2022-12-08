@@ -6,17 +6,21 @@ import {
   AllInOneRequest,
   CheckCustomerRequestData,
   CustomerEnroll,
+  CustomerInfo,
+  OpenAccountRequestData,
+  RegisterAlert,
   RequestOtpRequestData,
   UpdateLogStepData,
   VerifyOtpRequestData,
 } from '../models/aio';
-import { CustomerInfo } from '../models/customer-info';
+import { CustomerInfo2 } from '../models/customer-info';
 import { Service, ServiceStep } from '../models/enum';
 import { UUID } from 'angular2-uuid';
 import { Alert, Template } from '../models/alert';
 import { AlertComponent } from '../all-in-one/shared/dialog/alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
+import { FingerResponse } from '../models/mk';
 
 @Injectable({
   providedIn: 'root',
@@ -24,13 +28,17 @@ import { Observable } from 'rxjs';
 export class AioService {
   currentSerice = Service.None;
   currentStep = ServiceStep.DashBoard;
-  cusInfo: CustomerInfo = new CustomerInfo();
+  cusInfo: CustomerInfo2;
   isProcessing = false;
   apiUrl = environment.apiUrl;
   deviceID = '00000001';
   sessionID = 'd';
   refNumber = '';
-  customerEnrollInfo: CustomerEnroll;
+  customerEnrollInfo = new CustomerEnroll();
+  customerInfo = new CustomerInfo();
+  registerAlert = new RegisterAlert();
+  fpResponse: FingerResponse = new FingerResponse();
+  fpAttemp = 0;
 
   headerDict = {
     'Content-Type': 'application/json;ngann',
@@ -99,6 +107,16 @@ export class AioService {
     });
   }
 
+  verifySessionID(deviceID: string, sessionID: string) {
+    let req = this.newRequest(null, deviceID, sessionID);
+
+    console.log(req);
+
+    return this.http.post(this.apiUrl + 'verify-sessionId', req, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
   uploadFace(face: string) {
     let req = this.newRequest({ input: face });
     return this.http.post(this.apiUrl + 'upload-face', req, {
@@ -153,9 +171,16 @@ export class AioService {
     });
   }
 
-  customerEnroll(data: CustomerEnroll) {
-    let req = this.newRequest(data);
+  customerEnroll() {
+    let req = this.newRequest(this.customerEnrollInfo);
     return this.http.post(this.apiUrl + 'create-customer', req, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
+  openAccount(data: OpenAccountRequestData) {
+    let req = this.newRequest(data);
+    return this.http.post(this.apiUrl + 'create-account', req, {
       headers: new HttpHeaders(this.headerDict),
     });
   }
@@ -198,6 +223,15 @@ export class AioService {
   getOccupations(): Observable<any> {
     let req = this.newRequest();
     return this.http.post(this.apiUrl + 'occupations', req, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
+  findAddressByText(addressText: string) {
+    let req = this.newRequest({
+      addressText: addressText,
+    });
+    return this.http.post(this.apiUrl + 'find-address-by-text', req, {
       headers: new HttpHeaders(this.headerDict),
     });
   }
@@ -254,13 +288,17 @@ export class AioService {
       );
   }
 
-  newRequest(data: any = null) {
+  newRequest(
+    data: any = null,
+    deviceID: string = this.deviceID,
+    sessionID: string = this.sessionID
+  ) {
     let req = new AllInOneRequest<typeof data>();
 
     req.refNumber = UUID.UUID();
     req.refDateTime = new Date().toISOString().replace('Z', '');
-    req.deviceID = this.deviceID;
-    req.sessionID = this.sessionID;
+    req.deviceID = deviceID;
+    req.sessionID = sessionID;
     req.data = data;
 
     return JSON.stringify(req);
@@ -268,7 +306,7 @@ export class AioService {
 
   next() {
     this.updateLogStep();
-    if (!environment.production)
+    if (environment.production)
       //this.router.navigate(['/aio/on-boarding/account-and-alert']);
       this.router.navigate(['/aio/shared/verify-customer-info']);
     else {
@@ -293,7 +331,8 @@ export class AioService {
             break;
           }
           case ServiceStep.CollectCardId: {
-            this.router.navigate(['/aio/shared/input-mobile-number']);
+            // this.router.navigate(['/aio/shared/input-mobile-number']);
+            this.router.navigate(['/aio/shared/verify-customer-info']);
             break;
           }
           case ServiceStep.InputMobileNumber: {

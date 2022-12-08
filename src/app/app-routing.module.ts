@@ -25,7 +25,7 @@ import { WebcamComponent } from './webcam/webcam.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'collect/:id', component: CollectComponent },
+  { path: 'collect/:deviceid/:sessionid', component: CollectComponent },
   {
     path: 'aio',
     component: AllInOneComponent,
@@ -39,24 +39,6 @@ const routes: Routes = [
         path: 'dash-board',
         component: DashBoardComponent,
       },
-      // {
-      //   path: 'on-boarding',
-      //   component: OnBoardingComponent,
-      //   children: [
-      //     {
-      //       path: '',
-      //       component: OnBoardingComponent,
-      //     },
-      //     {
-      //       path: 'account-and-alert',
-      //       component: AccountAndAlertComponent,
-      //     },
-      //     {
-      //       path: 'end',
-      //       component: EndComponent,
-      //     },
-      //   ],
-      // },
       {
         path: 'on-boarding/account-and-alert',
         component: AccountAndAlertComponent,
@@ -112,7 +94,7 @@ const routes: Routes = [
             component: VerifyOtpComponent,
           },
           {
-            path: 'mobile-capture-card-id',
+            path: 'mobile-capture-card-id/:deviceid/:sessionid',
             component: MobileCaptureCardIdComponent,
           },
           {

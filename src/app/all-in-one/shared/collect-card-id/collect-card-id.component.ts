@@ -9,7 +9,6 @@ import { AioService } from 'src/app/services/aio.service';
 })
 export class CollectCardIdComponent implements OnInit {
   qrValue = '';
-  ssid: number;
 
   constructor(
     @Inject('BASE_URL') private baseUrl: string,
@@ -34,8 +33,12 @@ export class CollectCardIdComponent implements OnInit {
   }
 
   genQR() {
-    this.ssid = new Date().getTime();
-    this.qrValue = this.baseUrl + 'collect/' + this.ssid;
+    this.qrValue =
+      this.baseUrl +
+      'collect/' +
+      this.aioSvc.deviceID +
+      '/' +
+      this.aioSvc.sessionID;
   }
 
   next() {

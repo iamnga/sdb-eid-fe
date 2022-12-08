@@ -26,4 +26,9 @@
   opacity: 0.5;
 }
 
+.gif {
+  width: 40%;
+  margin-inline: auto;
+}
+
 /* end btn Next */

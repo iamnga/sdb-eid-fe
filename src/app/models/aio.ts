@@ -30,9 +30,11 @@ export class AddressData {
   order: string;
   name: string;
   id: string;
+  code: string;
 }
 
 export class Occupations {
+  code: string;
   order: string;
   name: string;
 }
@@ -58,6 +60,18 @@ export class VerifyOtpRequestData {
   serviceType: string;
 }
 
+export class OpenAccountRequestData {
+  idEKYCPersonal: string;
+  cifNo: string;
+  registerAlert: RegisterAlert;
+  fullName: string;
+  prefixNumberAccount: string;
+  accountCurrency: string;
+  accountType: string;
+  branchCode: string;
+  mobileNo: string;
+}
+
 export class RequestOtpRequestData {
   customerID: string;
   customerType: string;
@@ -70,6 +84,7 @@ export class RequestOtpRequestData {
 
 export class CustomerInfo {
   customerID: string;
+  customerIDOld: string;
   customerType: string;
   categoryCustomer: string;
   fullName: string;

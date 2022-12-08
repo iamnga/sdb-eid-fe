@@ -10,7 +10,6 @@ import { AioService } from 'src/app/services/aio.service';
 })
 export class JobComponent implements OnInit {
   title = 'Nghề nghiệp';
-  currentOccupation = '';
 
   constructor(
     public dialogRef: MatDialogRef<JobComponent>,
@@ -20,8 +19,7 @@ export class JobComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  setOccupations(occ: string) {
-    this.currentOccupation = occ;
-    this.dialogRef.close(this.currentOccupation);
+  setOccupations(occ: Occupations) {
+    this.dialogRef.close(occ);
   }
 }

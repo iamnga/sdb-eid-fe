@@ -18,12 +18,13 @@ import { CustomerInfo } from 'src/app/models/aio';
 })
 export class InputFingerComponent implements OnInit {
   fpResponse: FingerResponse = new FingerResponse();
+  hasIcaoResponse = false;
 
   input: AnimationOptions = {
-    path: '/assets/all-in-one/shared/img/cccd-vantay.json',
+    path: 'assets/all-in-one/shared/img/cccd-vantay.json',
   };
   check: AnimationOptions = {
-    path: '/assets/all-in-one/shared/img/check.json',
+    path: 'assets/all-in-one/shared/img/check.json',
   };
 
   constructor(private aioSvc: AioService, public dialog: MatDialog) {
@@ -44,8 +45,12 @@ export class InputFingerComponent implements OnInit {
       (msg: any) => {
         console.log(msg);
         this.fpResponse = msg;
-        if (this.fpResponse.quality > 0) {
-          if (this.fpResponse.icaoResponse) {
+        if (this.fpResponse.quality > 0 && this.hasIcaoResponse == false) {
+          if (
+            this.fpResponse.icaoResponse &&
+            this.fpResponse.icaoResponse.success
+          ) {
+            this.hasIcaoResponse = true;
             console.log(this.fpResponse);
             this.fpResponse.image =
               'data:image/png;base64,' + this.fpResponse.image;
@@ -101,59 +106,6 @@ export class InputFingerComponent implements OnInit {
     });
   }
   mappingData() {
-    // this.fpResponse = {
-    //   type: 2,
-    //   quality: 77,
-    //   image: '',
-    //   verifyResponse: {
-    //     success: true,
-    //     code: 0,
-    //     message: 'SUCCESS',
-    //     data: 'IDVNM0910055134051091005513<<09101014M3101012VNM<<<<<<<<<<<8DINH<<DUY<TAN<<<<<<<<<<<<<<<<<',
-    //   },
-    //   icaoResponse: {
-    //     success: true,
-    //     code: 0,
-    //     message: 'SUCCESS',
-    //     data: {
-    //       docNumber: '091005513',
-    //       name: 'DUY<TAN<<<<<<<<<<<<<<<<< DINH',
-    //       dateOfBirth: '910101',
-    //       validTo: '310101',
-    //       dateOfIssuance: '',
-    //       gender: 'MALE',
-    //       faceImage: '',
-    //       dg13: {
-    //         idCardNo: '051091005513',
-    //         name: 'Đinh Duy Tân',
-    //         dateOfBirth: '01/01/1991',
-    //         gender: 'Nam',
-    //         nationality: 'Việt Nam',
-    //         ethnic: 'Kinh',
-    //         religion: 'Không',
-    //         placeOfOrigin: 'Nghĩa Chánh, Thành phố Quảng Ngãi, Quảng Ngãi',
-    //         residenceAddress:
-    //           'Tổ 1, Nghĩa Chánh, Thành phố Quảng Ngãi, Quảng Ngãi',
-    //         personalSpecificIdentification:
-    //           'sẹo chấm c.1cm trên trước đầu mày trái',
-    //         dateOfIssuance: '15/03/2022',
-    //         dateOfExpiry: '01/01/2031',
-    //         motherName: 'null',
-    //         fatherName: 'null',
-    //         spouseName: 'null',
-    //         oldIdCardNumber: '212566766',
-    //         chipId: '',
-    //       },
-    //       validationResult: {
-    //         aa: true,
-    //         pa: true,
-    //         ca: false,
-    //       },
-    //       fingerImages: '',
-    //     },
-    //   },
-    // };
-
     let customerInfo = new CustomerInfo();
     let dg13 = this.fpResponse.icaoResponse.data.dg13;
 

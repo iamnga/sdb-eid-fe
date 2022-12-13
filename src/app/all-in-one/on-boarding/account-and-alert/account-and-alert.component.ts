@@ -37,16 +37,17 @@ export class AccountAndAlertComponent implements OnInit {
   selectAccountType(type: any) {
     this.currentAccountType = type;
     if (type == this.accountType.Phone) {
-      this.currentAccountNumber = '938483697';
+      this.currentAccountNumber = this.aioSvc.customerInfo.mobileNo.substr(-9);
     }
     if (type == this.accountType.DOB) {
-      this.currentAccountNumber = '9031995';
+      this.currentAccountNumber = this.aioSvc.customerInfo.dob.replace('/', '');
     }
     if (type == this.accountType.CardId) {
-      this.currentAccountNumber = '15071000030 ';
+      this.currentAccountNumber =
+        this.aioSvc.customerInfo.customerID.substr(-10);
     }
     if (type == this.accountType.Random) {
-      this.currentAccountNumber = 'random';
+      this.currentAccountNumber = '';
     }
     if (type == this.accountType.Custom) {
       this.isCustomAccount = type == this.accountType.Custom;
@@ -150,7 +151,7 @@ export class AccountAndAlertComponent implements OnInit {
     this.aioSvc.customerEnrollInfo.accountCurrency = '704';
     this.aioSvc.customerEnrollInfo.prefixNumberAccount =
       this.currentAccountNumber;
-    this.aioSvc.customerEnrollInfo.branchCode = 'VN001';
+    this.aioSvc.customerEnrollInfo.branchCode = 'VN0010001';
     this.aioSvc.next();
   }
 

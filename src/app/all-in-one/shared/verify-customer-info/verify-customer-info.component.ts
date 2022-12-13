@@ -27,28 +27,29 @@ export class VerifyCustomerInfoComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('verify: ', this.aioSvc.customerInfo);
-    this.checkCustomerByIdNo(this.randomId());
+    this.checkCustomerByIdNo(this.randomId(12));
   }
 
-  randomId() {
+  randomId(length: number) {
     var result = '';
     var characters = '0123456789';
     var charactersLength = characters.length;
-    for (var i = 0; i < 9; i++) {
+    for (var i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
   }
 
   checkCustomerByIdNo(customerId: string) {
+    console.log(this.aioSvc.customerInfo);
     this.aioSvc.isProcessing = true;
     this.aioSvc.checkCustomerByIdNo(customerId).subscribe(
       (res: any) => {
         if (res.respCode == '14') {
           let faceC = localStorage.getItem('face-captured');
           this.face = faceC ? faceC : '';
-          this.aioSvc.customerInfo.email = 'minhngaag@gmail.com';
-          this.aioSvc.customerInfo.mobileNo = '0349444450';
+          this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
+          this.aioSvc.customerInfo.mobileNo = '0349' + this.randomId(6);
           this.aioSvc.customerInfo.customerID = customerId;
           this.findAddressByText();
         } else if (res.respCode == '00') {
@@ -128,10 +129,10 @@ export class VerifyCustomerInfoComponent implements OnInit {
   getProvinces() {
     this.aioSvc.getProvinces().subscribe(
       (res: any) => {
-        this.aioSvc.isProcessing = false;
         console.log(res);
         if (res.data.provinces) {
           this.provinces = res.data.provinces;
+          this.aioSvc.isProcessing = false;
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra getProvinces`);
           this.aioSvc.isProcessing = false;

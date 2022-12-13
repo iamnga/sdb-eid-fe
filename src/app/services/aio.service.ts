@@ -306,74 +306,57 @@ export class AioService {
 
   next() {
     this.updateLogStep();
-    if (environment.production)
-      //this.router.navigate(['/aio/on-boarding/account-and-alert']);
-      this.router.navigate(['/aio/shared/verify-customer-info']);
-    else {
-      if (this.currentSerice == Service.OnBoarding) {
-        switch (this.currentStep) {
-          case ServiceStep.DashBoard: {
-            this.router.navigate(['/aio/shared/capture-guide']);
-            //this.router.navigate(['/aio/on-boarding/account-and-alert']);
-            //this.router.navigate(['/aio/shared/verify-customer-info']);
-            break;
-          }
-          case ServiceStep.CaptureGuide: {
-            this.router.navigate(['/aio/shared/capture-face']);
-            break;
-          }
-          case ServiceStep.CaptureFace: {
-            this.router.navigate(['/aio/shared/input-finger']);
-            break;
-          }
-          case ServiceStep.InputFinger: {
-            this.router.navigate(['/aio/shared/collect-card-id']);
-            break;
-          }
-          case ServiceStep.CollectCardId: {
-            // this.router.navigate(['/aio/shared/input-mobile-number']);
-            this.router.navigate(['/aio/shared/verify-customer-info']);
-            break;
-          }
-          case ServiceStep.InputMobileNumber: {
-            this.router.navigate(['/aio/shared/verify-customer-info']);
-            break;
-          }
-          case ServiceStep.VerifyCustomerInfo: {
-            this.router.navigate(['/aio/on-boarding/account-and-alert']);
-            break;
-          }
-          case ServiceStep.AccountAndAlert: {
-            this.router.navigate(['/aio/shared/verify-otp']);
-            break;
-          }
-          case ServiceStep.VerifyOtp: {
-            this.router.navigate(['/aio/on-boarding/end']);
-            break;
-          }
-          case ServiceStep.End: {
-            this.router.navigate(['/aio']);
-            break;
-          }
-          default: {
-            this.router.navigate(['/aio']);
-            break;
-          }
+
+    if (this.currentSerice == Service.OnBoarding) {
+      switch (this.currentStep) {
+        case ServiceStep.DashBoard: {
+          this.router.navigate(['/aio/shared/capture-guide']);
+          //this.router.navigate(['/aio/on-boarding/account-and-alert']);
+          //this.router.navigate(['/aio/shared/verify-customer-info']);
+          break;
+        }
+        case ServiceStep.CaptureGuide: {
+          this.router.navigate(['/aio/shared/capture-face']);
+          break;
+        }
+        case ServiceStep.CaptureFace: {
+          this.router.navigate(['/aio/shared/input-finger']);
+          break;
+        }
+        case ServiceStep.InputFinger: {
+          this.router.navigate(['/aio/shared/collect-card-id']);
+          break;
+        }
+        case ServiceStep.CollectCardId: {
+          // this.router.navigate(['/aio/shared/input-mobile-number']);
+          this.router.navigate(['/aio/shared/verify-customer-info']);
+          break;
+        }
+        case ServiceStep.InputMobileNumber: {
+          this.router.navigate(['/aio/shared/verify-customer-info']);
+          break;
+        }
+        case ServiceStep.VerifyCustomerInfo: {
+          this.router.navigate(['/aio/on-boarding/account-and-alert']);
+          break;
+        }
+        case ServiceStep.AccountAndAlert: {
+          this.router.navigate(['/aio/shared/verify-otp']);
+          break;
+        }
+        case ServiceStep.VerifyOtp: {
+          this.router.navigate(['/aio/on-boarding/end']);
+          break;
+        }
+        case ServiceStep.End: {
+          this.router.navigate(['/aio']);
+          break;
+        }
+        default: {
+          this.router.navigate(['/aio']);
+          break;
         }
       }
     }
   }
 }
-
-// {
-//   name: 'TRAN MINH HOANG LONG',
-//   phone: '0979 327 455',
-//   gender: 'Nam',
-//   dob: '16/03/1995',
-//   idNo: '231053235256',
-//   dateOfIssuance: '06/05/2022',
-//   dateOfExpiry: '06/05/2040',
-//   residenceAddress: '268 Nam Kỳ Khởi Nghĩa, P.8, Q.3, TP.HCM',
-//   email: '',
-//   contactAddress: '',
-// };

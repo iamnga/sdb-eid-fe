@@ -54,5 +54,70 @@
 
 <section *ngIf="step == 2">
   <div class="container pt-3">Chụp mặt trước CCCD</div>
-  <div></div>
+  <div class="p-3 text-center">
+    <input
+      type="file"
+      name="uploader"
+      id="uploader"
+      accept="image/*"
+      (change)="fileChange($event, 'front')"
+      #upLoadFront
+      class="d-none"
+    />
+    <br />
+    <div *ngIf="front">
+      <img [src]="front" class="img img-fluid" />
+    </div>
+  </div>
+  <div class="footer p-3">
+    <div class="row">
+      <div class="col">
+        <button class="btn-warning btn w-100" (click)="upLoadFront.click()">
+          <ng-container *ngIf="front">
+            <i class="fa fa-repeat" aria-hidden="true"></i>
+            Chụp lại
+          </ng-container>
+          <ng-container *ngIf="!front">
+            <i class="fa fa-camera" aria-hidden="true"></i>
+
+            Chụp ảnh
+          </ng-container>
+        </button>
+      </div>
+      <div class="col">
+        <button type="submit" class="btn-primary btn w-100">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="step == 3">
+  <div class="container pt-3">Chụp mặt sau CCCD</div>
+  <div>
+    <input
+      type="file"
+      name="uploader"
+      id="uploader"
+      accept="image/*"
+      (change)="fileChange($event, 'back')"
+      #upLoadBack
+      class="d-none"
+    />
+    <br />
+    <div *ngIf="front">
+      <img [src]="front" class="img img-fluid w-25 mt-4" />
+    </div>
+  </div>
+  <div class="footer p-3">
+    <div class="row">
+      <div class="col">
+        <button class="btn-warning btn w-100" (click)="upLoadBack.click()">
+          Chụp ảnh
+        </button>
+      </div>
+      <div class="col">
+        <button type="submit" class="btn-primary btn w-100">Xác nhận</button>
+      </div>
+    </div>
+  </div>
 </section>

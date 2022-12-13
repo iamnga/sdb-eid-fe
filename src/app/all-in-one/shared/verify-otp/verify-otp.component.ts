@@ -138,6 +138,8 @@ export class VerifyOtpComponent implements OnInit {
     this.aioSvc.customerEnrollInfo.customerInfo.customerType = '1';
     this.aioSvc.customerEnrollInfo.customerInfo.categoryCustomer = 'N';
     this.aioSvc.customerEnrollInfo.customerInfo.issuePlace = 'CTCCSQLHCVTTXH';
+    //TODO
+    this.aioSvc.customerEnrollInfo.customerInfo.issueDate = '20200101';
   }
 
   formatDate(dob: string) {
@@ -149,7 +151,8 @@ export class VerifyOtpComponent implements OnInit {
     let data = new OpenAccountRequestData();
     data.registerAlert = this.aioSvc.customerEnrollInfo.registerAlert;
     data.fullName = this.aioSvc.customerEnrollInfo.customerInfo.fullName;
-    data.mobileNo = this.aioSvc.customerEnrollInfo.customerInfo.mobileNo;
+    data.mobileNo =
+      '84' + this.aioSvc.customerEnrollInfo.customerInfo.mobileNo.substr(-9);
     data.accountCurrency = this.aioSvc.customerEnrollInfo.accountCurrency;
     data.accountType = this.aioSvc.customerEnrollInfo.accountType;
     data.branchCode = this.aioSvc.customerEnrollInfo.branchCode;

@@ -21,17 +21,6 @@ export class CollectCardIdComponent implements OnInit {
     this.genQR();
   }
 
-  checkCustomerByIdNo() {
-    this.aioSvc.checkCustomerByIdNo('').subscribe(
-      (res) => {
-        console.log(res);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  }
-
   genQR() {
     this.qrValue =
       this.baseUrl +
@@ -42,7 +31,6 @@ export class CollectCardIdComponent implements OnInit {
   }
 
   next() {
-    this.checkCustomerByIdNo();
-    // this.aioSvc.next();
+    this.aioSvc.next();
   }
 }

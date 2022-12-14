@@ -4,3 +4,27 @@ html,
 body {
   height: 100%;
 }
+
+.full-screen-modal {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  width: 100vw !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0 !important;
+}
+
+.full-screen-modal .modal-content {
+  border: none !important;
+  border-radius: 0px !important;
+  min-height: 100vh !important;
+}
+
+/* .confirm-discard-modal {
+  margin-top: 150% !important;
+} */
+
+.modal {
+  background-color: #00000063 !important;
+}

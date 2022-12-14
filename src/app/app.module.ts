@@ -48,6 +48,9 @@ import { AlertComponent } from './all-in-one/shared/dialog/alert/alert.component
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 import { LottieModule } from 'ngx-lottie';
 import player from 'lottie-web';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
 export function playerFactory() {
   return player;
 }
@@ -99,6 +102,8 @@ export function playerFactory() {
     MatDialogModule,
     NgxLoadingModule.forRoot({ animationType: ngxLoadingAnimationTypes.pulse }),
     LottieModule.forRoot({ player: playerFactory }),
+    ImageCropperModule,
+    ModalModule.forRoot(),
   ],
   providers: [
     WebsocketService,

@@ -10,7 +10,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
   styleUrls: ['./mobile-capture-card-id.component.css'],
 })
 export class MobileCaptureCardIdComponent implements OnInit {
-  step = 1;
+  step = 0;
   deviceID = '';
   sessionID = '';
   front = '';
@@ -23,8 +23,41 @@ export class MobileCaptureCardIdComponent implements OnInit {
   canvasRotation = 0;
   cropTimes = 0;
   alertMsg = '';
+  loadErr = false;
   @ViewChild('alertModal') alertModal: TemplateRef<HTMLDivElement>;
   alertModalRef: BsModalRef;
+
+  constructor(
+    private actRoute: ActivatedRoute,
+    private aioSvc: AioService,
+    private sanitizer: DomSanitizer,
+    private modalService: BsModalService
+  ) {
+    this.deviceID = this.actRoute.snapshot.params['deviceid'];
+    this.sessionID = this.actRoute.snapshot.params['sessionid'];
+  }
+
+  ngOnInit() {
+    this.aioSvc.isProcessing = true;
+    this.aioSvc.verifySessionID(this.deviceID, this.sessionID).subscribe(
+      (res: any) => {
+        if (res.respCode == '00') {
+          this.step++;
+          this.aioSvc.isProcessing = false;
+        } else {
+          this.loadErr = true;
+          this.alert(`Có lỗi xảy ra verifySessionID`);
+          this.aioSvc.isProcessing = false;
+        }
+        console.log(res);
+      },
+      (err) => {
+        this.loadErr = true;
+        this.alert(`Có lỗi xảy ra verifySessionID`);
+        this.aioSvc.isProcessing = false;
+      }
+    );
+  }
 
   imageCropped(event: ImageCroppedEvent) {
     this.hasChange = this.cropTimes == 0 ? false : true;
@@ -66,16 +99,6 @@ export class MobileCaptureCardIdComponent implements OnInit {
     }
   }
 
-  constructor(
-    private actRoute: ActivatedRoute,
-    private aioSvc: AioService,
-    private sanitizer: DomSanitizer,
-    private modalService: BsModalService
-  ) {
-    this.deviceID = this.actRoute.snapshot.params['deviceid'];
-    this.sessionID = this.actRoute.snapshot.params['sessionid'];
-  }
-
   handleInputChange(e: any) {
     var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
     if (file) {
@@ -100,14 +123,6 @@ export class MobileCaptureCardIdComponent implements OnInit {
     console.log(reader.result);
   }
 
-  ngOnInit() {
-    // this.aioSvc.verifySessionID(this.deviceID, this.sessionID).subscribe(
-    //   (res) => {
-    //     console.log(res);
-    //   },
-    //   (err) => {}
-    // );
-  }
   edit(template: TemplateRef<any>) {
     if (this.front != '' && this.step == 2) {
       this.modalRef = this.modalService.show(template, { id: 1 });
@@ -158,6 +173,55 @@ export class MobileCaptureCardIdComponent implements OnInit {
       case 3: {
         if (this.back) {
           // Send to BE
+          this.aioSvc.isProcessing = true;
+          this.aioSvc
+            .uploadImage(this.front, 'front', this.deviceID, this.sessionID)
+            .subscribe(
+              (res: any) => {
+                if (res.respCode == '00') {
+                  console.log('Upload front', res);
+
+                  this.aioSvc
+                    .uploadImage(
+                      this.back,
+                      'back',
+                      this.deviceID,
+                      this.sessionID
+                    )
+                    .subscribe(
+                      (res: any) => {
+                        if (res.respCode == '00') {
+                          console.log('Upload back', res);
+                          this.aioSvc.isProcessing = false;
+                          this.step++;
+                        } else {
+                          this.alert(`Có lỗi xảy ra uploadImage-back`);
+
+                          this.aioSvc.isProcessing = false;
+                          return;
+                        }
+                      },
+                      (err) => {
+                        this.alert(`Có lỗi xảy ra uploadImage-back`);
+                        console.log(err);
+                        this.aioSvc.isProcessing = false;
+                        return;
+                      }
+                    );
+                } else {
+                  this.alert(`Có lỗi xảy ra uploadImage-Front`);
+
+                  this.aioSvc.isProcessing = false;
+                  return;
+                }
+              },
+              (err) => {
+                this.alert(`Có lỗi xảy ra uploadImage-Front`);
+                console.log(err);
+                this.aioSvc.isProcessing = false;
+                return;
+              }
+            );
           console.log('Front: ', this.front);
           console.log('Back: ', this.back);
         } else {

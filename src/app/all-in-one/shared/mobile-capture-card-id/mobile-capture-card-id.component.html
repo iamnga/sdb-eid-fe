@@ -5,6 +5,14 @@
     alt=""
   />
 </div>
+<section *ngIf="step == 0" class="pt-5 text-sacom">
+  <div class="text-center">
+    <i class="fas fa-spinner fa-pulse fa-3x" *ngIf="!loadErr"></i>
+    <div *ngIf="loadErr" class="text-danger">
+      Lỗi tải trang, Quý khách vui lòng thử lại
+    </div>
+  </div>
+</section>
 <section *ngIf="step == 1">
   <div class="container pt-3">
     <div class="text-center">Hướng dẫn chụp CCCD</div>
@@ -67,7 +75,7 @@
   </div>
 </section>
 
-<section *ngIf="step > 1">
+<section *ngIf="step == 2 || step == 3">
   <div class="container pt-3 text-center">
     <span class="float-left" (click)="previous()"
       ><i class="fa-solid fa-chevron-left"></i
@@ -111,6 +119,29 @@
           <div><span class="material-icons"> shortcut </span></div>
           <div class="nav-text">Tiếp tục</div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="step == 4">
+  <div class="container text-center">
+    <div class="p-4">
+      <div>
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/3032/3032885.png"
+          class="img img-fluid w-50"
+          alt=""
+        />
+      </div>
+    </div>
+    <div class="text-sacom">
+      <div class="mb-2">
+        <h5><b> Tải ảnh thành công!</b></h5>
+      </div>
+      <div class="font-weight-light">
+        Quý khách vui lòng tiếp tục trên thiết bị của Sacombank, chân thành cảm
+        ơn Quý khách
       </div>
     </div>
   </div>

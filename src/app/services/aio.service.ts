@@ -28,17 +28,17 @@ import { FingerResponse } from '../models/mk';
 export class AioService {
   currentSerice = Service.None;
   currentStep = ServiceStep.DashBoard;
-  cusInfo: CustomerInfo2;
   isProcessing = false;
   apiUrl = environment.apiUrl;
   deviceID = '00000001';
-  sessionID = 'd';
+  sessionID = '';
   refNumber = '';
   customerEnrollInfo = new CustomerEnroll();
   customerInfo = new CustomerInfo();
   registerAlert = new RegisterAlert();
   fpResponse: FingerResponse = new FingerResponse();
   fpAttemp = 0;
+  faceCaptured = '';
 
   headerDict = {
     'Content-Type': 'application/json;ngann',
@@ -51,46 +51,18 @@ export class AioService {
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string,
     public dialog: MatDialog
-  ) {
-    this.cusInfo = {
-      name: 'TRAN MINH HOANG LONG',
-      phone: '0979 327 455',
-      gender: 'Nam',
-      dob: '16/03/1995',
-      idNo: '231053235256',
-      dateOfIssuance: '06/05/2022',
-      dateOfExpiry: '06/05/2040',
-      residenceAddress: '268 Nam Kỳ Khởi Nghĩa, P.8, Q.3, TP.HCM',
-      email: '',
-      contactAddress: '',
-      job: '',
-    };
-  }
-
-  create() {
-    this.isProcessing = true;
-    // this.getSessionId();
-  }
+  ) {}
 
   release() {
     this.isProcessing = false;
     this.currentSerice = Service.None;
     this.currentStep = ServiceStep.DashBoard;
     this.refNumber = '';
-
-    this.cusInfo = {
-      name: 'TRAN MINH HOANG LONG',
-      phone: '0979 327 455',
-      gender: 'Nam',
-      dob: '16/03/1995',
-      idNo: '231053235256',
-      dateOfIssuance: '06/05/2022',
-      dateOfExpiry: '06/05/2040',
-      residenceAddress: '268 Nam Kỳ Khởi Nghĩa, P.8, Q.3, TP.HCM',
-      email: '',
-      contactAddress: '',
-      job: '',
-    };
+    this.sessionID = '';
+    this.customerEnrollInfo = new CustomerEnroll();
+    this.customerInfo = new CustomerInfo();
+    this.registerAlert = new RegisterAlert();
+    this.fpResponse = new FingerResponse();
 
     this.router.navigate(['/aio/dash-board']);
   }
@@ -117,16 +89,32 @@ export class AioService {
     });
   }
 
-  uploadFace(face: string) {
-    let req = this.newRequest({ input: face });
-    return this.http.post(this.apiUrl + 'upload-face', req, {
+  uploadImage(
+    img: string,
+    type: string,
+    deviceID: string = this.deviceID,
+    sessionID: string = this.sessionID
+  ) {
+    let req = this.newRequest(
+      { imageBas64: img, imageType: type },
+      deviceID,
+      sessionID
+    );
+    return this.http.post(this.apiUrl + 'upload-image', req, {
       headers: new HttpHeaders(this.headerDict),
     });
   }
 
-  uploadFrontID(img: string) {
-    let req = this.newRequest({ input: img });
-    return this.http.post(this.apiUrl + 'upload-frontID', req, {
+  loadImage() {
+    let req = this.newRequest();
+    return this.http.post(this.apiUrl + 'load-image', req, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
+  compareFace() {
+    let req = this.newRequest();
+    return this.http.post(this.apiUrl + 'compareFace', req, {
       headers: new HttpHeaders(this.headerDict),
     });
   }
@@ -263,8 +251,9 @@ export class AioService {
     let data = new UpdateLogStepData();
     data.stepName = ServiceStep[this.currentStep];
     data.identityID = identityID;
-    data.lastRespCode = lastRespCode;
-    data.lastRespDescription = lastRespDescription;
+    data.lastRespCode = lastRespCode == '' ? '00' : lastRespCode;
+    data.lastRespDescription =
+      lastRespDescription == '' ? 'Success' : lastRespDescription;
     data.lastChildStep = lastChildStep;
 
     let req = this.newRequest(data);

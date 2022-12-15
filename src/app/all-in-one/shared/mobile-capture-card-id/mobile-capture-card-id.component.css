@@ -68,3 +68,8 @@ section {
 .edit-box {
   height: 50vh;
 }
+
+.text-sacom {
+  color: #1b54c3 !important;
+  line-height: 2rem;
+}

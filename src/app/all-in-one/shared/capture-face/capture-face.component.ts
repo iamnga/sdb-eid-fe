@@ -37,7 +37,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   ngOnInit() {
-    localStorage.setItem('face-captured', '');
+    this.aioSvc.faceCaptured = '';
     this.startCapture();
   }
 
@@ -110,7 +110,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
 
           this.captured = canvases2[0].toDataURL('image/png');
 
-          localStorage.setItem('face-captured', this.captured);
+          this.aioSvc.faceCaptured = this.captured;
 
           clearInterval(x);
         }
@@ -140,6 +140,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
     this.endCountDown = false;
     this.isLoadingCountDown = true;
     this.captured = '';
+    this.aioSvc.faceCaptured = '';
     this.doDetect();
   }
 
@@ -152,28 +153,6 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   }
 
   next() {
-    // this.aioSvc.isProcessing = true;
-    // this.aioSvc.uploadFace(this.captured).subscribe(
-    //   (res) => {
-    //     console.log(res);
-    //     this.getBase64ImageFromUrl('https://i.ibb.co/2kqhPp9/front.jpg')
-    //       .then((result: any) => {
-    //         console.log(result);
-    //         this.aioSvc.uploadFrontID(result).subscribe(
-    //           (res2) => {
-    //             console.log(res2);
-    //           },
-    //           (err) => {
-    //             this.aioSvc.isProcessing = false;
-    //           }
-    //         );
-    //       })
-    //       .catch((err) => console.error(err));
-    //   },
-    //   (err) => {
-    //     this.aioSvc.isProcessing = false;
-    //   }
-    // );
     this.aioSvc.next();
   }
 

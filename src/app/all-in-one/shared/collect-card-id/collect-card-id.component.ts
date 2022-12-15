@@ -25,24 +25,102 @@ export class CollectCardIdComponent implements OnInit {
 
   ngOnInit(): void {
     this.genQR();
-    setInterval(() => {
-      //Gọi cho BE để kiểm tra khách hàng đã upload ảnh lên chưa
-      //Nếu đã up rồi thì hiển thị ảnh lên và chờ khách hàng xác nhận/chụp lại
-      //Khi KH nhấn xác nhận thì gọi API check face
-      console.log('Get card id image');
+    let x = setInterval(() => {
+      this.aioSvc.loadImage().subscribe(
+        (res: any) => {
+          if (res.respCode == '00') {
+            this.front = res.data.frontBase64;
+            this.back = res.data.backBase64;
+            clearInterval(x);
+          }
+        },
+        (err) => {
+          this.aioSvc.alert(`Có lỗi xảy ra loadImage`);
+          clearInterval(x);
+        }
+      );
+      console.log('Load image');
     }, 2000);
   }
 
   genQR() {
     this.qrValue =
       this.baseUrl +
-      'collect/' +
+      'aio/shared/mobile-capture-card-id/' +
       this.aioSvc.deviceID +
       '/' +
       this.aioSvc.sessionID;
+
+    console.log(this.qrValue);
   }
 
   next() {
-    this.aioSvc.next();
+    this.compareFace();
+  }
+
+  compareFace() {
+    this.aioSvc.isProcessing = true;
+    this.aioSvc.uploadImage(this.aioSvc.faceCaptured, 'face').subscribe(
+      (res: any) => {
+        if (res.respCode == '00') {
+          console.log('Upload face', res);
+          this.aioSvc.compareFace().subscribe(
+            (res: any) => {
+              console.log('compareFace', res);
+              if (res.respCode == '00') {
+                if (res.data.result == '1') {
+                  if (
+                    res.data.customerOCRInfo.customerID ==
+                    this.aioSvc.customerInfo.customerID
+                  ) {
+                    this.aioSvc
+                      .uploadImage(this.aioSvc.faceCaptured, 'done')
+                      .subscribe(
+                        (res: any) => {
+                          this.aioSvc.isProcessing = false;
+                          if (res.respCode == '00') {
+                            this.aioSvc.next();
+                          } else {
+                            this.aioSvc.alert(`Có lỗi xảy ra uploadImage-done`);
+                          }
+                        },
+                        (err) => {
+                          this.aioSvc.alert(`Có lỗi xảy ra uploadImage-done`);
+                        }
+                      );
+                  } else {
+                    this.aioSvc.alert(`Số CCCD không trùng khớp`);
+                    this.aioSvc.isProcessing = false;
+                  }
+                  this.aioSvc.isProcessing = false;
+                } else {
+                  this.aioSvc.alert(`Xác thực thất bại`);
+                  this.aioSvc.isProcessing = false;
+                }
+              } else {
+                this.aioSvc.alert(`Có lỗi xảy ra compareFace`);
+              }
+            },
+            (err) => {
+              this.aioSvc.alert(`Có lỗi xảy ra compareFace`);
+            }
+          );
+        } else {
+          this.aioSvc.alert(`Có lỗi xảy ra uploadImage-face`);
+
+          this.aioSvc.isProcessing = false;
+        }
+      },
+      (err) => {
+        this.aioSvc.alert(`Có lỗi xảy ra uploadImage-face`);
+
+        this.aioSvc.isProcessing = false;
+      }
+    );
+  }
+
+  reUpload() {
+    this.front = '';
+    this.back = '';
   }
 }

@@ -3,21 +3,56 @@
 
 <section>
   <div class="container text-center">
-    <div>
-      <h3 class="mb-3 font-weight-bold">Quét mã QR</h3>
-      <h5>Scan QR để tiếp tục trên điện thoại của Quý khách</h5>
-    </div>
-    <div class="mt-4">
-      <qrcode
-        [qrdata]="qrValue"
-        [width]="256"
-        [errorCorrectionLevel]="'M'"
-      ></qrcode>
-    </div>
+    <ng-container *ngIf="!front || !back">
+      <div>
+        <h3 class="mb-3 font-weight-bold">Quét mã QR</h3>
+        <h5>Scan QR để tiếp tục trên điện thoại của Quý khách</h5>
+      </div>
+      <div class="mt-4">
+        <qrcode
+          [qrdata]="qrValue"
+          [width]="256"
+          [errorCorrectionLevel]="'M'"
+        ></qrcode>
+      </div>
 
-    <!-- <button (click)="next()" class="btn btn-primary">Tiếp tục</button> -->
-    <div class="w-25" style="margin-inline: auto">
-      <ng-lottie [options]="dots"></ng-lottie>
-    </div>
+      <div class="w-25" style="margin-inline: auto">
+        <ng-lottie [options]="dots"></ng-lottie>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="front && back">
+      <div>
+        <h3 class="mb-3 font-weight-bold">Kiểm tra thông tin</h3>
+        <h5>Quý khách vui lòng kiểm tra lại ảnh CCCD</h5>
+      </div>
+      <div class="row py-5">
+        <div class="col">
+          <div class="text-right">
+            <div class="w-75 float-right">
+              <div class="py-3 text-center">
+                <span>Mặt trước</span>
+              </div>
+              <img [src]="front" alt="" class="img img-fluid" />
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div>
+            <div class="w-75">
+              <div class="py-3 text-center">
+                <span>Mặt sau</span>
+              </div>
+              <img [src]="back" alt="" class="img img-fluid" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-50 d-inline-block pr-2 text-right">
+        <button class="btn-back" (click)="reUpload()">Làm lại</button>
+      </div>
+      <div class="w-50 d-inline-block pl-2 text-left">
+        <button class="btn-next" (click)="next()">Xác nhận</button>
+      </div>
+    </ng-container>
   </div>
 </section>

@@ -13,8 +13,7 @@ export class JobComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<JobComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Occupations[],
-    private aioSvc: AioService
+    @Inject(MAT_DIALOG_DATA) public data: Occupations[]
   ) {}
 
   ngOnInit(): void {}

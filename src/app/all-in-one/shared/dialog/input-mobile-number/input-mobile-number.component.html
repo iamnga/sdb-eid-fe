@@ -1,0 +1,39 @@
+<!-- <app-aio-header></app-aio-header>
+<app-aio-back-and-stepper [currentStep]="3"></app-aio-back-and-stepper> -->
+
+<section>
+  <div class="text-right">
+    <mat-icon matSuffix (click)="dialogRef.close(data)">close</mat-icon>
+  </div>
+  <div class="container text-center">
+    <div>
+      <h3 class="mb-4 font-weight-bold">
+        Quý khách vui lòng nhập số điện thoại
+      </h3>
+    </div>
+    <div class="text-danger mb-3" [ngClass]="{ 'o-0': !err }">
+      <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+      {{ errMsg }}
+    </div>
+    <div class="text-center keyboard-box">
+      <div>
+        <input type="text" [(ngModel)]="mobileNumber" readonly maxlength="10" />
+      </div>
+      <app-keyboard-number
+        (inputNumberEvent)="recieveInputNumber($event)"
+      ></app-keyboard-number>
+
+      <button
+        class="btn-next mt-4"
+        (click)="next()"
+        [disabled]="
+          mobileNumber.length < 10 ||
+          !mobileNumber ||
+          !isVietnamesePhoneNumber()
+        "
+      >
+        Tiếp tục
+      </button>
+    </div>
+  </div>
+</section>

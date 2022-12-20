@@ -8,6 +8,7 @@ import {
 } from 'src/app/models/aio';
 import { Service, ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dash-board',
@@ -35,7 +36,9 @@ export class DashBoardComponent implements OnInit {
             this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
           } else {
             this.aioSvc.sessionID = result.data.sessionId;
-            //this.customerEnroll();
+            if (!environment.production) {
+              this.aioSvc.fakeData();
+            }
             this.aioSvc.next();
           }
         } else {

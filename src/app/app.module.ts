@@ -13,7 +13,6 @@ import { AllInOneComponent } from './all-in-one/all-in-one.component';
 import { InputFingerComponent } from './all-in-one/shared/input-finger/input-finger.component';
 import { CaptureFaceComponent } from './all-in-one/shared/capture-face/capture-face.component';
 import { DashBoardComponent } from './all-in-one/dash-board/dash-board.component';
-import { InputMobileNumberComponent } from './all-in-one/shared/input-mobile-number/input-mobile-number.component';
 import { VerifyCustomerInfoComponent } from './all-in-one/shared/verify-customer-info/verify-customer-info.component';
 import { AccountAndAlertComponent } from './all-in-one/on-boarding/account-and-alert/account-and-alert.component';
 import { VerifyOtpComponent } from './all-in-one/shared/verify-otp/verify-otp.component';
@@ -50,6 +49,8 @@ import { LottieModule } from 'ngx-lottie';
 import player from 'lottie-web';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { FillInfoComponent } from './all-in-one/shared/fill-info/fill-info.component';
+import { InputMobileNumberComponent } from './all-in-one/shared/dialog/input-mobile-number/input-mobile-number.component';
 
 export function playerFactory() {
   return player;
@@ -84,6 +85,7 @@ export function playerFactory() {
     ContactAddressComponent,
     JobComponent,
     AlertComponent,
+    FillInfoComponent,
   ],
   imports: [
     SlickCarouselModule,

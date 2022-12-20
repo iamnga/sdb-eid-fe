@@ -2,10 +2,6 @@
 <app-aio-back-and-stepper [currentStep]="3"></app-aio-back-and-stepper>
 <section>
   <div class="container">
-    <!-- <div class="text-center">
-      <h3 class="font-weight-bold mb-4">Xác nhận thông tin</h3>
-      <h5 class="mb-4">Quý khách vui lòng kiểm tra lại thông tin cá nhân</h5>
-    </div> -->
     <div class="row pb-3">
       <div class="col-6 p-0">
         <h3 class="font-weight-bold mb-2">Xác nhận thông tin</h3>
@@ -37,12 +33,6 @@
               </td>
             </tr>
             <tr>
-              <td>Số điện thoại</td>
-              <td class="font-weight-bold">
-                {{ aioSvc.customerInfo.mobileNo }}
-              </td>
-            </tr>
-            <tr>
               <td>Giới tính</td>
               <td class="font-weight-bold">{{ aioSvc.customerInfo.gender }}</td>
             </tr>
@@ -68,10 +58,7 @@
                 {{ aioSvc.customerInfo.issueDate }}
               </td>
             </tr>
-            <tr>
-              <td>Nơi cấp</td>
-              <td class="font-weight-bold">CTCCSQLHCVTTXH</td>
-            </tr>
+
             <tr>
               <td>Địa chỉ thường trú</td>
               <td class="font-weight-bold">
@@ -81,75 +68,9 @@
           </table>
         </div>
       </div>
-      <hr />
-      <div class="col-12 pt-2 mt-4">
-        <div>
-          <table class="fill-table">
-            <tr>
-              <td class="w-50">
-                <mat-checkbox
-                  [color]="'primary'"
-                  (change)="likeResidenceAddress()"
-                  [(ngModel)]="isLikeResidenceAddress"
-                  >Địa chỉ liên lạc trùng với địa chỉ thường trú</mat-checkbox
-                >
-              </td>
-              <td class="w-50 pl-3">
-                <div
-                  class="fill-input ml-3"
-                  (click)="openContactAddressDialog()"
-                >
-                  <ng-container *ngIf="!contactAddress">
-                    Địa chỉ liên lạc
-                  </ng-container>
-                  <ng-container *ngIf="contactAddress">
-                    {{ contactAddress | slice : 0 : 50 }}
-                    {{ contactAddress.length > 50 ? "..." : "" }}
-                  </ng-container>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td class="w-50" (click)="openInputEmailDialog()">
-                <div class="fill-input">
-                  <ng-container *ngIf="!aioSvc.customerInfo.email"
-                    >Nhập email của bạn</ng-container
-                  >
-                  <ng-container *ngIf="aioSvc.customerInfo.email">{{
-                    aioSvc.customerInfo.email
-                  }}</ng-container>
-                </div>
-              </td>
-              <td class="w-50 pl-3" (click)="openJobDialog()">
-                <div class="fill-input ml-3">
-                  <ng-container *ngIf="!this.currentOcc"
-                    >Vui lòng chọn nghề nghiệp
-                    <span class="float-right pr-3">
-                      <i class="fa fa-angle-down" aria-hidden="true"></i>
-                    </span>
-                  </ng-container>
-                  <ng-container *ngIf="this.currentOcc">{{
-                    this.currentOcc.name
-                  }}</ng-container>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
     </div>
     <div class="text-center pt-5">
-      <button
-        class="btn-next"
-        (click)="confirm()"
-        [disabled]="
-          !aioSvc.customerInfo.email ||
-          !aioSvc.customerInfo.jobCode ||
-          !contactAddress
-        "
-      >
-        Xác nhận
-      </button>
+      <button class="btn-next" (click)="confirm()">Xác nhận</button>
     </div>
   </div>
 </section>

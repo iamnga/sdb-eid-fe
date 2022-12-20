@@ -56,12 +56,16 @@ td {
   transition: ease-in-out 0.3s;
 }
 
-.btn-disabled:disabled {
-  opacity: 0.5;
+.btn-next:disabled {
+  opacity: 0.5 !important;
 }
 
 .btn-next {
   background-color: #2a81d0;
   color: white;
   height: 60px;
+}
+
+.o-0 {
+  opacity: 0;
 }

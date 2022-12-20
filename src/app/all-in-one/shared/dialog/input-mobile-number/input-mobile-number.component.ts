@@ -1,26 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
 
 @Component({
   selector: 'app-input-mobile-number',
   templateUrl: './input-mobile-number.component.html',
-  styleUrls: [
-    '../../all-in-one.component.css',
-    './input-mobile-number.component.css',
-  ],
+  styleUrls: ['./input-mobile-number.component.css'],
 })
 export class InputMobileNumberComponent implements OnInit {
   mobileNumber = '';
+  errMsg = 'Số điện thoại không hợp lệ';
+  err = false;
 
-  constructor(private aioService: AioService) {
-    aioService.currentStep = ServiceStep.InputMobileNumber;
+  constructor(
+    public dialogRef: MatDialogRef<InputMobileNumberComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: string
+  ) {
+    this.mobileNumber = data;
   }
 
   ngOnInit(): void {}
 
   next() {
-    this.aioService.next();
+    if (!this.isVietnamesePhoneNumber() || this.mobileNumber.length < 10) {
+      return;
+    } else {
+      this.dialogRef.close(this.mobileNumber);
+    }
   }
 
   recieveInputNumber(event: any) {
@@ -33,13 +40,16 @@ export class InputMobileNumberComponent implements OnInit {
         0,
         this.mobileNumber.length - 1
       );
+      this.err = false;
     } else {
       if (this.mobileNumber.length >= 10) {
         return;
       } else {
         this.mobileNumber = this.mobileNumber + key;
         if (this.mobileNumber.length == 10) {
-          console.log(this.isVietnamesePhoneNumber(this.mobileNumber));
+          this.err = !this.isVietnamesePhoneNumber();
+        } else {
+          this.err = false;
         }
       }
     }
@@ -47,11 +57,7 @@ export class InputMobileNumberComponent implements OnInit {
     console.log(this.mobileNumber);
   }
 
-  isVietnamesePhoneNumber(number: string) {
-    return /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(number);
+  isVietnamesePhoneNumber() {
+    return /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(this.mobileNumber);
   }
-
-  // formartNumber(){
-  //   this.mobileNumber.
-  // }
 }

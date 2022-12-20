@@ -10,8 +10,8 @@ import { BackAndStepperComponent } from './all-in-one/shared/back-and-stepper/ba
 import { CaptureFaceComponent } from './all-in-one/shared/capture-face/capture-face.component';
 import { CaptureGuideComponent } from './all-in-one/shared/capture-guide/capture-guide.component';
 import { CollectCardIdComponent } from './all-in-one/shared/collect-card-id/collect-card-id.component';
+import { FillInfoComponent } from './all-in-one/shared/fill-info/fill-info.component';
 import { InputFingerComponent } from './all-in-one/shared/input-finger/input-finger.component';
-import { InputMobileNumberComponent } from './all-in-one/shared/input-mobile-number/input-mobile-number.component';
 import { MobileCaptureCardIdComponent } from './all-in-one/shared/mobile-capture-card-id/mobile-capture-card-id.component';
 import { SharedComponent } from './all-in-one/shared/shared.component';
 import { VerifyCustomerInfoComponent } from './all-in-one/shared/verify-customer-info/verify-customer-info.component';
@@ -82,12 +82,12 @@ const routes: Routes = [
             component: CollectCardIdComponent,
           },
           {
-            path: 'input-mobile-number',
-            component: InputMobileNumberComponent,
-          },
-          {
             path: 'verify-customer-info',
             component: VerifyCustomerInfoComponent,
+          },
+          {
+            path: 'fill-info',
+            component: FillInfoComponent,
           },
           {
             path: 'verify-otp',

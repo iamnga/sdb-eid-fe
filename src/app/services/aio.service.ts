@@ -299,9 +299,11 @@ export class AioService {
     if (this.currentSerice == Service.OnBoarding) {
       switch (this.currentStep) {
         case ServiceStep.DashBoard: {
-          this.router.navigate(['/aio/shared/capture-guide']);
-          //this.router.navigate(['/aio/on-boarding/account-and-alert']);
-          //this.router.navigate(['/aio/shared/verify-customer-info']);
+          if (environment.production) {
+            this.router.navigate(['/aio/shared/capture-guide']);
+          } else {
+            this.router.navigate(['/aio/shared/verify-customer-info']);
+          }
           break;
         }
         case ServiceStep.CaptureGuide: {
@@ -321,11 +323,12 @@ export class AioService {
           this.router.navigate(['/aio/shared/verify-customer-info']);
           break;
         }
-        case ServiceStep.InputMobileNumber: {
-          this.router.navigate(['/aio/shared/verify-customer-info']);
+
+        case ServiceStep.VerifyCustomerInfo: {
+          this.router.navigate(['/aio/shared/fill-info']);
           break;
         }
-        case ServiceStep.VerifyCustomerInfo: {
+        case ServiceStep.FillInfo: {
           this.router.navigate(['/aio/on-boarding/account-and-alert']);
           break;
         }
@@ -347,5 +350,23 @@ export class AioService {
         }
       }
     }
+  }
+
+  fakeData() {
+    let customerInfo = new CustomerInfo();
+
+    customerInfo.address =
+      'Ấp Mũi Tràm C, Khánh Bình Tây Bắc, Trần Văn Thời, Cà Mau';
+    customerInfo.dob = '25/01/1995';
+    customerInfo.gender = 'Nam';
+    customerInfo.customerID = '352229667';
+    customerInfo.customerIDOld = '352229667';
+    customerInfo.nationality = 'Việt Nam';
+    customerInfo.towncountry = 'Khánh Bình Tây Bắc, Trần Văn Thời, Cà Mau';
+    customerInfo.fullName = 'Bùi Hà Duy';
+    customerInfo.expireDate = '12/11/2034';
+    customerInfo.issueDate = '01/01/2021';
+
+    this.customerInfo = customerInfo;
   }
 }

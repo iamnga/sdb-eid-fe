@@ -38,12 +38,35 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   endCountDown = false;
   isLoadingCountDown = true;
   captured = '';
+  isReadyDetect = false;
 
   subscription: Subscription;
 
   ngOnInit() {
     this.aioSvc.faceCaptured = '';
     this.startCapture();
+  }
+
+  prepareFaceDetector() {
+    let base_image = new Image();
+    base_image.src = 'assets/all-in-one/shared/img/startDetectFace.jpeg';
+    let self = this;
+
+    base_image.onload = function () {
+      const fullFaceDescription = faceapi
+        .detectAllFaces(
+          base_image,
+          new faceapi.TinyFaceDetectorOptions({
+            inputSize: 608,
+            scoreThreshold: 0.7,
+          })
+        )
+        .run()
+        .then((res) => {
+          console.log('--------> ' + JSON.stringify(res));
+          self.startVideo();
+        });
+    };
   }
 
   async startVideo() {
@@ -128,7 +151,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
 
             clearInterval(x);
           } else {
-            console.log('outside face loader: ', this.detection);
+            // console.log('outside face loader: ', this.detection);
           }
         }
       }, 100);
@@ -138,6 +161,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   countdown() {
     console.log(2);
     let cdInterval = setInterval(() => {
+      this.isReadyDetect = true;
       console.log('countDownTime', this.countDownTime);
       this.isLoadingCountDown = false;
       this.countDownTime = this.countDownTime - 1;
@@ -165,7 +189,9 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri('assets/models'),
     ]).then(() => {
-      this.startVideo();
+      // this.startVideo();
+
+      this.prepareFaceDetector();
     });
   }
 

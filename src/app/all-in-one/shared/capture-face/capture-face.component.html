@@ -18,7 +18,14 @@
       <video #video [width]="WIDTH" [height]="HEIGHT" autoplay muted></video>
       <div #canvas></div>
     </div>
-    <div class="countdown" *ngIf="countDownTime > 0">
+    <div
+      class="countdown"
+      *ngIf="countDownTime > 0"
+      [ngClass]="{ 'o-1': !isReadyDetect, 'o-05': isReadyDetect }"
+    >
+      <div class="countdown-text" *ngIf="!isReadyDetect">
+        <ng-container> <i class="fas fa-spinner fa-pulse"></i> </ng-container>
+      </div>
       <div class="countdown-text">
         <ng-container *ngIf="!isLoadingCountDown">
           {{ countDownTime }}

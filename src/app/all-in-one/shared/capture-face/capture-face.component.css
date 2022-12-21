@@ -2,6 +2,14 @@
   opacity: 0;
 }
 
+.o-1 {
+  opacity: 1 !important;
+}
+
+.o-05 {
+  opacity: 0.5 !important;
+}
+
 .countdown {
   width: 640px;
   height: 480px;
@@ -15,7 +23,6 @@
   left: 50%;
   z-index: 100;
   background-color: #3c3c3c;
-  opacity: 0.5;
 }
 
 .face-load {
@@ -59,7 +66,6 @@ video {
   border-radius: 15px;
   margin: 0px auto;
   display: table;
-  /* border: 2px solid rgb(147, 171, 245); */
   position: absolute;
   top: 0px;
   transform: translateX(-50%);

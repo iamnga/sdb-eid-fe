@@ -8,13 +8,18 @@ import {
 import * as faceapi from 'face-api.js';
 import { ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
-import { interval, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { AnimationOptions } from 'ngx-lottie';
+
 @Component({
   selector: 'app-capture-face',
   templateUrl: './capture-face.component.html',
   styleUrls: ['../../all-in-one.component.css', './capture-face.component.css'],
 })
 export class CaptureFaceComponent implements OnInit, OnDestroy {
+  faceLoad: AnimationOptions = {
+    path: 'assets/all-in-one/shared/img/face-load.json',
+  };
   isUnderstood = true;
   WIDTH = 640;
   HEIGHT = 480;
@@ -102,17 +107,29 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
           canvases.length > 0 &&
           this.captured == ''
         ) {
-          this.captured = canvases[0].toDataURL('image/png');
+          let box = this.detection[0].box;
+          if (
+            box.x >= 170 &&
+            box.y >= 90 &&
+            box.width + box.x <= 470 &&
+            box.height + box.y <= 390
+          ) {
+            this.captured = canvases[0].toDataURL('image/png');
 
-          console.log('face-captured', this.captured);
+            console.log('face-captured', this.captured);
 
-          console.log('rect', canvases2[0].toDataURL('image/png'));
+            console.log('rect', canvases2[0].toDataURL('image/png'));
 
-          this.captured = canvases2[0].toDataURL('image/png');
+            this.captured = canvases2[0].toDataURL('image/png');
 
-          this.aioSvc.faceCaptured = this.captured;
+            this.aioSvc.faceCaptured = this.captured;
 
-          clearInterval(x);
+            console.log('inside face loader: ', this.detection);
+
+            clearInterval(x);
+          } else {
+            console.log('outside face loader: ', this.detection);
+          }
         }
       }, 100);
     }, 4000);

@@ -11,6 +11,7 @@ export enum ServiceStep {
   InputFinger,
   CollectCardId,
   VerifyCustomerInfo,
+  RecheckInfo,
   FillInfo,
   AccountAndAlert,
   RequestOtp,

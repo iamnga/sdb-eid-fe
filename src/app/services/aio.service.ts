@@ -13,7 +13,6 @@ import {
   UpdateLogStepData,
   VerifyOtpRequestData,
 } from '../models/aio';
-import { CustomerInfo2 } from '../models/customer-info';
 import { Service, ServiceStep } from '../models/enum';
 import { UUID } from 'angular2-uuid';
 import { Alert, Template } from '../models/alert';
@@ -299,7 +298,7 @@ export class AioService {
     if (this.currentSerice == Service.OnBoarding) {
       switch (this.currentStep) {
         case ServiceStep.DashBoard: {
-          if (environment.production) {
+          if (!environment.production) {
             this.router.navigate(['/aio/shared/capture-guide']);
           } else {
             this.router.navigate(['/aio/shared/verify-customer-info']);
@@ -350,6 +349,51 @@ export class AioService {
         }
       }
     }
+    if (this.currentSerice == Service.UpdateCardId) {
+      switch (this.currentStep) {
+        case ServiceStep.DashBoard: {
+          if (environment.production) {
+            this.router.navigate(['/aio/shared/capture-guide']);
+          } else {
+            this.router.navigate(['/aio/update-card-id/recheck-info']);
+          }
+          break;
+        }
+        case ServiceStep.CaptureGuide: {
+          this.router.navigate(['/aio/shared/capture-face']);
+          break;
+        }
+        case ServiceStep.CaptureFace: {
+          this.router.navigate(['/aio/shared/input-finger']);
+          break;
+        }
+        case ServiceStep.InputFinger: {
+          this.router.navigate(['/aio/shared/collect-card-id']);
+          break;
+        }
+        case ServiceStep.CollectCardId: {
+          this.router.navigate(['/aio/update-card-id/recheck-info']);
+          break;
+        }
+
+        case ServiceStep.RecheckInfo: {
+          this.router.navigate(['/aio/shared/verify-otp']);
+          break;
+        }
+        case ServiceStep.VerifyOtp: {
+          this.router.navigate(['/aio/on-boarding/end']);
+          break;
+        }
+        case ServiceStep.End: {
+          this.router.navigate(['/aio']);
+          break;
+        }
+        default: {
+          this.router.navigate(['/aio']);
+          break;
+        }
+      }
+    }
   }
 
   fakeData() {
@@ -366,6 +410,7 @@ export class AioService {
     customerInfo.fullName = 'Bùi Hà Duy';
     customerInfo.expireDate = '12/11/2034';
     customerInfo.issueDate = '01/01/2021';
+    customerInfo.mobileNo = '0933881676';
 
     this.customerInfo = customerInfo;
   }

@@ -4,7 +4,7 @@
   <div class="pb-5 text-center">
     <ng-container *ngIf="!captured">
       <h3 class="animate__animated animate__fadeIn">
-        Vui lòng nhìn thẳng vào camera...
+        Quý khách vui lòng đặt khuôn mặt vào trong hình tròn
       </h3>
     </ng-container>
     <ng-container *ngIf="!isLoadingCountDown && captured">
@@ -20,12 +20,21 @@
     </div>
     <div class="countdown" *ngIf="countDownTime > 0">
       <div class="countdown-text">
-        <ng-container *ngIf="isLoadingCountDown">
-          <i class="fa fa-spinner fa-spin"></i>
-        </ng-container>
         <ng-container *ngIf="!isLoadingCountDown">
           {{ countDownTime }}
         </ng-container>
+      </div>
+    </div>
+    <div class="face-load">
+      <div>
+        <img src="assets/all-in-one/shared/img/overlay.png" alt="" />
+      </div>
+    </div>
+    <div class="face-load">
+      <div class="position-relative">
+        <div class="face-load-animate">
+          <ng-lottie [options]="faceLoad"></ng-lottie>
+        </div>
       </div>
     </div>
     <div class="captured-img" *ngIf="captured">

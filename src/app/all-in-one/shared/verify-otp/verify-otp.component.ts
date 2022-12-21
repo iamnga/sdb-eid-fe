@@ -7,7 +7,7 @@ import {
   RequestOtpRequestData,
   VerifyOtpRequestData,
 } from 'src/app/models/aio';
-import { ServiceStep } from 'src/app/models/enum';
+import { Service, ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
 
 @Component({
@@ -20,9 +20,11 @@ export class VerifyOtpComponent implements OnInit {
   arrOtp = [...Array(6).keys()];
   idEKYCPersonal = '';
   cifNo = '';
+  currentStep: ServiceStep;
 
   constructor(private aioSvc: AioService, private elem: ElementRef) {
     aioSvc.currentStep = ServiceStep.VerifyOtp;
+    this.currentStep = this.aioSvc.currentSerice == Service.OnBoarding ? 4 : 3;
   }
   ngOnInit(): void {
     this.requestOtp();

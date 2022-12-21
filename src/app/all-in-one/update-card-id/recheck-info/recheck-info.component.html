@@ -1,0 +1,84 @@
+<app-aio-header></app-aio-header>
+<app-aio-back-and-stepper [currentStep]="2"></app-aio-back-and-stepper>
+<section>
+  <div class="container">
+    <div class="text-center mb-4">
+      <h3 class="font-weight-bold mb-2">
+        Xin chào,
+        <span class="text-sacom">{{ aioSvc.customerInfo.fullName }}</span>
+      </h3>
+      Quý khách vui lòng kiểm tra lại thông tin
+    </div>
+    <div class="row p-3 bg-white box">
+      <div class="col-6 left">
+        <div>
+          <table>
+            <tr>
+              <td colspan="2">
+                <h5 class="font-weight-bold m-0">Thông tin hiện tại</h5>
+              </td>
+            </tr>
+            <tr>
+              <td>Số CCCD</td>
+              <td class="font-weight-bold">
+                {{ aioSvc.customerInfo.customerID }}
+              </td>
+            </tr>
+            <tr>
+              <td>Ngày cấp</td>
+              <td class="font-weight-bold">
+                {{ aioSvc.customerInfo.issueDate }}
+              </td>
+            </tr>
+            <tr>
+              <td>Nơi cấp</td>
+              <td class="font-weight-bold">CA Cà Mau</td>
+            </tr>
+            <tr>
+              <td>Địa chỉ thường trú</td>
+              <td class="font-weight-bold">
+                {{ aioSvc.customerInfo.address }}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-6">
+        <div>
+          <table>
+            <tr>
+              <td colspan="2">
+                <h5 class="font-weight-bold m-0">Thông tin điều chỉnh</h5>
+              </td>
+            </tr>
+            <tr>
+              <td>Số CCCD</td>
+              <td class="font-weight-bold">
+                {{ aioSvc.customerInfo.customerID }}
+              </td>
+            </tr>
+            <tr>
+              <td>Ngày cấp</td>
+              <td class="font-weight-bold">
+                {{ aioSvc.customerInfo.issueDate }}
+              </td>
+            </tr>
+            <tr>
+              <td>Nơi cấp</td>
+              <td class="font-weight-bold">CTCCSQLHCVTTXH</td>
+            </tr>
+            <tr>
+              <td>Địa chỉ thường trú</td>
+              <td class="font-weight-bold">
+                {{ aioSvc.customerInfo.address }}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="text-center pt-5">
+      <button class="btn-next" (click)="confirm()">Xác nhận</button>
+    </div>
+  </div>
+</section>

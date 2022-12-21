@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddressData, AddressInfo, Occupations } from 'src/app/models/aio';
 import { ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
+import { environment } from 'src/environments/environment';
 import { ContactAddressComponent } from '../dialog/contact-address/contact-address.component';
 import { InputEmailComponent } from '../dialog/input-email/input-email.component';
 import { InputMobileNumberComponent } from '../dialog/input-mobile-number/input-mobile-number.component';
@@ -25,9 +26,11 @@ export class FillInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
-    // this.aioSvc.customerInfo.mobileNo = '0349' + this.randomId(6);
-    this.aioSvc.customerInfo.customerID = this.randomId(12);
+    if (!environment.production) {
+      this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
+      this.aioSvc.customerInfo.mobileNo = '0349' + this.randomId(6);
+      this.aioSvc.customerInfo.customerID = this.randomId(12);
+    }
     this.findAddressByText();
   }
 

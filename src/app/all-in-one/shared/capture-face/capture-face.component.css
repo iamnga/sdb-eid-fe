@@ -18,6 +18,25 @@
   opacity: 0.5;
 }
 
+.face-load {
+  width: 640px;
+  height: 480px;
+  border-radius: 15px;
+  margin: 0px auto;
+  position: absolute;
+  top: 0px;
+  transform: translateX(-50%);
+  left: 50%;
+  z-index: 100;
+}
+
+.face-load-animate {
+  width: 450px;
+  height: 450px;
+  margin-inline: auto;
+  margin-top: 15px;
+}
+
 .countdown-text {
   display: table-cell;
   vertical-align: middle;

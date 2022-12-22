@@ -175,12 +175,7 @@ export class MobileCaptureCardIdComponent implements OnInit {
           // Send to BE
           this.aioSvc.isProcessing = true;
           this.aioSvc
-            .uploadImage(
-              this.front.replace(/^data:image\/[a-z]+;base64,/, ''),
-              'front',
-              this.deviceID,
-              this.sessionID
-            )
+            .uploadImage(this.front, 'front', this.deviceID, this.sessionID)
             .subscribe(
               (res: any) => {
                 if (res.respCode == '00') {
@@ -188,7 +183,7 @@ export class MobileCaptureCardIdComponent implements OnInit {
 
                   this.aioSvc
                     .uploadImage(
-                      this.back.replace(/^data:image\/[a-z]+;base64,/, ''),
+                      this.back,
                       'back',
                       this.deviceID,
                       this.sessionID

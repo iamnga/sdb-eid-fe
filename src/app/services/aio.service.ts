@@ -8,6 +8,7 @@ import {
   CustomerEnroll,
   CustomerInfo,
   OpenAccountRequestData,
+  OpenAccountResponseData,
   RegisterAlert,
   RequestOtpRequestData,
   UpdateLogStepData,
@@ -35,9 +36,12 @@ export class AioService {
   customerEnrollInfo = new CustomerEnroll();
   customerInfo = new CustomerInfo();
   registerAlert = new RegisterAlert();
-  fpResponse: FingerResponse = new FingerResponse();
+  fpResponse = new FingerResponse();
+  openAccountResponseData = new OpenAccountResponseData();
   fpAttemp = 0;
   faceCaptured = '';
+  frontCardId = '';
+  backCardId = '';
 
   headerDict = {
     'Content-Type': 'application/json;ngann',
@@ -62,6 +66,10 @@ export class AioService {
     this.customerInfo = new CustomerInfo();
     this.registerAlert = new RegisterAlert();
     this.fpResponse = new FingerResponse();
+    this.openAccountResponseData = new OpenAccountResponseData();
+    this.frontCardId = '';
+    this.backCardId = '';
+    this.faceCaptured = '';
 
     this.router.navigate(['/aio/dash-board']);
   }
@@ -298,7 +306,7 @@ export class AioService {
     if (this.currentSerice == Service.OnBoarding) {
       switch (this.currentStep) {
         case ServiceStep.DashBoard: {
-          if (!environment.production) {
+          if (environment.production) {
             this.router.navigate(['/aio/shared/capture-guide']);
           } else {
             this.router.navigate(['/aio/shared/verify-customer-info']);

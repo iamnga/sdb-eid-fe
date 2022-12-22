@@ -126,3 +126,15 @@ export class CustomerEnroll {
   registerAlert: RegisterAlert;
   branchCode: string;
 }
+
+export class OpenAccountResponseData {
+  accountNumber: string;
+  currency: string;
+  cifNo: string;
+  accountTitle: string;
+  accountCompany: string;
+  blockID: string;
+  lockAccountNumber: string;
+  lockCompany: string;
+  dataStreamQR: string;
+}

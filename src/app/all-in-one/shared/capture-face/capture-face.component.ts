@@ -28,7 +28,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   constructor(private elRef: ElementRef, private aioSvc: AioService) {
     aioSvc.currentStep = ServiceStep.CaptureFace;
   }
-  detection: any;
+  resultDetection: any;
   resizedDetections: any;
   canvas: any;
   canvasEl: any;
@@ -103,7 +103,8 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       var x = setInterval(async () => {
         console.log('run detect: ', x);
-        this.detection = await faceapi.detectAllFaces(
+
+        this.resultDetection = await faceapi.detectSingleFace(
           this.videoInput,
           new faceapi.TinyFaceDetectorOptions({
             inputSize: 608,
@@ -111,43 +112,35 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
           })
         );
 
-        let canvases = await faceapi.extractFaces(
-          this.videoInput,
-          this.detection
-        );
+        if (this.resultDetection && this.captured == '') {
+          let box = this.resultDetection.box;
 
-        let regionsToExtract = [
-          new faceapi.Rect(0, 0, this.WIDTH, this.HEIGHT),
-        ];
-
-        let canvases2 = await faceapi.extractFaces(
-          this.videoInput,
-          regionsToExtract
-        );
-
-        if (
-          this.detection.length == 1 &&
-          canvases.length > 0 &&
-          this.captured == ''
-        ) {
-          let box = this.detection[0].box;
           if (
             box.x >= 170 &&
             box.y >= 90 &&
             box.width + box.x <= 470 &&
-            box.height + box.y <= 390
+            box.height + box.y <= 390 &&
+            box.width >= 200
           ) {
-            this.captured = canvases[0].toDataURL('image/png');
+            let canvasFaceBox = await faceapi.extractFaces(this.videoInput, [
+              new faceapi.Rect(box.x, box.y, box.width, box.height),
+            ]);
+
+            let canvasFullBox = await faceapi.extractFaces(this.videoInput, [
+              new faceapi.Rect(0, 0, this.WIDTH, this.HEIGHT),
+            ]);
+
+            this.aioSvc.faceCaptured = canvasFaceBox[0].toDataURL('image/png');
 
             console.log('face-captured', this.captured);
 
-            console.log('rect', canvases2[0].toDataURL('image/png'));
+            console.log('rect', canvasFullBox[0].toDataURL('image/png'));
 
-            this.captured = canvases2[0].toDataURL('image/png');
+            this.captured = canvasFullBox[0].toDataURL('image/png');
 
-            this.aioSvc.faceCaptured = this.captured;
+            //this.aioSvc.faceCaptured = this.captured;
 
-            console.log('inside face loader: ', this.detection);
+            console.log('inside face loader: ', this.resultDetection);
 
             clearInterval(x);
           } else {
@@ -188,9 +181,8 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   async startCapture() {
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri('assets/models'),
+      faceapi.nets.faceLandmark68Net.loadFromUri('assets/models'),
     ]).then(() => {
-      // this.startVideo();
-
       this.prepareFaceDetector();
     });
   }

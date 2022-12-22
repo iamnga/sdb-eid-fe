@@ -52,6 +52,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { FillInfoComponent } from './all-in-one/shared/fill-info/fill-info.component';
 import { InputMobileNumberComponent } from './all-in-one/shared/dialog/input-mobile-number/input-mobile-number.component';
 import { RecheckInfoComponent } from './all-in-one/update-card-id/recheck-info/recheck-info.component';
+import { ProcessingComponent } from './all-in-one/shared/processing/processing.component';
 
 export function playerFactory() {
   return player;
@@ -88,6 +89,7 @@ export function playerFactory() {
     AlertComponent,
     FillInfoComponent,
     RecheckInfoComponent,
+    ProcessingComponent,
   ],
   imports: [
     SlickCarouselModule,

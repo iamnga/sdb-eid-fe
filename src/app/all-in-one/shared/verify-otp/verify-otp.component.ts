@@ -31,10 +31,11 @@ export class VerifyOtpComponent implements OnInit {
   }
 
   requestOtp() {
+    //TODO: hard code
     let data = new RequestOtpRequestData();
     data.customerID = this.aioSvc.customerInfo.customerID;
     data.cifNo = '1';
-    data.authType = '3';
+    data.authType = '5';
     data.customerType = '1';
     data.mobileNo = this.aioSvc.customerInfo.mobileNo;
     data.channel = 'DigiZone';
@@ -66,7 +67,7 @@ export class VerifyOtpComponent implements OnInit {
     data.authCode = this.otp.join('');
     data.customerID = this.aioSvc.customerInfo.customerID;
     data.cifNo = '1';
-    data.authType = '3';
+    data.authType = '5';
     data.customerType = '1';
     data.mobileNo = this.aioSvc.customerInfo.mobileNo;
     data.serviceType = 'OA';
@@ -166,6 +167,13 @@ export class VerifyOtpComponent implements OnInit {
     this.aioSvc.openAccount(data).subscribe(
       (res: any) => {
         console.log(res);
+        this.aioSvc.isProcessing = false;
+        if (res.respCode == '00') {
+          this.aioSvc.openAccountResponseData = res.data;
+          this.aioSvc.next();
+        } else {
+          this.aioSvc.alert(`Có lỗi xảy ra openAccount`);
+        }
       },
       (err) => {
         console.log(err);

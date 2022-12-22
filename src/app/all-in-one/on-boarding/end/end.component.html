@@ -8,19 +8,23 @@
   <div class="container">
     <div class="text-center">
       <h3 class="font-weight-bold mb-4">
-        Vui lòng quét để xem thông tin tài khoản
+        Xin chúc mừng, Quý khách đã mở tài khoản thành công
       </h3>
     </div>
 
     <div class="row bg-white rounded p-4">
       <div class="col-4">
         <div class="mb-3">Họ và tên</div>
-        <div><b> TRAN MINH HOANG LONG</b></div>
+        <div>
+          <b> {{ aioSvc.customerInfo.fullName }}</b>
+        </div>
       </div>
       <div class="col-4">
         <div class="mb-3">Số tài khoản</div>
-        <div class="mb-3"><b> 060972057702</b></div>
-        <div>Ngày hiệu lực 04/03/2012</div>
+        <div class="mb-3">
+          <b> {{ aioSvc.openAccountResponseData.accountNumber }}</b>
+        </div>
+        <div>Ngày hiệu lực <b>(Unknow)</b></div>
       </div>
       <div class="col-4">
         <div class="mb-3">Chi nhánh</div>

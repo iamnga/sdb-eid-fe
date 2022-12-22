@@ -8,7 +8,7 @@ import { AioService } from 'src/app/services/aio.service';
   styleUrls: ['./end.component.css'],
 })
 export class EndComponent implements OnInit {
-  constructor(private aioSvc: AioService) {
+  constructor(public aioSvc: AioService) {
     aioSvc.currentStep = ServiceStep.End;
   }
 

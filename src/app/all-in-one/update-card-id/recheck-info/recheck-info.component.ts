@@ -38,6 +38,7 @@ export class RecheckInfoComponent implements OnInit {
         console.log(res);
 
         if (res.respCode == '14') {
+          this.aioSvc.isProcessing = false;
           this.aioSvc.alert(
             `Quý khách chưa có tài khoản tại Sacombank <br> Quý khách vui lòng quay về trang chủ và chọn chức năng Mở tài khoản nếu có nhu cầu`
           );

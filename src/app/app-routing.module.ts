@@ -19,6 +19,7 @@ import { VerifyOtpComponent } from './all-in-one/shared/verify-otp/verify-otp.co
 import { VirtualKeyboardComponent } from './all-in-one/shared/virtual-keyboard/virtual-keyboard.component';
 import { RecheckInfoComponent } from './all-in-one/update-card-id/recheck-info/recheck-info.component';
 import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-id.component';
+import { UpdateSuccessComponent } from './all-in-one/update-card-id/update-success/update-success.component';
 import { CollectComponent } from './collect/collect.component';
 import { HomeComponent } from './home/home.component';
 import { MkComponent } from './mk/mk.component';
@@ -41,6 +42,10 @@ const routes: Routes = [
         component: DashBoardComponent,
       },
       {
+        path: 'on-boarding',
+        component: OnBoardingComponent,
+      },
+      {
         path: 'on-boarding/account-and-alert',
         component: AccountAndAlertComponent,
       },
@@ -55,6 +60,10 @@ const routes: Routes = [
       {
         path: 'update-card-id',
         component: UpdateCardIdComponent,
+      },
+      {
+        path: 'update-card-id/update-success',
+        component: UpdateSuccessComponent,
       },
       {
         path: 'shared',

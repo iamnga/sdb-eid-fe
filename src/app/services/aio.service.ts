@@ -34,7 +34,7 @@ export class AioService {
   currentStep = ServiceStep.DashBoard;
   isProcessing = false;
   apiUrl = environment.apiUrl;
-  deviceID = '00000001';
+  deviceID = environment.production ? '00000001' : '00000002';
   sessionID = '';
   refNumber = '';
   customerEnrollInfo = new CustomerEnroll();
@@ -359,6 +359,10 @@ export class AioService {
           break;
         }
         case ServiceStep.VerifyOtp: {
+          this.router.navigate(['/aio/on-boarding']);
+          break;
+        }
+        case ServiceStep.CustomerEnroll: {
           this.router.navigate(['/aio/on-boarding/end']);
           break;
         }
@@ -410,7 +414,7 @@ export class AioService {
           break;
         }
         case ServiceStep.UpdateCustomerInfo: {
-          this.router.navigate(['/aio/on-boarding/end']);
+          this.router.navigate(['/aio/update-card-id/update-success']);
           break;
         }
         case ServiceStep.End: {
@@ -454,8 +458,8 @@ export class AioService {
       'Ấp Mũi Tràm C, Khánh Bình Tây Bắc, Trần Văn Thời, Cà Mau';
     customerInfo.dob = '25/01/1995';
     customerInfo.gender = 'Nam';
-    customerInfo.customerID = '352229668123';
-    customerInfo.customerIDOld = '352229667';
+    customerInfo.customerID = '352229668125';
+    customerInfo.customerIDOld = '352229668124';
     customerInfo.nationality = 'Việt Nam';
     customerInfo.towncountry = 'Khánh Bình Tây Bắc, Trần Văn Thời, Cà Mau';
     customerInfo.fullName = 'Nguyễn Ngọc Ngà';

@@ -28,7 +28,6 @@ export class DashBoardComponent implements OnInit {
     console.log('serviceCd', serviceCd);
     this.aioSvc.getSessionId().subscribe(
       (result: any) => {
-        this.aioSvc.isProcessing = false;
         if (result) {
           console.log(result);
           if (result.respCode != '00') {
@@ -42,6 +41,7 @@ export class DashBoardComponent implements OnInit {
           }
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra: getSessionId`);
+          this.aioSvc.isProcessing = false;
         }
       },
       (err) => {

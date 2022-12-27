@@ -5,6 +5,7 @@
   top: 0;
   background-color: white;
   display: table;
+  z-index: 9999 !important;
 }
 
 .processing-box {

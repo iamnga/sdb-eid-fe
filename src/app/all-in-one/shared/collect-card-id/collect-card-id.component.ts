@@ -75,11 +75,11 @@ export class CollectCardIdComponent implements OnInit, OnDestroy {
                       .uploadImage(this.aioSvc.faceCaptured, 'done')
                       .subscribe(
                         (res: any) => {
-                          this.aioSvc.isProcessing = false;
                           if (res.respCode == '00') {
                             this.aioSvc.next();
                           } else {
                             this.aioSvc.alert(`Có lỗi xảy ra uploadImage-done`);
+                            this.aioSvc.isProcessing = false;
                           }
                         },
                         (err) => {

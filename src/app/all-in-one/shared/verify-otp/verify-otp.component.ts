@@ -1,16 +1,13 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
-import { endianness } from 'os';
+import { Component, OnInit } from '@angular/core';
 import {
-  CustomerEnroll,
+  AuthenInfo,
   GetAuthMethodRequestData,
-  OpenAccountRequestData,
   RequestOtpRequestData,
   VerifyOtpRequestData,
 } from 'src/app/models/aio';
-import { Service, ServiceStep } from 'src/app/models/enum';
+import { AuthType, Service, ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
-import Utils from '../utils/utils';
+import { AnimationOptions } from 'ngx-lottie';
 
 @Component({
   selector: 'app-verify-otp',
@@ -23,10 +20,24 @@ export class VerifyOtpComponent implements OnInit {
   idEKYCPersonal = '';
   cifNo = '';
   currentStep: ServiceStep;
+  currentService: Service;
+  service = Service;
+  currentAuthType: AuthType;
+  authType = AuthType;
+  authenInfo: AuthenInfo[] = [];
+  step = 1; //1: chọn authType - 2: verify
+  faceLoad: AnimationOptions = {
+    path: 'assets/all-in-one/shared/img/notifications.json',
+  };
 
-  constructor(private aioSvc: AioService, private elem: ElementRef) {
+  constructor(public aioSvc: AioService) {
     aioSvc.currentStep = ServiceStep.VerifyOtp;
     this.currentStep = this.aioSvc.currentSerice == Service.OnBoarding ? 4 : 3;
+    this.currentAuthType =
+      this.aioSvc.currentSerice == Service.OnBoarding
+        ? this.authType.SMSTTT
+        : this.authType.None;
+    this.currentService = this.aioSvc.currentSerice;
   }
   ngOnInit(): void {
     if (this.aioSvc.currentSerice == Service.OnBoarding) {
@@ -34,6 +45,21 @@ export class VerifyOtpComponent implements OnInit {
     } else if (this.aioSvc.currentSerice == Service.UpdateCardId) {
       this.getAuthMethod();
     }
+  }
+
+  selectAuthType(type: any) {
+    this.currentAuthType = type;
+    console.log(this.currentAuthType);
+  }
+
+  checkAuthType(type: any) {
+    let result = false;
+    if (this.authenInfo.length > 0)
+      result =
+        this.authenInfo.findIndex((x) => x.authType == type.toString()) > -1
+          ? true
+          : false;
+    return result;
   }
 
   getAuthMethod() {
@@ -51,7 +77,21 @@ export class VerifyOtpComponent implements OnInit {
           if (res.respCode != '00') {
             this.aioSvc.alert(`Có lỗi xảy ra getAuthMethod`);
           } else {
-            // Do
+            if (res.data.authInfo) {
+              this.authenInfo = res.data.authInfo;
+
+              this.authenInfo = [
+                { authType: this.authType.mCodeOTP, authDesVN: '' },
+                { authType: this.authType.mConnect, authDesVN: '' },
+              ];
+
+              // if (this.authenInfo.length == 1) {
+              //   this.currentAuthType = this.authenInfo[0].authType;
+              //   this.requestOtp();
+              // } else {
+              //   this.currentAuthType = this.authType.None;
+              // }
+            } else this.aioSvc.alert(`Không tồn tại phương thức xác thực`);
           }
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra getAuthMethod`);
@@ -69,7 +109,7 @@ export class VerifyOtpComponent implements OnInit {
     let data = new RequestOtpRequestData();
     data.customerID = this.aioSvc.customerInfo.customerID;
     data.cifNo = '1';
-    data.authType = '5';
+    data.authType = this.currentAuthType;
     data.customerType = '1';
     data.mobileNo = this.aioSvc.customerInfo.mobileNo;
     data.channel = 'DigiZone';
@@ -80,6 +120,8 @@ export class VerifyOtpComponent implements OnInit {
         console.log('requestOtp', res);
         this.aioSvc.isProcessing = false;
         if (res.respCode) {
+          this.step = 2;
+
           if (res.respCode != '00') {
             this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
           }
@@ -99,7 +141,7 @@ export class VerifyOtpComponent implements OnInit {
     data.authCode = this.otp.join('');
     data.customerID = this.aioSvc.customerInfo.customerID;
     data.cifNo = '1';
-    data.authType = '5';
+    data.authType = this.currentAuthType.toString();
     data.customerType = '1';
     data.mobileNo = this.aioSvc.customerInfo.mobileNo;
     data.serviceType = 'OA';
@@ -112,7 +154,8 @@ export class VerifyOtpComponent implements OnInit {
           if (res.respCode != '00') {
             this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
           } else {
-            this.customerEnroll();
+            // this.customerEnroll();
+            this.aioSvc.next();
           }
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
@@ -120,91 +163,6 @@ export class VerifyOtpComponent implements OnInit {
       },
       (err) => {
         this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
-        this.aioSvc.isProcessing = false;
-      }
-    );
-  }
-
-  customerEnroll() {
-    this.aioSvc.customerEnrollInfo.customerInfo = this.aioSvc.customerInfo;
-    this.aioSvc.customerEnrollInfo.registerAlert = this.aioSvc.registerAlert;
-    this.formatCustomerInfoData();
-    console.log(this.aioSvc.customerEnrollInfo);
-    this.aioSvc.customerEnroll().subscribe(
-      (res: any) => {
-        this.aioSvc.isProcessing = false;
-
-        console.log('customerEnroll', res);
-        if (res.respCode == '00') {
-          this.idEKYCPersonal = res.data.idEKYCPersonal;
-          this.cifNo = res.data.cifNo;
-          this.openAccount();
-        } else {
-          this.aioSvc.alert(`Có lỗi xảy ra customerEnroll`);
-        }
-      },
-      (err) => {
-        console.log(err);
-        this.aioSvc.alert(`Có lỗi xảy ra customerEnroll`);
-        this.aioSvc.isProcessing = false;
-      }
-    );
-  }
-
-  formatCustomerInfoData() {
-    this.aioSvc.customerEnrollInfo.customerInfo.gender =
-      this.aioSvc.customerEnrollInfo.customerInfo.gender.toLocaleLowerCase() ==
-      'nam'
-        ? 'M'
-        : 'F';
-    this.aioSvc.customerEnrollInfo.customerInfo.dob = Utils.formatDate(
-      this.aioSvc.customerEnrollInfo.customerInfo.dob
-    );
-
-    this.aioSvc.customerEnrollInfo.customerInfo.issueDate = Utils.formatDate(
-      this.aioSvc.customerEnrollInfo.customerInfo.issueDate
-    );
-
-    this.aioSvc.customerEnrollInfo.customerInfo.expireDate = Utils.formatDate(
-      this.aioSvc.customerEnrollInfo.customerInfo.expireDate
-    );
-
-    this.aioSvc.customerEnrollInfo.customerInfo.country = 'VN';
-    this.aioSvc.customerEnrollInfo.customerInfo.customerType = '1';
-    this.aioSvc.customerEnrollInfo.customerInfo.categoryCustomer = 'N';
-    this.aioSvc.customerEnrollInfo.customerInfo.issuePlace = 'CTCCSQLHCVTTXH';
-    //TODO
-    this.aioSvc.customerEnrollInfo.customerInfo.issueDate = '20200101';
-  }
-
-  openAccount() {
-    let data = new OpenAccountRequestData();
-    data.registerAlert = this.aioSvc.customerEnrollInfo.registerAlert;
-    data.fullName = this.aioSvc.customerEnrollInfo.customerInfo.fullName;
-    data.mobileNo =
-      '84' + this.aioSvc.customerEnrollInfo.customerInfo.mobileNo.substr(-9);
-    data.accountCurrency = this.aioSvc.customerEnrollInfo.accountCurrency;
-    data.accountType = this.aioSvc.customerEnrollInfo.accountType;
-    data.branchCode = this.aioSvc.customerEnrollInfo.branchCode;
-    data.cifNo = this.cifNo;
-    data.idEKYCPersonal = this.idEKYCPersonal;
-    data.prefixNumberAccount =
-      this.aioSvc.customerEnrollInfo.prefixNumberAccount;
-
-    this.aioSvc.openAccount(data).subscribe(
-      (res: any) => {
-        console.log(res);
-        this.aioSvc.isProcessing = false;
-        if (res.respCode == '00') {
-          this.aioSvc.openAccountResponseData = res.data;
-          this.aioSvc.next();
-        } else {
-          this.aioSvc.alert(`Có lỗi xảy ra openAccount`);
-        }
-      },
-      (err) => {
-        console.log(err);
-        this.aioSvc.alert(`Có lỗi xảy ra openAccount`);
         this.aioSvc.isProcessing = false;
       }
     );

@@ -32,6 +32,8 @@ export class FillInfoComponent implements OnInit {
       this.aioSvc.customerInfo.customerID = this.randomId(12);
     }
     this.findAddressByText();
+    //TODO: remove hard
+    this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
   }
 
   likeResidenceAddress() {

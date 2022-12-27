@@ -41,7 +41,6 @@ export class UpdateCardIdComponent implements OnInit {
 
     this.aioSvc.checkCustomerSDB(data).subscribe(
       (res: any) => {
-        this.aioSvc.isProcessing = false;
         if (res.respCode == '00') {
           this.customerUpdateData.customerIDOld =
             this.aioSvc.customerInfo.customerIDOld;
@@ -50,10 +49,10 @@ export class UpdateCardIdComponent implements OnInit {
           this.customerUpdateData.expDate = Utils.formatDate(
             this.aioSvc.customerInfo.expireDate
           );
-          this.customerUpdateData.issueDate = Utils.formatDate(
+          this.customerUpdateData.issDate = Utils.formatDate(
             this.aioSvc.customerInfo.issueDate
           );
-          this.customerUpdateData.issuePlace = Utils.issPlace;
+          this.customerUpdateData.issPlace = Utils.issPlace;
           this.customerUpdateData.isUpdateAddress = false;
           this.customerUpdateData.qrContent = 'thisIsQRContent';
           this.customerUpdateData.addressCityCode = '';
@@ -66,6 +65,13 @@ export class UpdateCardIdComponent implements OnInit {
 
           this.updateCustomerRequestData.customerUpdate =
             this.customerUpdateData;
+
+          this.updateCustomerRequestData.cifNo =
+            this.aioSvc.checkCustomerByIdNoResponseData.cifNo;
+          this.updateCustomerRequestData.branchCode =
+            this.aioSvc.checkCustomerByIdNoResponseData.companyBook;
+          this.updateCustomerRequestData.mobileNo =
+            this.aioSvc.checkCustomerByIdNoResponseData.mobileNumber;
 
           this.aioSvc.updateCustomer(this.updateCustomerRequestData).subscribe(
             (res: any) => {
@@ -86,6 +92,7 @@ export class UpdateCardIdComponent implements OnInit {
           );
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra checkCustomerSDB`);
+          this.aioSvc.isProcessing = false;
         }
       },
       (err) => {

@@ -44,3 +44,36 @@
 .btn-next:disabled {
   opacity: 0.5;
 }
+
+.account-type-label::before {
+  content: "";
+  height: 20px;
+  width: 20px;
+  border-radius: 30px;
+  background-color: #f0f2f7;
+  display: inline-block;
+  margin-right: 7px;
+  vertical-align: sub;
+}
+
+.active.account-type-label::before {
+  background-color: white;
+  border: 5px solid #2a81d0;
+  transition: ease-out 0.2s;
+}
+
+.account-type {
+  cursor: pointer;
+  border: 2px solid white;
+  border-radius: 6px;
+}
+
+.active.account-type {
+  border: 2px solid #2a81d0;
+  transition: ease-in-out 0.2s;
+}
+
+.text-sacom {
+  color: #1b54c3 !important;
+  line-height: 2rem;
+}

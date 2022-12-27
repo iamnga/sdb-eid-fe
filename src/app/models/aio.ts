@@ -1,3 +1,5 @@
+import { AuthType } from './enum';
+
 export class AllInOneRequest<T> {
   refNumber: string;
   refDateTime: string;
@@ -169,8 +171,8 @@ export class CheckCustomerSDBRequestData {
 export class CustomerUpdateData {
   customerIDOld: string;
   customerIDNew: string;
-  issueDate: string;
-  issuePlace: string;
+  issDate: string;
+  issPlace: string;
   expDate: string;
   isUpdateAddress: boolean;
   addressCityCode: string;
@@ -188,6 +190,11 @@ export class CurrentDocInfo {
   issueDate: string;
   issuePlace: string;
   address: string;
+}
+
+export class AuthenInfo {
+  authType: AuthType;
+  authDesVN: string;
 }
 
 export class CheckCustomerByIdNoResponseData {

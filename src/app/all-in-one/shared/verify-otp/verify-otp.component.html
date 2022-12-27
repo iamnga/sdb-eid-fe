@@ -1,58 +1,14 @@
 <app-aio-header></app-aio-header>
 <app-aio-back-and-stepper [currentStep]="4"></app-aio-back-and-stepper>
-<section></section>
-  <ng-container
-    *ngIf="
-      currentService == service.OnBoarding ||
-      (currentService == service.UpdateCardId &&
-        (checkAuthType(authType.SMSOTP) ||
-          checkAuthType(authType.DeviceToken) ||
-          checkAuthType(authType.SMSTTT) ||
-          checkAuthType(authType.AdvToken)))
-    "
-  >
-    <div class="container">
-      <div class="text-center">
-        <h3 class="font-weight-bold mb-4">
-          Quý khách vui lòng nhập mã OTP được gửi đến điện thoại của quý khách
-        </h3>
-      </div>
-      <div class="text-center keyboard-box">
-        <div>
-          <input
-            type="text"
-            class="otp-item"
-            *ngFor="let item of arrOtp; last as last; let i = index"
-            [ngClass]="{ last: last }"
-            [value]="showOtp(i)"
-            disabled
-            readonly
-            autofocus="false"
-          />
-        </div>
-        <app-keyboard-number
-          (inputNumberEvent)="recieveInputNumber($event)"
-        ></app-keyboard-number>
 
-        <button
-          class="btn-next mt-4"
-          (click)="verifyOtp()"
-          [disabled]="otp.length < 6"
-        >
-          Xác nhận
-        </button>
-        <div class="pt-4 text-sacom">Gửi lại mã (60s)</div>
-      </div>
-    </div>
-  </ng-container>
-</section>
 <section
   *ngIf="
     currentService == service.UpdateCardId &&
     (checkAuthType(authType.mCodeOTP) ||
       checkAuthType(authType.mConnect) ||
       checkAuthType(authType.SmartOTP) ||
-      checkAuthType(authType.SmartOTPCode))
+      checkAuthType(authType.SmartOTPCode)) &&
+    step == 1
   "
 >
   <div class="container">
@@ -149,4 +105,83 @@
       </button>
     </div>
   </div>
+</section>
+
+<section *ngIf="step == 2">
+  <ng-container
+    *ngIf="
+      currentService == service.OnBoarding ||
+      (currentService == service.UpdateCardId &&
+        (checkAuthType(authType.SMSOTP) ||
+          checkAuthType(authType.DeviceToken) ||
+          checkAuthType(authType.SMSTTT) ||
+          checkAuthType(authType.AdvToken) ||
+          currentAuthType == authType.SmartOTPCode ||
+          currentAuthType == authType.mCodeOTP))
+    "
+  >
+    <div class="container">
+      <div class="text-center">
+        <h3 class="font-weight-bold mb-4">
+          Quý khách vui lòng nhập mã OTP được gửi đến điện thoại của quý khách
+        </h3>
+      </div>
+      <div class="text-center keyboard-box">
+        <div>
+          <input
+            type="text"
+            class="otp-item"
+            *ngFor="let item of arrOtp; last as last; let i = index"
+            [ngClass]="{ last: last }"
+            [value]="showOtp(i)"
+            disabled
+            readonly
+            autofocus="false"
+          />
+        </div>
+        <app-keyboard-number
+          (inputNumberEvent)="recieveInputNumber($event)"
+        ></app-keyboard-number>
+
+        <button
+          class="btn-next mt-4"
+          (click)="verifyOtp()"
+          [disabled]="otp.length < 6"
+        >
+          Xác nhận
+        </button>
+        <div class="pt-4 text-sacom">Gửi lại mã (60s)</div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container
+    *ngIf="
+      !(
+        currentService == service.OnBoarding ||
+        (currentService == service.UpdateCardId &&
+          (checkAuthType(authType.SMSOTP) ||
+            checkAuthType(authType.DeviceToken) ||
+            checkAuthType(authType.SMSTTT) ||
+            checkAuthType(authType.AdvToken) ||
+            currentAuthType == authType.SmartOTPCode ||
+            currentAuthType == authType.mCodeOTP))
+      )
+    "
+  >
+    <div class="container text-center">
+      <div>
+        <h3 class="font-weight-bold mb-4">
+          Sacombank đã gửi yêu cầu xác thực giao dịch đến <br />
+          ứng dụng Sacombank Pay của Quý khách
+        </h3>
+        <h5>
+          Vui lòng kiểm tra và duyệt giao dịch thông qua ứng dụng Sacombank Pay
+        </h5>
+      </div>
+      <div class="w-25" style="margin-inline: auto">
+        <ng-lottie [options]="faceLoad"></ng-lottie>
+      </div>
+    </div>
+  </ng-container>
 </section>

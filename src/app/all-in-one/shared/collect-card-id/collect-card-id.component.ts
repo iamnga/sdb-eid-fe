@@ -58,7 +58,6 @@ export class CollectCardIdComponent implements OnInit, OnDestroy {
   }
 
   compareFace() {
-    this.aioSvc.isProcessing = true;
     this.aioSvc.uploadImage(this.aioSvc.faceCaptured, 'face').subscribe(
       (res: any) => {
         if (res.respCode == '00') {
@@ -85,6 +84,7 @@ export class CollectCardIdComponent implements OnInit, OnDestroy {
                         },
                         (err) => {
                           this.aioSvc.alert(`Có lỗi xảy ra uploadImage-done`);
+                          this.aioSvc.isProcessing = false;
                         }
                       );
                   } else {
@@ -102,6 +102,7 @@ export class CollectCardIdComponent implements OnInit, OnDestroy {
             },
             (err) => {
               this.aioSvc.alert(`Có lỗi xảy ra compareFace`);
+              this.aioSvc.isProcessing = false;
             }
           );
         } else {

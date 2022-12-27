@@ -42,7 +42,6 @@ export class InputEmailComponent implements OnInit {
       } else {
         this.err = '';
         //call Zero bounce
-        this.aioSvc.isProcessing = true;
         this.aioSvc.verifyEmail(this.email).subscribe(
           (res: any) => {
             this.aioSvc.isProcessing = false;

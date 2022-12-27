@@ -4,13 +4,17 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import {
   AllInOneRequest,
+  CheckCustomerByIdNoResponseData,
   CheckCustomerRequestData,
+  CheckCustomerSDBRequestData,
   CustomerEnroll,
   CustomerInfo,
+  GetAuthMethodRequestData,
   OpenAccountRequestData,
   OpenAccountResponseData,
   RegisterAlert,
   RequestOtpRequestData,
+  UpdateCustomerRequestData,
   UpdateLogStepData,
   VerifyOtpRequestData,
 } from '../models/aio';
@@ -38,6 +42,7 @@ export class AioService {
   registerAlert = new RegisterAlert();
   fpResponse = new FingerResponse();
   openAccountResponseData = new OpenAccountResponseData();
+  checkCustomerByIdNoResponseData = new CheckCustomerByIdNoResponseData();
   fpAttemp = 0;
   faceCaptured = '';
   frontCardId = '';
@@ -67,6 +72,8 @@ export class AioService {
     this.registerAlert = new RegisterAlert();
     this.fpResponse = new FingerResponse();
     this.openAccountResponseData = new OpenAccountResponseData();
+    this.checkCustomerByIdNoResponseData =
+      new CheckCustomerByIdNoResponseData();
     this.frontCardId = '';
     this.backCardId = '';
     this.faceCaptured = '';
@@ -113,7 +120,7 @@ export class AioService {
   }
 
   loadImage() {
-    let req = this.newRequest();
+    let req = this.newRequest(null, this.deviceID, this.sessionID, false);
     return this.http.post(this.apiUrl + 'load-image', req, {
       headers: new HttpHeaders(this.headerDict),
     });
@@ -148,6 +155,27 @@ export class AioService {
       legalIdType: '1',
     });
     return this.http.post(this.apiUrl + 'check-customer', req, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
+  checkCustomerSDB(data: CheckCustomerSDBRequestData) {
+    let req = this.newRequest(data);
+    return this.http.post(this.apiUrl + 'check-customer-sdb', req, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
+  updateCustomer(data: UpdateCustomerRequestData) {
+    let req = this.newRequest(data);
+    return this.http.post(this.apiUrl + 'update-customer', req, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
+  getAuthMethod(data: GetAuthMethodRequestData) {
+    let req = this.newRequest(data);
+    return this.http.post(this.apiUrl + 'get-authMethod', req, {
       headers: new HttpHeaders(this.headerDict),
     });
   }
@@ -252,9 +280,9 @@ export class AioService {
     identityID: string = '',
     lastRespCode: string = '',
     lastRespDescription: string = '',
-    lastChildStep: string = ''
+    lastChildStep: string = '',
+    isNext: boolean = true
   ) {
-    this.isProcessing = true;
     let data = new UpdateLogStepData();
     data.stepName = ServiceStep[this.currentStep];
     data.identityID = identityID;
@@ -270,10 +298,14 @@ export class AioService {
       .subscribe(
         (res: any) => {
           console.log(res);
-          this.isProcessing = false;
           if (res) {
             if (res.respCode != '00') {
               this.alert(`Có lỗi xảy ra: updateLogStep`);
+            } else {
+              if (isNext) {
+                this.isProcessing = false;
+                this.navigate();
+              }
             }
           }
         },
@@ -284,32 +316,15 @@ export class AioService {
       );
   }
 
-  newRequest(
-    data: any = null,
-    deviceID: string = this.deviceID,
-    sessionID: string = this.sessionID
-  ) {
-    let req = new AllInOneRequest<typeof data>();
-
-    req.refNumber = UUID.UUID();
-    req.refDateTime = new Date().toISOString().replace('Z', '');
-    req.deviceID = deviceID;
-    req.sessionID = sessionID;
-    req.data = data;
-
-    return JSON.stringify(req);
-  }
-
-  next() {
-    this.updateLogStep();
-
+  navigate() {
     if (this.currentSerice == Service.OnBoarding) {
       switch (this.currentStep) {
         case ServiceStep.DashBoard: {
           if (environment.production) {
             this.router.navigate(['/aio/shared/capture-guide']);
           } else {
-            this.router.navigate(['/aio/shared/verify-customer-info']);
+            // this.router.navigate(['/aio/shared/verify-customer-info']);
+            this.router.navigate(['/aio/shared/capture-guide']);
           }
           break;
         }
@@ -363,6 +378,7 @@ export class AioService {
           if (environment.production) {
             this.router.navigate(['/aio/shared/capture-guide']);
           } else {
+            //this.router.navigate(['/aio/shared/verify-otp']);
             this.router.navigate(['/aio/update-card-id/recheck-info']);
           }
           break;
@@ -386,9 +402,14 @@ export class AioService {
 
         case ServiceStep.RecheckInfo: {
           this.router.navigate(['/aio/shared/verify-otp']);
+          //this.router.navigate(['/aio/update-card-id']);
           break;
         }
         case ServiceStep.VerifyOtp: {
+          this.router.navigate(['/aio/update-card-id']);
+          break;
+        }
+        case ServiceStep.UpdateCustomerInfo: {
           this.router.navigate(['/aio/on-boarding/end']);
           break;
         }
@@ -404,6 +425,28 @@ export class AioService {
     }
   }
 
+  newRequest(
+    data: any = null,
+    deviceID: string = this.deviceID,
+    sessionID: string = this.sessionID,
+    isProcessing: boolean = true
+  ) {
+    this.isProcessing = isProcessing;
+    let req = new AllInOneRequest<typeof data>();
+
+    req.refNumber = UUID.UUID();
+    req.refDateTime = new Date().toISOString().replace('Z', '');
+    req.deviceID = deviceID;
+    req.sessionID = sessionID;
+    req.data = data;
+
+    return JSON.stringify(req);
+  }
+
+  next() {
+    this.updateLogStep();
+  }
+
   fakeData() {
     let customerInfo = new CustomerInfo();
 
@@ -411,14 +454,14 @@ export class AioService {
       'Ấp Mũi Tràm C, Khánh Bình Tây Bắc, Trần Văn Thời, Cà Mau';
     customerInfo.dob = '25/01/1995';
     customerInfo.gender = 'Nam';
-    customerInfo.customerID = '352229667';
+    customerInfo.customerID = '352229668123';
     customerInfo.customerIDOld = '352229667';
     customerInfo.nationality = 'Việt Nam';
     customerInfo.towncountry = 'Khánh Bình Tây Bắc, Trần Văn Thời, Cà Mau';
-    customerInfo.fullName = 'Bùi Hà Duy';
+    customerInfo.fullName = 'Nguyễn Ngọc Ngà';
     customerInfo.expireDate = '12/11/2034';
-    customerInfo.issueDate = '01/01/2021';
-    customerInfo.mobileNo = '0933881676';
+    customerInfo.issueDate = '01/01/2020';
+    customerInfo.mobileNo = '0349444440';
 
     this.customerInfo = customerInfo;
   }

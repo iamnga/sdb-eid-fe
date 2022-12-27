@@ -38,7 +38,6 @@ export class MobileCaptureCardIdComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.aioSvc.isProcessing = true;
     this.aioSvc.verifySessionID(this.deviceID, this.sessionID).subscribe(
       (res: any) => {
         if (res.respCode == '00') {
@@ -173,7 +172,6 @@ export class MobileCaptureCardIdComponent implements OnInit {
       case 3: {
         if (this.back) {
           // Send to BE
-          this.aioSvc.isProcessing = true;
           this.aioSvc
             .uploadImage(this.front, 'front', this.deviceID, this.sessionID)
             .subscribe(

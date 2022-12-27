@@ -82,6 +82,13 @@ export class RequestOtpRequestData {
   smsContent: string;
 }
 
+export class GetAuthMethodRequestData {
+  customerID: string;
+  customerType: string;
+  mobileNo: string;
+  cifNo: string;
+}
+
 export class CustomerInfo {
   customerID: string;
   customerIDOld: string;
@@ -137,4 +144,110 @@ export class OpenAccountResponseData {
   lockAccountNumber: string;
   lockCompany: string;
   dataStreamQR: string;
+}
+
+export class UpdateCustomerRequestData {
+  mobileNo: string;
+  customerUpdate: CustomerUpdateData;
+  cifNo: string;
+  branchCode: string;
+}
+
+export class CheckCustomerSDBRequestData {
+  customerID: string;
+  customerType: string;
+  cifNo: string;
+  serviceType: string;
+  fullName: string;
+  mobileNo: string;
+  dob: string;
+  residentAddress: string;
+  email: string;
+  isEdit: boolean;
+}
+
+export class CustomerUpdateData {
+  customerIDOld: string;
+  customerIDNew: string;
+  issueDate: string;
+  issuePlace: string;
+  expDate: string;
+  isUpdateAddress: boolean;
+  addressCityCode: string;
+  addressCityName: string;
+  addressDistrictCode: string;
+  addressDistrictName: string;
+  addressWardCode: string;
+  addressWardName: string;
+  addressStreet: string;
+  qrContent: string;
+}
+
+export class CurrentDocInfo {
+  customerID: string;
+  issueDate: string;
+  issuePlace: string;
+  address: string;
+}
+
+export class CheckCustomerByIdNoResponseData {
+  cifNo: string;
+  mnemonic: string;
+  role: string;
+  homeNumber: string;
+  maritalStatus: string;
+  crmId: string;
+  familyName: string;
+  givenName: string;
+  middleName: string;
+  shortName: string;
+  name: string;
+  legalId: string;
+  legalDocName: string;
+  legalIssAuth: string;
+  legalIssDate: string;
+  legalExpDate: string;
+  birthIncorpDate: string;
+  birthPlace: string;
+  kycind: string;
+  nationality: string;
+  residence: string;
+  gender: string;
+  position: string;
+  occuDetails: string;
+  employersName: string;
+  officeAddress: string;
+  street: string;
+  street_2: string;
+  street_3: string;
+  street_4: string;
+  townCountry: string;
+  province: string;
+  country: string;
+  address_1: string;
+  address_2: string;
+  address_3: string;
+  address_4: string;
+  mobileNumber: string;
+  email: string;
+  mainClass: string;
+  sector: string;
+  subIndustry: string;
+  industry: string;
+  target: string;
+  customerStatus: string;
+  cuStatus: string;
+  bankRelation: string;
+  companyBook: string;
+  accountOfficer: string;
+  documentID: string;
+  lstLegal: [
+    {
+      legalId: string;
+      legalDocName: string;
+      legalIssAuth: string;
+      legalIssDate: string;
+      legalExpDate: string;
+    }
+  ];
 }

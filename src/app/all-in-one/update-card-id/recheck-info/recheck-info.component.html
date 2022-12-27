@@ -21,23 +21,37 @@
             <tr>
               <td>Số CCCD</td>
               <td class="font-weight-bold">
-                {{ aioSvc.customerInfo.customerID }}
+                {{ currentDocInfo.customerID }}
+                <ng-container *ngIf="!currentDocInfo.customerID">
+                  <i class="fas fa-spinner fa-pulse"></i>
+                </ng-container>
               </td>
             </tr>
             <tr>
               <td>Ngày cấp</td>
               <td class="font-weight-bold">
-                {{ aioSvc.customerInfo.issueDate }}
+                {{ currentDocInfo.issueDate }}
+                <ng-container *ngIf="!currentDocInfo.issueDate">
+                  <i class="fas fa-spinner fa-pulse"></i>
+                </ng-container>
               </td>
             </tr>
             <tr>
               <td>Nơi cấp</td>
-              <td class="font-weight-bold">CA Cà Mau</td>
+              <td class="font-weight-bold">
+                {{ currentDocInfo.issuePlace }}
+                <ng-container *ngIf="!currentDocInfo.issuePlace">
+                  <i class="fas fa-spinner fa-pulse"></i>
+                </ng-container>
+              </td>
             </tr>
             <tr>
               <td>Địa chỉ thường trú</td>
               <td class="font-weight-bold">
-                {{ aioSvc.customerInfo.address }}
+                {{ currentDocInfo.address }}
+                <ng-container *ngIf="!currentDocInfo.address">
+                  <i class="fas fa-spinner fa-pulse"></i>
+                </ng-container>
               </td>
             </tr>
           </table>

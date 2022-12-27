@@ -3,12 +3,14 @@ import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import { endianness } from 'os';
 import {
   CustomerEnroll,
+  GetAuthMethodRequestData,
   OpenAccountRequestData,
   RequestOtpRequestData,
   VerifyOtpRequestData,
 } from 'src/app/models/aio';
 import { Service, ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
+import Utils from '../utils/utils';
 
 @Component({
   selector: 'app-verify-otp',
@@ -27,7 +29,39 @@ export class VerifyOtpComponent implements OnInit {
     this.currentStep = this.aioSvc.currentSerice == Service.OnBoarding ? 4 : 3;
   }
   ngOnInit(): void {
-    this.requestOtp();
+    if (this.aioSvc.currentSerice == Service.OnBoarding) {
+      this.requestOtp();
+    } else if (this.aioSvc.currentSerice == Service.UpdateCardId) {
+      this.getAuthMethod();
+    }
+  }
+
+  getAuthMethod() {
+    let data = new GetAuthMethodRequestData();
+    data.cifNo = this.aioSvc.checkCustomerByIdNoResponseData.cifNo;
+    data.customerID = this.aioSvc.checkCustomerByIdNoResponseData.legalId;
+    data.customerType = '1';
+    data.mobileNo = this.aioSvc.checkCustomerByIdNoResponseData.mobileNumber;
+    this.aioSvc.getAuthMethod(data).subscribe(
+      (res: any) => {
+        console.log(res);
+        this.aioSvc.isProcessing = false;
+
+        if (res.respCode) {
+          if (res.respCode != '00') {
+            this.aioSvc.alert(`Có lỗi xảy ra getAuthMethod`);
+          } else {
+            // Do
+          }
+        } else {
+          this.aioSvc.alert(`Có lỗi xảy ra getAuthMethod`);
+        }
+      },
+      (err) => {
+        this.aioSvc.alert(`Có lỗi xảy ra getAuthMethod`);
+        this.aioSvc.isProcessing = false;
+      }
+    );
   }
 
   requestOtp() {
@@ -41,18 +75,16 @@ export class VerifyOtpComponent implements OnInit {
     data.channel = 'DigiZone';
     data.smsContent = 'NGANN';
 
-    this.aioSvc.isProcessing = true;
     this.aioSvc.requestOtp(data).subscribe(
       (res: any) => {
-        console.log(res);
+        console.log('requestOtp', res);
+        this.aioSvc.isProcessing = false;
         if (res.respCode) {
           if (res.respCode != '00') {
             this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
-            this.aioSvc.isProcessing = false;
           }
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
-          this.aioSvc.isProcessing = false;
         }
       },
       (err) => {
@@ -71,20 +103,19 @@ export class VerifyOtpComponent implements OnInit {
     data.customerType = '1';
     data.mobileNo = this.aioSvc.customerInfo.mobileNo;
     data.serviceType = 'OA';
-    this.aioSvc.isProcessing = true;
     this.aioSvc.verifyOtp(data).subscribe(
       (res: any) => {
-        console.log(res);
+        console.log('verifyOtp', res);
+        this.aioSvc.isProcessing = false;
+
         if (res.respCode) {
           if (res.respCode != '00') {
             this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
-            this.aioSvc.isProcessing = false;
           } else {
             this.customerEnroll();
           }
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
-          this.aioSvc.isProcessing = false;
         }
       },
       (err) => {
@@ -101,14 +132,15 @@ export class VerifyOtpComponent implements OnInit {
     console.log(this.aioSvc.customerEnrollInfo);
     this.aioSvc.customerEnroll().subscribe(
       (res: any) => {
-        console.log(res);
+        this.aioSvc.isProcessing = false;
+
+        console.log('customerEnroll', res);
         if (res.respCode == '00') {
           this.idEKYCPersonal = res.data.idEKYCPersonal;
           this.cifNo = res.data.cifNo;
           this.openAccount();
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra customerEnroll`);
-          this.aioSvc.isProcessing = false;
         }
       },
       (err) => {
@@ -125,15 +157,15 @@ export class VerifyOtpComponent implements OnInit {
       'nam'
         ? 'M'
         : 'F';
-    this.aioSvc.customerEnrollInfo.customerInfo.dob = this.formatDate(
+    this.aioSvc.customerEnrollInfo.customerInfo.dob = Utils.formatDate(
       this.aioSvc.customerEnrollInfo.customerInfo.dob
     );
 
-    this.aioSvc.customerEnrollInfo.customerInfo.issueDate = this.formatDate(
+    this.aioSvc.customerEnrollInfo.customerInfo.issueDate = Utils.formatDate(
       this.aioSvc.customerEnrollInfo.customerInfo.issueDate
     );
 
-    this.aioSvc.customerEnrollInfo.customerInfo.expireDate = this.formatDate(
+    this.aioSvc.customerEnrollInfo.customerInfo.expireDate = Utils.formatDate(
       this.aioSvc.customerEnrollInfo.customerInfo.expireDate
     );
 
@@ -143,11 +175,6 @@ export class VerifyOtpComponent implements OnInit {
     this.aioSvc.customerEnrollInfo.customerInfo.issuePlace = 'CTCCSQLHCVTTXH';
     //TODO
     this.aioSvc.customerEnrollInfo.customerInfo.issueDate = '20200101';
-  }
-
-  formatDate(dob: string) {
-    let arr = dob.split('/');
-    return arr[2] + arr[1] + arr[0];
   }
 
   openAccount() {

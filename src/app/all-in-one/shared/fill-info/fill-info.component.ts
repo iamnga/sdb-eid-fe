@@ -176,6 +176,7 @@ export class FillInfoComponent implements OnInit {
   confirm() {
     if (
       this.aioSvc.customerInfo.email &&
+      this.aioSvc.customerInfo.mobileNo &&
       this.aioSvc.customerInfo.jobCode &&
       this.aioSvc.customerInfo.contactAddress
     ) {

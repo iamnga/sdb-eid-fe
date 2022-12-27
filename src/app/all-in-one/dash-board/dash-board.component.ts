@@ -25,7 +25,6 @@ export class DashBoardComponent implements OnInit {
 
   startService(serviceCd: any) {
     this.aioSvc.currentSerice = serviceCd;
-    this.aioSvc.isProcessing = true;
     console.log('serviceCd', serviceCd);
     this.aioSvc.getSessionId().subscribe(
       (result: any) => {

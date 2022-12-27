@@ -53,6 +53,10 @@ const routes: Routes = [
         component: RecheckInfoComponent,
       },
       {
+        path: 'update-card-id',
+        component: UpdateCardIdComponent,
+      },
+      {
         path: 'shared',
         component: SharedComponent,
         children: [

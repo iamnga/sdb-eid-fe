@@ -22,6 +22,7 @@ export class VerifyCustomerInfoComponent implements OnInit {
       this.checkCustomerByIdNo(this.randomId(12));
     } else {
       this.face = this.aioSvc.faceCaptured;
+      this.checkCustomerByIdNo('051095009392');
     }
   }
 
@@ -37,9 +38,10 @@ export class VerifyCustomerInfoComponent implements OnInit {
 
   checkCustomerByIdNo(customerId: string) {
     console.log(this.aioSvc.customerInfo);
-    this.aioSvc.isProcessing = true;
     this.aioSvc.checkCustomerByIdNo(customerId).subscribe(
       (res: any) => {
+        this.aioSvc.isProcessing = false;
+
         if (res.respCode == '14') {
           this.face = this.aioSvc.faceCaptured;
         } else if (res.respCode == '00') {
@@ -48,7 +50,6 @@ export class VerifyCustomerInfoComponent implements OnInit {
           );
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra checkCustomerByIdNo`);
-          this.aioSvc.isProcessing = false;
         }
         console.log(res);
       },

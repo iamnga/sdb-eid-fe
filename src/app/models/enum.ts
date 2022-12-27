@@ -12,6 +12,7 @@ export enum ServiceStep {
   CollectCardId,
   VerifyCustomerInfo,
   RecheckInfo,
+  UpdateCustomerInfo,
   FillInfo,
   AccountAndAlert,
   RequestOtp,

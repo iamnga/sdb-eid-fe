@@ -9,17 +9,9 @@
       </div>
       <div class="col-6 img-info text-right p-0">
         <img [src]="face" alt="" />
-        <img
-          class="ml-3"
-          src="assets/all-in-one/shared/img/front-card.png"
-          alt=""
-        />
+        <img class="ml-3" [src]="aioSvc.frontCardId" alt="" />
 
-        <img
-          class="ml-3"
-          src="assets/all-in-one/shared/img/back-card.png"
-          alt=""
-        />
+        <img class="ml-3" [src]="aioSvc.backCardId" alt="" />
       </div>
     </div>
     <div class="row p-3 bg-white box">

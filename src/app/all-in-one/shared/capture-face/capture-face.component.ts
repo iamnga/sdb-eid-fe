@@ -120,25 +120,29 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
             box.y >= 90 &&
             box.width + box.x <= 470 &&
             box.height + box.y <= 390 &&
-            box.width >= 200
+            box.width >= 150
           ) {
             let canvasFaceBox = await faceapi.extractFaces(this.videoInput, [
-              new faceapi.Rect(box.x, box.y, box.width, box.height),
+              new faceapi.Rect(120, 0, 400, this.HEIGHT),
             ]);
+
+            console.log(
+              'canvasFaceBox',
+              canvasFaceBox[0].toDataURL('image/png')
+            );
+
+            this.aioSvc.faceCaptured = canvasFaceBox[0].toDataURL('image/png');
 
             let canvasFullBox = await faceapi.extractFaces(this.videoInput, [
               new faceapi.Rect(0, 0, this.WIDTH, this.HEIGHT),
             ]);
 
-            this.aioSvc.faceCaptured = canvasFaceBox[0].toDataURL('image/png');
-
-            console.log('face-captured', this.captured);
-
-            console.log('rect', canvasFullBox[0].toDataURL('image/png'));
+            console.log(
+              'canvasFullBox',
+              canvasFullBox[0].toDataURL('image/png')
+            );
 
             this.captured = canvasFullBox[0].toDataURL('image/png');
-
-            //this.aioSvc.faceCaptured = this.captured;
 
             console.log('inside face loader: ', this.resultDetection);
 

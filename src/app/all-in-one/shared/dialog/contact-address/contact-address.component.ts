@@ -41,7 +41,6 @@ export class ContactAddressComponent implements OnInit {
 
   getDistrict(pro: AddressData) {
     this.currentPro = pro;
-    this.aioSvc.isProcessing = true;
     this.districts = [];
     this.aioSvc.getDistricts(pro.id).subscribe(
       (res: any) => {
@@ -64,7 +63,6 @@ export class ContactAddressComponent implements OnInit {
 
   getWard(dis: AddressData) {
     this.currentDis = dis;
-    this.aioSvc.isProcessing = true;
     this.wards = [];
     this.aioSvc.getWards(dis.id).subscribe(
       (res: any) => {

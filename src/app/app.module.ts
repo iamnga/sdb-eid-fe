@@ -53,6 +53,7 @@ import { FillInfoComponent } from './all-in-one/shared/fill-info/fill-info.compo
 import { InputMobileNumberComponent } from './all-in-one/shared/dialog/input-mobile-number/input-mobile-number.component';
 import { RecheckInfoComponent } from './all-in-one/update-card-id/recheck-info/recheck-info.component';
 import { ProcessingComponent } from './all-in-one/shared/processing/processing.component';
+import { HandshakeComponent } from './handshake/handshake.component';
 
 export function playerFactory() {
   return player;
@@ -90,6 +91,7 @@ export function playerFactory() {
     FillInfoComponent,
     RecheckInfoComponent,
     ProcessingComponent,
+    HandshakeComponent,
   ],
   imports: [
     SlickCarouselModule,

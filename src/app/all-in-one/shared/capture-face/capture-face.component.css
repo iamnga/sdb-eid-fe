@@ -54,6 +54,8 @@
 video {
   border: 2px solid rgb(147, 171, 245);
   border-radius: 15px;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 }
 
 .capture-box {
@@ -68,7 +70,7 @@ video {
   display: table;
   position: absolute;
   top: 0px;
-  transform: translateX(-50%);
+  transform: translateX(-50%) scaleX(-1);
   left: 50%;
   z-index: 100;
 }

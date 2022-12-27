@@ -156,7 +156,6 @@ export class AccountAndAlertComponent implements OnInit {
   }
 
   checkAccount(accountNo: string) {
-    this.aioSvc.isProcessing = true;
     this.aioSvc.checkAccount(accountNo).subscribe(
       (res: any) => {
         this.aioSvc.isProcessing = false;

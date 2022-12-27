@@ -1,4 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  CheckCustomerSDBRequestData,
+  CustomerUpdateData,
+  GetAuthMethodRequestData,
+  UpdateCustomerRequestData,
+} from 'src/app/models/aio';
+import { ServiceStep } from 'src/app/models/enum';
+import { AioService } from 'src/app/services/aio.service';
+import Utils from '../shared/utils/utils';
 
 @Component({
   selector: 'app-update-card-id',
@@ -6,12 +15,83 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./update-card-id.component.css'],
 })
 export class UpdateCardIdComponent implements OnInit {
-  ssid = '';
-  constructor() {}
+  customerUpdateData = new CustomerUpdateData();
+  updateCustomerRequestData = new UpdateCustomerRequestData();
+  constructor(private aioSvc: AioService) {
+    aioSvc.currentStep = ServiceStep.UpdateCustomerInfo;
+  }
 
   ngOnInit(): void {
-    this.ssid = new Date().getTime().toString();
-    localStorage.setItem('aio-ssid', this.ssid);
-    localStorage.setItem('cs', '2'); // Current service - 1: on boarding, 2:  update cus info
+    this.updateCustomer();
+  }
+
+  updateCustomer() {
+    let data = new CheckCustomerSDBRequestData();
+
+    data.cifNo = '';
+    data.customerID = this.aioSvc.checkCustomerByIdNoResponseData.legalId;
+    data.customerType = '1';
+    data.dob = this.aioSvc.checkCustomerByIdNoResponseData.birthIncorpDate;
+    data.fullName = this.aioSvc.checkCustomerByIdNoResponseData.name;
+    data.isEdit = true;
+    data.mobileNo = this.aioSvc.checkCustomerByIdNoResponseData.mobileNumber;
+    data.serviceType = 'CI';
+    data.email = this.aioSvc.checkCustomerByIdNoResponseData.email;
+    data.residentAddress = this.aioSvc.checkCustomerByIdNoResponseData.street;
+
+    this.aioSvc.checkCustomerSDB(data).subscribe(
+      (res: any) => {
+        this.aioSvc.isProcessing = false;
+        if (res.respCode == '00') {
+          this.customerUpdateData.customerIDOld =
+            this.aioSvc.customerInfo.customerIDOld;
+          this.customerUpdateData.customerIDNew =
+            this.aioSvc.customerInfo.customerID;
+          this.customerUpdateData.expDate = Utils.formatDate(
+            this.aioSvc.customerInfo.expireDate
+          );
+          this.customerUpdateData.issueDate = Utils.formatDate(
+            this.aioSvc.customerInfo.issueDate
+          );
+          this.customerUpdateData.issuePlace = Utils.issPlace;
+          this.customerUpdateData.isUpdateAddress = false;
+          this.customerUpdateData.qrContent = 'thisIsQRContent';
+          this.customerUpdateData.addressCityCode = '';
+          this.customerUpdateData.addressCityName = '';
+          this.customerUpdateData.addressDistrictCode = '';
+          this.customerUpdateData.addressDistrictName = '';
+          this.customerUpdateData.addressStreet = '';
+          this.customerUpdateData.addressWardCode = '';
+          this.customerUpdateData.addressWardName = '';
+
+          this.updateCustomerRequestData.customerUpdate =
+            this.customerUpdateData;
+
+          this.aioSvc.updateCustomer(this.updateCustomerRequestData).subscribe(
+            (res: any) => {
+              console.log(res);
+              this.aioSvc.isProcessing = false;
+              if (res.respCode == '00') {
+                this.aioSvc.next();
+              } else {
+                this.aioSvc.alert(`Có lỗi xảy ra updateCustomer`);
+              }
+            },
+            (err) => {
+              this.aioSvc.alert(`Có lỗi xảy ra updateCustomer`);
+              this.aioSvc.isProcessing = false;
+
+              console.log(err);
+            }
+          );
+        } else {
+          this.aioSvc.alert(`Có lỗi xảy ra checkCustomerSDB`);
+        }
+      },
+      (err) => {
+        this.aioSvc.alert(`Có lỗi xảy ra checkCustomerSDB`);
+        this.aioSvc.isProcessing = false;
+      }
+    );
   }
 }

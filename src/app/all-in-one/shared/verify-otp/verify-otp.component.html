@@ -1,37 +1,152 @@
 <app-aio-header></app-aio-header>
 <app-aio-back-and-stepper [currentStep]="4"></app-aio-back-and-stepper>
-<section>
+<section></section>
+  <ng-container
+    *ngIf="
+      currentService == service.OnBoarding ||
+      (currentService == service.UpdateCardId &&
+        (checkAuthType(authType.SMSOTP) ||
+          checkAuthType(authType.DeviceToken) ||
+          checkAuthType(authType.SMSTTT) ||
+          checkAuthType(authType.AdvToken)))
+    "
+  >
+    <div class="container">
+      <div class="text-center">
+        <h3 class="font-weight-bold mb-4">
+          Quý khách vui lòng nhập mã OTP được gửi đến điện thoại của quý khách
+        </h3>
+      </div>
+      <div class="text-center keyboard-box">
+        <div>
+          <input
+            type="text"
+            class="otp-item"
+            *ngFor="let item of arrOtp; last as last; let i = index"
+            [ngClass]="{ last: last }"
+            [value]="showOtp(i)"
+            disabled
+            readonly
+            autofocus="false"
+          />
+        </div>
+        <app-keyboard-number
+          (inputNumberEvent)="recieveInputNumber($event)"
+        ></app-keyboard-number>
+
+        <button
+          class="btn-next mt-4"
+          (click)="verifyOtp()"
+          [disabled]="otp.length < 6"
+        >
+          Xác nhận
+        </button>
+        <div class="pt-4 text-sacom">Gửi lại mã (60s)</div>
+      </div>
+    </div>
+  </ng-container>
+</section>
+<section
+  *ngIf="
+    currentService == service.UpdateCardId &&
+    (checkAuthType(authType.mCodeOTP) ||
+      checkAuthType(authType.mConnect) ||
+      checkAuthType(authType.SmartOTP) ||
+      checkAuthType(authType.SmartOTPCode))
+  "
+>
   <div class="container">
     <div class="text-center">
-      <h3 class="font-weight-bold mb-4">
-        Quý khách vui lòng nhập mã OTP được gửi đến điện thoại của quý khách
-      </h3>
+      <h3 class="mb-3 font-weight-bold">Xác thực thông tin</h3>
+      <h5>Quý khách vui lòng chọn phương thức xác thực</h5>
     </div>
-    <div class="text-center keyboard-box">
-      <div>
-        <input
-          type="text"
-          class="otp-item"
-          *ngFor="let item of arrOtp; last as last; let i = index"
-          [ngClass]="{ last: last }"
-          [value]="showOtp(i)"
-          disabled
-          readonly
-          autofocus="false"
-        />
+    <div>
+      <img src="" alt="" />
+    </div>
+    <ng-container
+      *ngIf="
+        checkAuthType(authType.SmartOTP) || checkAuthType(authType.SmartOTPCode)
+      "
+    >
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-4">
+          <div
+            class="bg-white p-3 account-type mb-4"
+            (click)="selectAuthType(authType.SmartOTP)"
+            [ngClass]="{ active: currentAuthType == authType.SmartOTP }"
+          >
+            <div class="d-inline-block">
+              <span
+                class="account-type-label"
+                [ngClass]="{ active: currentAuthType == authType.SmartOTP }"
+                >Sacombank Smart OTP</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div
+            class="bg-white p-3 account-type mb-4"
+            (click)="selectAuthType(authType.SmartOTPCode)"
+            [ngClass]="{ active: currentAuthType == authType.SmartOTPCode }"
+          >
+            <div class="d-inline-block">
+              <span
+                class="account-type-label"
+                [ngClass]="{ active: currentAuthType == authType.SmartOTPCode }"
+                >Smart OTP Code</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-2"></div>
       </div>
-      <app-keyboard-number
-        (inputNumberEvent)="recieveInputNumber($event)"
-      ></app-keyboard-number>
-
-      <button
-        class="btn-next mt-4"
-        (click)="verifyOtp()"
-        [disabled]="otp.length < 6"
-      >
-        Xác nhận
+    </ng-container>
+    <ng-container
+      *ngIf="
+        checkAuthType(authType.mCodeOTP) || checkAuthType(authType.mConnect)
+      "
+    >
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-4">
+          <div
+            class="bg-white p-3 account-type mb-4"
+            (click)="selectAuthType(authType.mConnect)"
+            [ngClass]="{ active: currentAuthType == authType.mConnect }"
+          >
+            <div class="d-inline-block">
+              <span
+                class="account-type-label"
+                [ngClass]="{ active: currentAuthType == authType.mConnect }"
+                >mConnected</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div
+            class="bg-white p-3 account-type mb-4"
+            (click)="selectAuthType(authType.mCodeOTP)"
+            [ngClass]="{ active: currentAuthType == authType.mCodeOTP }"
+          >
+            <div class="d-inline-block">
+              <span
+                class="account-type-label"
+                [ngClass]="{ active: currentAuthType == authType.mCodeOTP }"
+                >mCode</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-2"></div>
+      </div>
+    </ng-container>
+    <div class="text-center">
+      <button class="btn-next mt-4 w-25" (click)="requestOtp()">
+        Tiếp tục
       </button>
-      <div class="pt-4 text-primary">Gửi lại mã (60s)</div>
     </div>
   </div>
 </section>

@@ -4,7 +4,6 @@ import { AllInOneComponent } from './all-in-one/all-in-one.component';
 import { DashBoardComponent } from './all-in-one/dash-board/dash-board.component';
 import { AccountAndAlertComponent } from './all-in-one/on-boarding/account-and-alert/account-and-alert.component';
 import { EndComponent } from './all-in-one/on-boarding/end/end.component';
-
 import { OnBoardingComponent } from './all-in-one/on-boarding/on-boarding.component';
 import { BackAndStepperComponent } from './all-in-one/shared/back-and-stepper/back-and-stepper.component';
 import { CaptureFaceComponent } from './all-in-one/shared/capture-face/capture-face.component';
@@ -22,8 +21,6 @@ import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-i
 import { UpdateSuccessComponent } from './all-in-one/update-card-id/update-success/update-success.component';
 import { CollectComponent } from './collect/collect.component';
 import { HomeComponent } from './home/home.component';
-import { MkComponent } from './mk/mk.component';
-import { WebcamComponent } from './webcam/webcam.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -112,11 +109,6 @@ const routes: Routes = [
         ],
       },
     ],
-  },
-  { path: 'webcam', component: WebcamComponent },
-  {
-    path: 'mk',
-    component: MkComponent,
   },
 ];
 

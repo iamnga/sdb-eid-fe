@@ -77,3 +77,7 @@
   color: #1b54c3 !important;
   line-height: 2rem;
 }
+
+.w-10 {
+  width: 10% !important;
+}

@@ -105,35 +105,42 @@ export class VerifyOtpComponent implements OnInit {
   }
 
   requestOtp() {
-    //TODO: hard code
-    let data = new RequestOtpRequestData();
-    data.customerID = this.aioSvc.customerInfo.customerID;
-    data.cifNo = '1';
-    data.authType = this.currentAuthType;
-    data.customerType = '1';
-    data.mobileNo = this.aioSvc.customerInfo.mobileNo;
-    data.channel = 'DigiZone';
-    data.smsContent = 'NGANN';
+    if (
+      this.currentAuthType == this.authType.mConnect ||
+      this.currentAuthType == this.authType.SmartOTP
+    ) {
+      this.verifyOtp();
+    } else {
+      //TODO: hard code
+      let data = new RequestOtpRequestData();
+      data.customerID = this.aioSvc.customerInfo.customerID;
+      data.cifNo = '1';
+      data.authType = this.currentAuthType;
+      data.customerType = '1';
+      data.mobileNo = this.aioSvc.customerInfo.mobileNo;
+      data.channel = 'DigiZone';
+      data.smsContent = 'NGANN';
 
-    this.aioSvc.requestOtp(data).subscribe(
-      (res: any) => {
-        console.log('requestOtp', res);
-        this.aioSvc.isProcessing = false;
-        if (res.respCode) {
-          this.step = 2;
+      this.aioSvc.requestOtp(data).subscribe(
+        (res: any) => {
+          console.log('requestOtp', res);
+          this.aioSvc.isProcessing = false;
+          if (res.respCode) {
+            this.step = 2;
 
-          if (res.respCode != '00') {
+            if (res.respCode != '00') {
+              this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
+            }
+          } else {
             this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
           }
-        } else {
+        },
+        (err) => {
           this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
+          this.aioSvc.isProcessing = false;
         }
-      },
-      (err) => {
-        this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
-        this.aioSvc.isProcessing = false;
-      }
-    );
+      );
+    }
   }
 
   verifyOtp() {
@@ -141,7 +148,7 @@ export class VerifyOtpComponent implements OnInit {
     data.authCode = this.otp.join('');
     data.customerID = this.aioSvc.customerInfo.customerID;
     data.cifNo = '1';
-    data.authType = this.currentAuthType.toString();
+    data.authType = this.currentAuthType;
     data.customerType = '1';
     data.mobileNo = this.aioSvc.customerInfo.mobileNo;
     data.serviceType = 'OA';
@@ -154,7 +161,6 @@ export class VerifyOtpComponent implements OnInit {
           if (res.respCode != '00') {
             this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
           } else {
-            // this.customerEnroll();
             this.aioSvc.next();
           }
         } else {

@@ -16,14 +16,19 @@
       <h3 class="mb-3 font-weight-bold">Xác thực thông tin</h3>
       <h5>Quý khách vui lòng chọn phương thức xác thực</h5>
     </div>
-    <div>
-      <img src="" alt="" />
-    </div>
+
     <ng-container
       *ngIf="
         checkAuthType(authType.SmartOTP) || checkAuthType(authType.SmartOTPCode)
       "
     >
+      <div class="text-center py-4">
+        <img
+          src="assets/all-in-one/shared/img/spay-logo.png"
+          alt=""
+          class="w-10"
+        />
+      </div>
       <div class="row">
         <div class="col-2"></div>
         <div class="col-4">
@@ -64,6 +69,13 @@
         checkAuthType(authType.mCodeOTP) || checkAuthType(authType.mConnect)
       "
     >
+      <div class="text-center py-4">
+        <img
+          src="assets/all-in-one/shared/img/mSign-logo.png"
+          alt=""
+          class="w-10"
+        />
+      </div>
       <div class="row">
         <div class="col-2"></div>
         <div class="col-4">
@@ -112,10 +124,10 @@
     *ngIf="
       currentService == service.OnBoarding ||
       (currentService == service.UpdateCardId &&
-        (checkAuthType(authType.SMSOTP) ||
-          checkAuthType(authType.DeviceToken) ||
-          checkAuthType(authType.SMSTTT) ||
-          checkAuthType(authType.AdvToken) ||
+        (currentAuthType == authType.SMSOTP ||
+          currentAuthType == authType.DeviceToken ||
+          currentAuthType == authType.SMSTTT ||
+          currentAuthType == authType.AdvToken ||
           currentAuthType == authType.SmartOTPCode ||
           currentAuthType == authType.mCodeOTP))
     "
@@ -123,7 +135,13 @@
     <div class="container">
       <div class="text-center">
         <h3 class="font-weight-bold mb-4">
-          Quý khách vui lòng nhập mã OTP được gửi đến điện thoại của quý khách
+          {{
+            currentAuthType == authType.mCodeOTP
+              ? "Vui lòng nhập mã mCode"
+              : currentAuthType == authType.SmartOTPCode
+              ? "Vui lòng nhập Smart OTP Code"
+              : "Vui lòng nhập mã OTP"
+          }}
         </h3>
       </div>
       <div class="text-center keyboard-box">
@@ -160,10 +178,10 @@
       !(
         currentService == service.OnBoarding ||
         (currentService == service.UpdateCardId &&
-          (checkAuthType(authType.SMSOTP) ||
-            checkAuthType(authType.DeviceToken) ||
-            checkAuthType(authType.SMSTTT) ||
-            checkAuthType(authType.AdvToken) ||
+          (currentAuthType == authType.SMSOTP ||
+            currentAuthType == authType.DeviceToken ||
+            currentAuthType == authType.SMSTTT ||
+            currentAuthType == authType.AdvToken ||
             currentAuthType == authType.SmartOTPCode ||
             currentAuthType == authType.mCodeOTP))
       )
@@ -179,7 +197,7 @@
           Vui lòng kiểm tra và duyệt giao dịch thông qua ứng dụng Sacombank Pay
         </h5>
       </div>
-      <div class="w-25" style="margin-inline: auto">
+      <div class="w-25 mt-4" style="margin-inline: auto">
         <ng-lottie [options]="faceLoad"></ng-lottie>
       </div>
     </div>

@@ -77,11 +77,20 @@ export class AioService {
     this.frontCardId = '';
     this.backCardId = '';
     this.faceCaptured = '';
-
+    this.fpAttemp = 0;
     this.router.navigate(['/aio/dash-board']);
   }
 
   // API
+
+  getTestCase() {
+    return this.http.get(
+      'https://script.googleusercontent.com/macros/echo?user_content_key=o7oMCrJU1UIfVmajMOki_7ZAnSgNgZu9_cHz263MsCnLUcTp21Dg4UiQi5JHXrOnhkBhjnGPgJCpzC85GwumIxh6VRkgxR7Fm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnNynvCYtRS-i_9phJjo-NYpT4c0SjmNO8RI5tOYpdoc4s1qFB7IrD-_JciIMeUH8icNcxpR83hI9uvoLRVqjJSVRqM7RMRhLCg&lib=Ms7HLW8aIvZno15AlAhQeXu7_LOrhYMhx',
+      {
+        headers: new HttpHeaders(this.headerDict),
+      }
+    );
+  }
 
   getSessionId(): Observable<any> {
     let req = this.newRequest({ serviceCode: Service[this.currentSerice] });
@@ -458,8 +467,8 @@ export class AioService {
       'Ấp Mũi Tràm C, Khánh Bình Tây Bắc, Trần Văn Thời, Cà Mau';
     customerInfo.dob = '25/01/1995';
     customerInfo.gender = 'Nam';
-    customerInfo.customerID = '352229668125';
-    customerInfo.customerIDOld = '352229668124';
+    customerInfo.customerID = '352229668128';
+    customerInfo.customerIDOld = '352229668127';
     customerInfo.nationality = 'Việt Nam';
     customerInfo.towncountry = 'Khánh Bình Tây Bắc, Trần Văn Thời, Cà Mau';
     customerInfo.fullName = 'Nguyễn Ngọc Ngà';

@@ -19,12 +19,10 @@ import { VerifyOtpComponent } from './all-in-one/shared/verify-otp/verify-otp.co
 import { EndComponent } from './all-in-one/on-boarding/end/end.component';
 import { CollectCardIdComponent } from './all-in-one/shared/collect-card-id/collect-card-id.component';
 import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-id.component';
-import { WebcamComponent } from './webcam/webcam.component';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { HeaderComponent } from './all-in-one/shared/header/header.component';
 import { MobileCaptureCardIdComponent } from './all-in-one/shared/mobile-capture-card-id/mobile-capture-card-id.component';
 import { SharedComponent } from './all-in-one/shared/shared.component';
-import { MkComponent } from './mk/mk.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AioService } from './services/aio.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -53,7 +51,6 @@ import { FillInfoComponent } from './all-in-one/shared/fill-info/fill-info.compo
 import { InputMobileNumberComponent } from './all-in-one/shared/dialog/input-mobile-number/input-mobile-number.component';
 import { RecheckInfoComponent } from './all-in-one/update-card-id/recheck-info/recheck-info.component';
 import { ProcessingComponent } from './all-in-one/shared/processing/processing.component';
-import { HandshakeComponent } from './handshake/handshake.component';
 import { UpdateSuccessComponent } from './all-in-one/update-card-id/update-success/update-success.component';
 
 export function playerFactory() {
@@ -76,11 +73,9 @@ export function playerFactory() {
     VerifyOtpComponent,
     EndComponent,
     UpdateCardIdComponent,
-    WebcamComponent,
     HeaderComponent,
     MobileCaptureCardIdComponent,
     SharedComponent,
-    MkComponent,
     BackAndStepperComponent,
     CaptureGuideComponent,
     KeyboardNumberComponent,
@@ -92,7 +87,6 @@ export function playerFactory() {
     FillInfoComponent,
     RecheckInfoComponent,
     ProcessingComponent,
-    HandshakeComponent,
     UpdateSuccessComponent,
   ],
   imports: [

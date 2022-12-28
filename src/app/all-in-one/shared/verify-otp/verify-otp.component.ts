@@ -8,6 +8,7 @@ import {
 import { AuthType, Service, ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/aio.service';
 import { AnimationOptions } from 'ngx-lottie';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-verify-otp',
@@ -78,19 +79,16 @@ export class VerifyOtpComponent implements OnInit {
             this.aioSvc.alert(`Có lỗi xảy ra getAuthMethod`);
           } else {
             if (res.data.authInfo) {
-              this.authenInfo = res.data.authInfo;
+              this.authenInfo = environment.production
+                ? res.data.authInfo
+                : this.aioSvc.authenInfo;
 
-              this.authenInfo = [
-                { authType: this.authType.mCodeOTP, authDesVN: '' },
-                { authType: this.authType.mConnect, authDesVN: '' },
-              ];
-
-              // if (this.authenInfo.length == 1) {
-              //   this.currentAuthType = this.authenInfo[0].authType;
-              //   this.requestOtp();
-              // } else {
-              //   this.currentAuthType = this.authType.None;
-              // }
+              if (this.authenInfo.length == 1) {
+                this.currentAuthType = this.authenInfo[0].authType;
+                this.requestOtp();
+              } else {
+                this.currentAuthType = this.authType.None;
+              }
             } else this.aioSvc.alert(`Không tồn tại phương thức xác thực`);
           }
         } else {

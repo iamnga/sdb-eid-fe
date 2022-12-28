@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import {
   AllInOneRequest,
+  AuthenInfo,
   CheckCustomerByIdNoResponseData,
   CheckCustomerRequestData,
   CheckCustomerSDBRequestData,
@@ -47,6 +48,7 @@ export class AioService {
   faceCaptured = '';
   frontCardId = '';
   backCardId = '';
+  authenInfo: AuthenInfo[] = [];
 
   headerDict = {
     'Content-Type': 'application/json;ngann',
@@ -78,6 +80,7 @@ export class AioService {
     this.backCardId = '';
     this.faceCaptured = '';
     this.fpAttemp = 0;
+    this.authenInfo = [];
     this.router.navigate(['/aio/dash-board']);
   }
 
@@ -85,7 +88,7 @@ export class AioService {
 
   getTestCase() {
     return this.http.get(
-      'https://script.googleusercontent.com/macros/echo?user_content_key=o7oMCrJU1UIfVmajMOki_7ZAnSgNgZu9_cHz263MsCnLUcTp21Dg4UiQi5JHXrOnhkBhjnGPgJCpzC85GwumIxh6VRkgxR7Fm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnNynvCYtRS-i_9phJjo-NYpT4c0SjmNO8RI5tOYpdoc4s1qFB7IrD-_JciIMeUH8icNcxpR83hI9uvoLRVqjJSVRqM7RMRhLCg&lib=Ms7HLW8aIvZno15AlAhQeXu7_LOrhYMhx',
+      'https://script.googleusercontent.com/macros/echo?user_content_key=51ggE-tGOfKm5pHh-TI9ya8gF0L7FZtI_78goLzKEOb7RSEpFmAFtCP1w6EGFUbggpGcPXMmXOerPw68OpBR01KlJ-PMbKNim5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnLcmh-ftdXUoLC-snEeYhvYipzZ81i4aAU7lEl4TR6BinQ38WpmQm1TXteMJsW-0eIZp7UDGMETJPFCn-R5LuM_0bsUVe31J1A&lib=Ms7HLW8aIvZno15AlAhQeXu7_LOrhYMhx',
       {
         headers: new HttpHeaders(this.headerDict),
       }
@@ -461,21 +464,34 @@ export class AioService {
   }
 
   fakeData() {
-    let customerInfo = new CustomerInfo();
+    this.getTestCase().subscribe((res: any) => {
+      console.log(res);
+      let data = res.content[1];
+      console.log('fake data', data);
+      let customerInfo = new CustomerInfo();
+      customerInfo.fullName = data[1];
+      customerInfo.customerID = data[2];
+      customerInfo.customerIDOld = data[3];
+      customerInfo.gender = data[4];
+      customerInfo.dob = data[5];
+      customerInfo.mobileNo = data[6];
+      customerInfo.nationality = data[7];
+      customerInfo.towncountry = data[8];
+      customerInfo.expireDate = data[9];
+      customerInfo.issueDate = data[10];
+      customerInfo.address = data[11];
 
-    customerInfo.address =
-      'Ấp Mũi Tràm C, Khánh Bình Tây Bắc, Trần Văn Thời, Cà Mau';
-    customerInfo.dob = '25/01/1995';
-    customerInfo.gender = 'Nam';
-    customerInfo.customerID = '352229668128';
-    customerInfo.customerIDOld = '352229668127';
-    customerInfo.nationality = 'Việt Nam';
-    customerInfo.towncountry = 'Khánh Bình Tây Bắc, Trần Văn Thời, Cà Mau';
-    customerInfo.fullName = 'Nguyễn Ngọc Ngà';
-    customerInfo.expireDate = '12/11/2034';
-    customerInfo.issueDate = '01/01/2020';
-    customerInfo.mobileNo = '0349444440';
+      let auths = data[12].split(',');
 
-    this.customerInfo = customerInfo;
+      for (let i = 0; i < auths.length; i++) {
+        let auth = new AuthenInfo();
+        auth.authType = auths[i];
+        auth.authDesVN = '';
+        this.authenInfo.push(auth);
+      }
+
+      this.customerInfo = customerInfo;
+      this.next();
+    });
   }
 }

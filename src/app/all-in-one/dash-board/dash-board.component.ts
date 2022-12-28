@@ -21,11 +21,7 @@ export class DashBoardComponent implements OnInit {
     aioSvc.currentStep = ServiceStep.DashBoard;
   }
 
-  ngOnInit(): void {
-    this.aioSvc.getTestCase().subscribe((res: any) => {
-      console.log(res);
-    });
-  }
+  ngOnInit(): void {}
 
   startService(serviceCd: any) {
     this.aioSvc.currentSerice = serviceCd;
@@ -40,8 +36,9 @@ export class DashBoardComponent implements OnInit {
             this.aioSvc.sessionID = result.data.sessionId;
             if (!environment.production) {
               this.aioSvc.fakeData();
+            } else {
+              this.aioSvc.next();
             }
-            this.aioSvc.next();
           }
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra: getSessionId`);

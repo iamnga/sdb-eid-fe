@@ -7,7 +7,7 @@ import {
   UpdateCustomerRequestData,
 } from 'src/app/models/aio';
 import { ServiceStep } from 'src/app/models/enum';
-import { AioService } from 'src/app/services/aio.service';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 import Utils from '../../shared/utils/utils';
 
 @Component({
@@ -66,7 +66,7 @@ export class RecheckInfoComponent implements OnInit {
           this.aioSvc.isProcessing = false;
         }
       },
-      (err) => {
+      (err: any) => {
         this.aioSvc.alert(`Có lỗi xảy ra checkCustomerByIdNo`);
         this.aioSvc.isProcessing = false;
 

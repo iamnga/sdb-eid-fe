@@ -258,3 +258,8 @@ export class CheckCustomerByIdNoResponseData {
     }
   ];
 }
+
+export class HandShake {
+  key: string;
+  challenge: string;
+}

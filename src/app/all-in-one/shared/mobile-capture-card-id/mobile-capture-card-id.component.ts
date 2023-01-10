@@ -1,9 +1,9 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { AioService } from 'src/app/services/aio.service';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 @Component({
   selector: 'app-mobile-capture-card-id',
   templateUrl: './mobile-capture-card-id.component.html',
@@ -30,7 +30,6 @@ export class MobileCaptureCardIdComponent implements OnInit {
   constructor(
     private actRoute: ActivatedRoute,
     private aioSvc: AioService,
-    private sanitizer: DomSanitizer,
     private modalService: BsModalService
   ) {
     this.deviceID = this.actRoute.snapshot.params['deviceid'];

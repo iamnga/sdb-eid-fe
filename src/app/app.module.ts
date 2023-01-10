@@ -24,7 +24,6 @@ import { HeaderComponent } from './all-in-one/shared/header/header.component';
 import { MobileCaptureCardIdComponent } from './all-in-one/shared/mobile-capture-card-id/mobile-capture-card-id.component';
 import { SharedComponent } from './all-in-one/shared/shared.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AioService } from './services/aio.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BackAndStepperComponent } from './all-in-one/shared/back-and-stepper/back-and-stepper.component';
 import { CaptureGuideComponent } from './all-in-one/shared/capture-guide/capture-guide.component';
@@ -52,6 +51,7 @@ import { InputMobileNumberComponent } from './all-in-one/shared/dialog/input-mob
 import { RecheckInfoComponent } from './all-in-one/update-card-id/recheck-info/recheck-info.component';
 import { ProcessingComponent } from './all-in-one/shared/processing/processing.component';
 import { UpdateSuccessComponent } from './all-in-one/update-card-id/update-success/update-success.component';
+import { AioService } from './services/all-in-one/aio.service';
 
 export function playerFactory() {
   return player;
@@ -111,7 +111,6 @@ export function playerFactory() {
   ],
   providers: [
     WebsocketService,
-    AioService,
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline' },

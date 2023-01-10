@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceStep } from 'src/app/models/enum';
-import { AioService } from 'src/app/services/aio.service';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-capture-guide',

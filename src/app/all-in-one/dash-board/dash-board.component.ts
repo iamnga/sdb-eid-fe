@@ -1,13 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  AddressInfo,
-  CustomerEnroll,
-  CustomerInfo,
-  RegisterAlert,
-} from 'src/app/models/aio';
 import { Service, ServiceStep } from 'src/app/models/enum';
-import { AioService } from 'src/app/services/aio.service';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
+import { DashBoardService } from 'src/app/services/all-in-one/dash-board.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -17,21 +12,40 @@ import { environment } from 'src/environments/environment';
 })
 export class DashBoardComponent implements OnInit {
   service = Service;
-  constructor(public aioSvc: AioService, private router: Router) {
+  constructor(
+    public aioSvc: AioService,
+    private dbSvc: DashBoardService,
+    private router: Router
+  ) {
     aioSvc.currentStep = ServiceStep.DashBoard;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // this.aioSvc.testRSA().subscribe(
+    //   (res: any) => {
+    //     console.log(res);
+    //   },
+    //   (err) => {}
+    // );
+  }
 
   startService(serviceCd: any) {
     this.aioSvc.currentSerice = serviceCd;
     console.log('serviceCd', serviceCd);
-    this.aioSvc.getSessionId().subscribe(
+    this.dbSvc.getSessionId().subscribe(
       (result: any) => {
         if (result) {
           console.log(result);
           if (result.respCode != '00') {
+            this.aioSvc.isProcessing = false;
             this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
+
+            this.aioSvc.updateLogStep(
+              '',
+              result.respCode,
+              result.respDescription,
+              'getSessionId'
+            );
           } else {
             this.aioSvc.sessionID = result.data.sessionId;
             if (!environment.production) {
@@ -41,13 +55,16 @@ export class DashBoardComponent implements OnInit {
             }
           }
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra: getSessionId`);
+          this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
+          this.aioSvc.updateLogStep('', '', 'notResult', 'getSessionId');
           this.aioSvc.isProcessing = false;
         }
       },
-      (err) => {
+      (err: any) => {
         this.aioSvc.isProcessing = false;
-        this.aioSvc.alert(`Có lỗi xảy ra: getSessionId`);
+        this.aioSvc.alert(`Có lỗi xảy ra`);
+
+        this.aioSvc.updateLogStep('', '', `HttpError`, 'getSessionId');
       }
     );
   }

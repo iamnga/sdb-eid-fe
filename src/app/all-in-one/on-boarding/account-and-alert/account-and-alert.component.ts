@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountType, AlertType, ServiceStep } from 'src/app/models/enum';
-import { AioService } from 'src/app/services/aio.service';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertComponent } from '../../shared/dialog/alert/alert.component';
 import { Alert, Template } from 'src/app/models/alert';

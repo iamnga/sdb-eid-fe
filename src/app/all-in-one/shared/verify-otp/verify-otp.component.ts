@@ -6,9 +6,9 @@ import {
   VerifyOtpRequestData,
 } from 'src/app/models/aio';
 import { AuthType, Service, ServiceStep } from 'src/app/models/enum';
-import { AioService } from 'src/app/services/aio.service';
 import { AnimationOptions } from 'ngx-lottie';
 import { environment } from 'src/environments/environment';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-verify-otp',
@@ -95,7 +95,7 @@ export class VerifyOtpComponent implements OnInit {
           this.aioSvc.alert(`Có lỗi xảy ra getAuthMethod`);
         }
       },
-      (err) => {
+      (err: any) => {
         this.aioSvc.alert(`Có lỗi xảy ra getAuthMethod`);
         this.aioSvc.isProcessing = false;
       }

@@ -18,14 +18,16 @@ import {
   UpdateCustomerRequestData,
   UpdateLogStepData,
   VerifyOtpRequestData,
-} from '../models/aio';
-import { Service, ServiceStep } from '../models/enum';
+} from '../../models/aio';
+import { Service, ServiceStep } from '../../models/enum';
 import { UUID } from 'angular2-uuid';
-import { Alert, Template } from '../models/alert';
-import { AlertComponent } from '../all-in-one/shared/dialog/alert/alert.component';
+import { Alert, Template } from '../../models/alert';
+import { AlertComponent } from '../../all-in-one/shared/dialog/alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { FingerResponse } from '../models/mk';
+import { FingerResponse } from '../../models/mk';
+import Utils from '../../all-in-one/shared/utils/utils';
+import { mergeMap, flatMap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -86,6 +88,12 @@ export class AioService {
 
   // API
 
+  postAsync(route: string, data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}${route}`, data, {
+      headers: new HttpHeaders(this.headerDict),
+    });
+  }
+
   getTestCase() {
     return this.http.get(
       'https://script.googleusercontent.com/macros/echo?user_content_key=51ggE-tGOfKm5pHh-TI9ya8gF0L7FZtI_78goLzKEOb7RSEpFmAFtCP1w6EGFUbggpGcPXMmXOerPw68OpBR01KlJ-PMbKNim5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnLcmh-ftdXUoLC-snEeYhvYipzZ81i4aAU7lEl4TR6BinQ38WpmQm1TXteMJsW-0eIZp7UDGMETJPFCn-R5LuM_0bsUVe31J1A&lib=Ms7HLW8aIvZno15AlAhQeXu7_LOrhYMhx',
@@ -103,6 +111,50 @@ export class AioService {
     return this.http.post(this.apiUrl + 'get-sessionId', req, {
       headers: new HttpHeaders(this.headerDict),
     });
+  }
+
+  testRSA(): Observable<any> {
+    let req = this.newRequest({ serviceCode: Service[this.currentSerice] });
+    console.log(req);
+
+    req = `{"refNumber":"f74ec3ae-a3a6-264c-7e06-6c0cf21a9803","refDateTime":"2022-12-30T09:19:11.237","deviceID":"00000002","sessionID":"","data":{"serviceCode":"None"}}`;
+    Utils.sign2(req);
+    console.log('sign');
+    console.log(Utils.sign3(req));
+    console.log('payload');
+    console.log(Utils.encrypt(req));
+
+    // return this.http.post(
+    //   this.apiUrl + 'test-rsa',
+    //   Utils.encrypt(req).toString(),
+    //   {
+    //     headers: new HttpHeaders({
+    //       'Content-Type': 'application/json;',
+    //       Accept: '*/*',
+    //       'Access-Control-Allow-Origin': '*',
+    //       sign: Utils.sign3(req).toString(),
+    //     }),
+    //   }
+    // );
+
+    return Utils.sign(req).pipe(
+      mergeMap((signed) => {
+        console.log(signed);
+
+        return this.http.post(
+          this.apiUrl + 'test-rsa',
+          btoa(Utils.encrypt(req).toString()),
+          {
+            headers: new HttpHeaders({
+              'Content-Type': 'application/json;',
+              Accept: '*/*',
+              'Access-Control-Allow-Origin': '*',
+              sign: btoa(signed),
+            }),
+          }
+        );
+      })
+    );
   }
 
   verifySessionID(deviceID: string, sessionID: string) {
@@ -301,7 +353,7 @@ export class AioService {
     data.lastRespCode = lastRespCode == '' ? '00' : lastRespCode;
     data.lastRespDescription =
       lastRespDescription == '' ? 'Success' : lastRespDescription;
-    data.lastChildStep = lastChildStep;
+    data.lastChildStep = lastChildStep ? lastChildStep : data.stepName;
 
     let req = this.newRequest(data);
 
@@ -312,11 +364,14 @@ export class AioService {
           console.log(res);
           if (res) {
             if (res.respCode != '00') {
+              this.isProcessing = false;
               this.alert(`Có lỗi xảy ra: updateLogStep`);
             } else {
+              this.isProcessing = false;
               if (isNext) {
-                this.isProcessing = false;
                 this.navigate();
+              } else {
+                this.release();
               }
             }
           }

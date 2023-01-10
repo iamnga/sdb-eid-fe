@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AddressData, AddressInfo } from 'src/app/models/aio';
-import { AioService } from 'src/app/services/aio.service';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-contact-address',
@@ -31,8 +31,7 @@ export class ContactAddressComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ContactAddressComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AddressData[],
-    private aioSvc: AioService,
-    private cdref: ChangeDetectorRef
+    private aioSvc: AioService
   ) {}
 
   ngOnInit() {

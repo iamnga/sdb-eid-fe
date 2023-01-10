@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ServiceStep } from '../models/enum';
-import { AioService } from '../services/aio.service';
+import { AioService } from '../services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-all-in-one',

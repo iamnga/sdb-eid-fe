@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddressData, AddressInfo, Occupations } from 'src/app/models/aio';
 import { ServiceStep } from 'src/app/models/enum';
-import { AioService } from 'src/app/services/aio.service';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 import { environment } from 'src/environments/environment';
 import { ContactAddressComponent } from '../dialog/contact-address/contact-address.component';
 import { InputEmailComponent } from '../dialog/input-email/input-email.component';

@@ -7,9 +7,9 @@ import {
 } from '@angular/core';
 import * as faceapi from 'face-api.js';
 import { ServiceStep } from 'src/app/models/enum';
-import { AioService } from 'src/app/services/aio.service';
 import { Subscription } from 'rxjs';
 import { AnimationOptions } from 'ngx-lottie';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-capture-face',

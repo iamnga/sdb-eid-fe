@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { ServiceStep } from 'src/app/models/enum';
 import { FingerResponse } from 'src/app/models/mk';
-import { AioService } from 'src/app/services/aio.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { AnimationItem } from 'lottie-web';
 import { AnimationOptions } from 'ngx-lottie';
@@ -10,6 +8,7 @@ import { Alert, Template } from 'src/app/models/alert';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertComponent } from '../dialog/alert/alert.component';
 import { CustomerInfo } from 'src/app/models/aio';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-input-finger',

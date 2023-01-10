@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { ServiceStep } from 'src/app/models/enum';
-import { AioService } from 'src/app/services/aio.service';
 import { AnimationOptions } from 'ngx-lottie';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-collect-card-id',

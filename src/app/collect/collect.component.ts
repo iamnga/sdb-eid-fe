@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
+import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { AioService } from '../services/aio.service';
+import { AioService } from '../services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-collect',
@@ -10,21 +10,17 @@ import { AioService } from '../services/aio.service';
 export class CollectComponent implements OnInit {
   deviceID = '';
   sessionID = '';
-  constructor(
-    private sanitizer: DomSanitizer,
-    private actRoute: ActivatedRoute,
-    private aioSvc: AioService
-  ) {
+  constructor(private actRoute: ActivatedRoute, private aioSvc: AioService) {
     this.deviceID = this.actRoute.snapshot.params['deviceid'];
     this.sessionID = this.actRoute.snapshot.params['sessionid'];
   }
 
   ngOnInit() {
     this.aioSvc.verifySessionID(this.deviceID, this.sessionID).subscribe(
-      (res) => {
+      (res: any) => {
         console.log(res);
       },
-      (err) => {}
+      (err: any) => {}
     );
   }
   // image: string | SafeUrl;

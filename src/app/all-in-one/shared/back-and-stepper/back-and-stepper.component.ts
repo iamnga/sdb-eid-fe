@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Service } from 'src/app/models/enum';
-import { AioService } from 'src/app/services/aio.service';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-aio-back-and-stepper',

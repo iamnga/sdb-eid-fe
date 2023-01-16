@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://cardtest.sacombank.com.vn:9443/digizone/',
+  apiUrl: 'http://istio-ingressgateway-istio-system.apps.ocptest.sacombank.local/digizone/',
+  uploadCardIdUrl: 'http://localhost:4200/',
   publicKey: `-----BEGIN PUBLIC KEY-----
   MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuKwQibnz77qMV1EvF5Or
   gaT0gPtaag3RnImqkh0SLxBVKdplNk+qG+pAT/NJp0CSvmudgHTSbD7q7SHeD4ll

@@ -184,9 +184,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
 
   async startCapture() {
     await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri('assets/models'),
-      faceapi.nets.faceLandmark68Net.loadFromUri('assets/models'),
-    ]).then(() => {
+      faceapi.nets.tinyFaceDetector.loadFromUri('assets/models')]).then(() => {
       this.prepareFaceDetector();
     });
   }

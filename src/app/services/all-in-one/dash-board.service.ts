@@ -13,7 +13,7 @@ export class DashBoardService {
       serviceCode: Service[this.aioSvc.currentSerice],
     });
 
-    console.log(req);
+    console.log(req.toString());
 
     return this.aioSvc.postAsync('get-sessionId', req);
   }

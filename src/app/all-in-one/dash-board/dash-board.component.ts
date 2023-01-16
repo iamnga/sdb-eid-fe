@@ -21,12 +21,7 @@ export class DashBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.aioSvc.testRSA().subscribe(
-    //   (res: any) => {
-    //     console.log(res);
-    //   },
-    //   (err) => {}
-    // );
+    // this.aioSvc.testHS()
   }
 
   startService(serviceCd: any) {
@@ -40,31 +35,23 @@ export class DashBoardComponent implements OnInit {
             this.aioSvc.isProcessing = false;
             this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
 
-            this.aioSvc.updateLogStep(
-              '',
-              result.respCode,
-              result.respDescription,
-              'getSessionId'
-            );
           } else {
             this.aioSvc.sessionID = result.data.sessionId;
             if (!environment.production) {
-              this.aioSvc.fakeData();
+              // this.aioSvc.fakeData();
+              this.aioSvc.next();
             } else {
               this.aioSvc.next();
             }
           }
         } else {
           this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
-          this.aioSvc.updateLogStep('', '', 'notResult', 'getSessionId');
           this.aioSvc.isProcessing = false;
         }
       },
       (err: any) => {
         this.aioSvc.isProcessing = false;
         this.aioSvc.alert(`Có lỗi xảy ra`);
-
-        this.aioSvc.updateLogStep('', '', `HttpError`, 'getSessionId');
       }
     );
   }

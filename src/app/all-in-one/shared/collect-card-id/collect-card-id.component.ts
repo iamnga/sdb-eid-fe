@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { ServiceStep } from 'src/app/models/enum';
 import { AnimationOptions } from 'ngx-lottie';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-collect-card-id',
@@ -44,8 +45,8 @@ export class CollectCardIdComponent implements OnInit, OnDestroy {
 
   genQR() {
     this.qrValue =
-      this.baseUrl +
-      'aio/shared/mobile-capture-card-id/' +
+      environment.uploadCardIdUrl +
+      'upload/' +
       this.aioSvc.deviceID +
       '/' +
       this.aioSvc.sessionID;

@@ -51,7 +51,6 @@ import { InputMobileNumberComponent } from './all-in-one/shared/dialog/input-mob
 import { RecheckInfoComponent } from './all-in-one/update-card-id/recheck-info/recheck-info.component';
 import { ProcessingComponent } from './all-in-one/shared/processing/processing.component';
 import { UpdateSuccessComponent } from './all-in-one/update-card-id/update-success/update-success.component';
-import { AioService } from './services/all-in-one/aio.service';
 
 export function playerFactory() {
   return player;

@@ -175,18 +175,11 @@ export class AccountAndAlertComponent implements OnInit {
             }
           }
         } else {
-          this.aioSvc.updateLogStep(
-            '',
-            res.respCode,
-            res.respDescription,
-            'checkAccount'
-          );
           this.aioSvc.alert(`Có lỗi xảy ra checkAccount`);
         }
       },
       (err) => {
         this.aioSvc.isProcessing = false;
-        this.aioSvc.updateLogStep('', '01', 'HttpError', 'checkAccount');
         this.aioSvc.alert(`Có lỗi xảy ra checkAccount`);
         console.log(err);
       }

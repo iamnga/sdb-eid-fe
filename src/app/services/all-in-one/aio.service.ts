@@ -26,8 +26,8 @@ import { AlertComponent } from '../../all-in-one/shared/dialog/alert/alert.compo
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { FingerResponse } from '../../models/mk';
-import Utils from '../../all-in-one/shared/utils/utils';
-import { mergeMap, flatMap, map } from 'rxjs/operators';
+import { CryptoUtils } from 'src/app/all-in-one/shared/utils/cryptoUtils';
+import * as jose from 'node-jose';
 
 @Injectable({
   providedIn: 'root',
@@ -53,9 +53,9 @@ export class AioService {
   authenInfo: AuthenInfo[] = [];
 
   headerDict = {
-    'Content-Type': 'application/json;ngann',
+    'Content-Type': 'application/json;',
     Accept: '*/*',
-    'Access-Control-Allow-Origin': '*',
+
   };
 
   constructor(
@@ -96,9 +96,13 @@ export class AioService {
 
   getTestCase() {
     return this.http.get(
-      'https://script.googleusercontent.com/macros/echo?user_content_key=51ggE-tGOfKm5pHh-TI9ya8gF0L7FZtI_78goLzKEOb7RSEpFmAFtCP1w6EGFUbggpGcPXMmXOerPw68OpBR01KlJ-PMbKNim5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnLcmh-ftdXUoLC-snEeYhvYipzZ81i4aAU7lEl4TR6BinQ38WpmQm1TXteMJsW-0eIZp7UDGMETJPFCn-R5LuM_0bsUVe31J1A&lib=Ms7HLW8aIvZno15AlAhQeXu7_LOrhYMhx',
+      'http://script.googleusercontent.com/macros/echo?user_content_key=51ggE-tGOfKm5pHh-TI9ya8gF0L7FZtI_78goLzKEOb7RSEpFmAFtCP1w6EGFUbggpGcPXMmXOerPw68OpBR01KlJ-PMbKNim5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnLcmh-ftdXUoLC-snEeYhvYipzZ81i4aAU7lEl4TR6BinQ38WpmQm1TXteMJsW-0eIZp7UDGMETJPFCn-R5LuM_0bsUVe31J1A&lib=Ms7HLW8aIvZno15AlAhQeXu7_LOrhYMhx',
       {
-        headers: new HttpHeaders(this.headerDict),
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json;',
+          Accept: '*/*',
+          'Access-Control-Allow-Origin': '*',
+        })
       }
     );
   }
@@ -113,48 +117,127 @@ export class AioService {
     });
   }
 
-  testRSA(): Observable<any> {
-    let req = this.newRequest({ serviceCode: Service[this.currentSerice] });
-    console.log(req);
-
-    req = `{"refNumber":"f74ec3ae-a3a6-264c-7e06-6c0cf21a9803","refDateTime":"2022-12-30T09:19:11.237","deviceID":"00000002","sessionID":"","data":{"serviceCode":"None"}}`;
-    Utils.sign2(req);
-    console.log('sign');
-    console.log(Utils.sign3(req));
-    console.log('payload');
-    console.log(Utils.encrypt(req));
-
-    // return this.http.post(
-    //   this.apiUrl + 'test-rsa',
-    //   Utils.encrypt(req).toString(),
-    //   {
-    //     headers: new HttpHeaders({
-    //       'Content-Type': 'application/json;',
-    //       Accept: '*/*',
-    //       'Access-Control-Allow-Origin': '*',
-    //       sign: Utils.sign3(req).toString(),
-    //     }),
-    //   }
-    // );
-
-    return Utils.sign(req).pipe(
-      mergeMap((signed) => {
-        console.log(signed);
-
-        return this.http.post(
-          this.apiUrl + 'test-rsa',
-          btoa(Utils.encrypt(req).toString()),
-          {
-            headers: new HttpHeaders({
-              'Content-Type': 'application/json;',
-              Accept: '*/*',
-              'Access-Control-Allow-Origin': '*',
-              sign: btoa(signed),
-            }),
-          }
-        );
+  testHS() {
+    let shared = CryptoUtils.randomKeyString(32);
+    let sharedSecretBase64 = CryptoUtils.toBase64(shared);
+    let jwk: any;
+    let encryptedContent: any;
+    let rsaKey: any;
+    let keyFromServer: any;
+    console.log(
+      JSON.stringify({
+        kty: 'oct',
+        alg: 'dir',
+        kid: shared,
+        k: sharedSecretBase64,
+        length: 256,
       })
     );
+
+    jose.JWK.asKey(
+      JSON.stringify({
+        kty: 'oct',
+        alg: 'dir',
+        kid: shared,
+        k: sharedSecretBase64,
+        length: 256,
+      }),
+      'json'
+    ).then((result) => {
+      jwk = result;
+      console.log('jwk', jwk);
+
+      jose.JWK.asKey(environment.publicKey, 'pem').then((result) => {
+        rsaKey = result;
+        console.log('rsaKey', rsaKey);
+
+        jose.JWE.createEncrypt({ format: 'compact' }, rsaKey)
+          .update(jose.util.base64url.decode(sharedSecretBase64))
+          .final()
+          .then((result: any) => {
+            encryptedContent = result;
+            console.log('encryptedContent', encryptedContent);
+            this.http
+              .post(
+                this.apiUrl + 'handshake',
+                JSON.stringify({ key: encryptedContent }),
+                {
+                  headers: new HttpHeaders({
+                    'Content-Type': 'application/json;',
+                    Accept: '*/*',
+                    'Access-Control-Allow-Origin': '*',
+                  }),
+                }
+              )
+              .subscribe((res: any) => {
+                console.log('hsResp', res);
+                keyFromServer = res.key;
+
+                jose.JWE.createDecrypt(jwk)
+                  .decrypt(res.challenge)
+                  .then((res) => {
+                    console.log('decrypt challenge', res.plaintext.toString());
+                    if (res.plaintext.toString() == shared) {
+
+                      jose.JWK.asKey(
+                        JSON.stringify({
+                          kty: 'oct',
+                          alg: 'A256GCM',
+                          kid: shared,
+                          use: 'enc',
+                          k: sharedSecretBase64,
+                          length: 256,
+                        }),
+                        'json'
+                      ).then((jwk2) => {
+                        let req = this.newRequest({
+                          serviceCode: Service[this.currentSerice],
+                        });
+                        let reqBase64 = CryptoUtils.toBase64(req);
+                        console.log('jwk2', jwk2);
+                        console.log('reqBase64', reqBase64);
+
+                        jose.JWE.createEncrypt({ format: 'compact' }, jwk2)
+                          .update(jose.util.base64url.decode(reqBase64))
+                          .final()
+                          .then((dataEnc: any) => {
+                            console.log('dataEnc', dataEnc);
+
+                            let deviceIdBase64 = CryptoUtils.toBase64(
+                              this.deviceID
+                            );
+                            jose.JWE.createEncrypt(
+                              { format: 'compact' },
+                              rsaKey
+                            )
+                              .update(
+                                jose.util.base64url.decode(deviceIdBase64)
+                              )
+                              .final()
+                              .then((deviceIdEnc) => {
+                                console.log('deviceIdEnc', deviceIdEnc);
+                                this.http
+                                  .post(this.apiUrl + 'test-handshake',  dataEnc , {
+                                    headers: new HttpHeaders({
+                                      'Content-Type': 'application/json;',
+                                      Accept: '*/*',
+                                      'Access-Control-Allow-Origin': '*',
+                                      'x-hs-page-id': keyFromServer,
+                                      'co-prof-tranx': deviceIdEnc
+                                    }),
+                                  })
+                                  .subscribe((res) => {
+                                    console.log(res);
+                                  });
+                              });
+                          });
+                      });
+                    }
+                  });
+              });
+          });
+      });
+    });
   }
 
   verifySessionID(deviceID: string, sessionID: string) {
@@ -391,7 +474,8 @@ export class AioService {
             this.router.navigate(['/aio/shared/capture-guide']);
           } else {
             // this.router.navigate(['/aio/shared/verify-customer-info']);
-            this.router.navigate(['/aio/shared/capture-guide']);
+            // this.router.navigate(['/aio/shared/capture-guide']);
+            this.router.navigate(['/aio/shared/collect-card-id']);
           }
           break;
         }
@@ -408,7 +492,6 @@ export class AioService {
           break;
         }
         case ServiceStep.CollectCardId: {
-          // this.router.navigate(['/aio/shared/input-mobile-number']);
           this.router.navigate(['/aio/shared/verify-customer-info']);
           break;
         }
@@ -515,7 +598,8 @@ export class AioService {
   }
 
   next() {
-    this.updateLogStep();
+    // this.updateLogStep();
+    this.navigate()
   }
 
   fakeData() {

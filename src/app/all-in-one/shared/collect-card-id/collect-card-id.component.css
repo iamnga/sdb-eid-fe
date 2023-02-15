@@ -33,3 +33,14 @@
   border-radius: 5px;
   color: white;
 }
+
+.id-img{
+  height: 400px;
+  text-align: center;
+}
+
+.id-img img{
+  max-height: 100%;
+  max-width: 100%;
+}
+

@@ -38,6 +38,7 @@ export enum AlertType {
 }
 
 export enum AuthType {
+  Unknow = '-1',
   None = '0',
   SMSOTP = '1',
   DeviceToken = '2',

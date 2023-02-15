@@ -28,6 +28,9 @@ import { Observable } from 'rxjs';
 import { FingerResponse } from '../../models/mk';
 import { CryptoUtils } from 'src/app/all-in-one/shared/utils/cryptoUtils';
 import * as jose from 'node-jose';
+import TestCase from '../../../assets/testCase.json';
+import { AuthType } from '../../models/enum';
+import Utils from 'src/app/all-in-one/shared/utils/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -51,11 +54,10 @@ export class AioService {
   frontCardId = '';
   backCardId = '';
   authenInfo: AuthenInfo[] = [];
-
+  testCaseURL = 'assets/testCase.json';
   headerDict = {
     'Content-Type': 'application/json;',
     Accept: '*/*',
-
   };
 
   constructor(
@@ -96,14 +98,7 @@ export class AioService {
 
   getTestCase() {
     return this.http.get(
-      'http://script.googleusercontent.com/macros/echo?user_content_key=51ggE-tGOfKm5pHh-TI9ya8gF0L7FZtI_78goLzKEOb7RSEpFmAFtCP1w6EGFUbggpGcPXMmXOerPw68OpBR01KlJ-PMbKNim5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnLcmh-ftdXUoLC-snEeYhvYipzZ81i4aAU7lEl4TR6BinQ38WpmQm1TXteMJsW-0eIZp7UDGMETJPFCn-R5LuM_0bsUVe31J1A&lib=Ms7HLW8aIvZno15AlAhQeXu7_LOrhYMhx',
-      {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json;',
-          Accept: '*/*',
-          'Access-Control-Allow-Origin': '*',
-        })
-      }
+      'https://script.googleusercontent.com/macros/echo?user_content_key=51ggE-tGOfKm5pHh-TI9ya8gF0L7FZtI_78goLzKEOb7RSEpFmAFtCP1w6EGFUbggpGcPXMmXOerPw68OpBR01KlJ-PMbKNim5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnLcmh-ftdXUoLC-snEeYhvYipzZ81i4aAU7lEl4TR6BinQ38WpmQm1TXteMJsW-0eIZp7UDGMETJPFCn-R5LuM_0bsUVe31J1A&lib=Ms7HLW8aIvZno15AlAhQeXu7_LOrhYMhx'
     );
   }
 
@@ -178,7 +173,6 @@ export class AioService {
                   .then((res) => {
                     console.log('decrypt challenge', res.plaintext.toString());
                     if (res.plaintext.toString() == shared) {
-
                       jose.JWK.asKey(
                         JSON.stringify({
                           kty: 'oct',
@@ -217,15 +211,19 @@ export class AioService {
                               .then((deviceIdEnc) => {
                                 console.log('deviceIdEnc', deviceIdEnc);
                                 this.http
-                                  .post(this.apiUrl + 'test-handshake',  dataEnc , {
-                                    headers: new HttpHeaders({
-                                      'Content-Type': 'application/json;',
-                                      Accept: '*/*',
-                                      'Access-Control-Allow-Origin': '*',
-                                      'x-hs-page-id': keyFromServer,
-                                      'co-prof-tranx': deviceIdEnc
-                                    }),
-                                  })
+                                  .post(
+                                    this.apiUrl + 'test-handshake',
+                                    dataEnc,
+                                    {
+                                      headers: new HttpHeaders({
+                                        'Content-Type': 'application/json;',
+                                        Accept: '*/*',
+                                        'Access-Control-Allow-Origin': '*',
+                                        'x-hs-page-id': keyFromServer,
+                                        'co-prof-tranx': deviceIdEnc,
+                                      }),
+                                    }
+                                  )
                                   .subscribe((res) => {
                                     console.log(res);
                                   });
@@ -406,7 +404,7 @@ export class AioService {
     });
   }
 
-  alert(content: string) {
+  alert(content: string, isRelease: boolean = true) {
     let data = new Alert();
 
     data.template = Template.Simple;
@@ -419,7 +417,7 @@ export class AioService {
     });
 
     dialogRef.afterClosed().subscribe((result: Alert) => {
-      this.release();
+      if (isRelease) this.release();
     });
   }
 
@@ -474,8 +472,10 @@ export class AioService {
             this.router.navigate(['/aio/shared/capture-guide']);
           } else {
             // this.router.navigate(['/aio/shared/verify-customer-info']);
-            // this.router.navigate(['/aio/shared/capture-guide']);
-            this.router.navigate(['/aio/shared/collect-card-id']);
+            //this.router.navigate(['/aio/shared/capture-guide']);
+            //this.router.navigate(['/aio/shared/collect-card-id']);
+            this.router.navigate(['/aio/on-boarding/end']);
+            //this.router.navigate(['/aio/shared/fill-info']);
           }
           break;
         }
@@ -530,7 +530,8 @@ export class AioService {
       switch (this.currentStep) {
         case ServiceStep.DashBoard: {
           if (environment.production) {
-            this.router.navigate(['/aio/shared/capture-guide']);
+            //this.router.navigate(['/aio/shared/capture-guide']);
+            this.router.navigate(['/aio/update-card-id/recheck-info']);
           } else {
             //this.router.navigate(['/aio/shared/verify-otp']);
             this.router.navigate(['/aio/update-card-id/recheck-info']);
@@ -599,38 +600,84 @@ export class AioService {
 
   next() {
     // this.updateLogStep();
-    this.navigate()
+    this.navigate();
   }
 
   fakeData() {
-    this.getTestCase().subscribe((res: any) => {
-      console.log(res);
-      let data = res.content[1];
-      console.log('fake data', data);
-      let customerInfo = new CustomerInfo();
-      customerInfo.fullName = data[1];
-      customerInfo.customerID = data[2];
-      customerInfo.customerIDOld = data[3];
-      customerInfo.gender = data[4];
-      customerInfo.dob = data[5];
-      customerInfo.mobileNo = data[6];
-      customerInfo.nationality = data[7];
-      customerInfo.towncountry = data[8];
-      customerInfo.expireDate = data[9];
-      customerInfo.issueDate = data[10];
-      customerInfo.address = data[11];
+    this.http
+      .get(this.testCaseURL + '?' + Utils.randomId(10))
+      .subscribe((testCase: any) => {
+        console.log(testCase);
+        let data = testCase[0];
+        console.log('fake data', data);
+        let customerInfo = new CustomerInfo();
+        customerInfo.fullName = data.fullName;
+        customerInfo.customerID = data.customerID;
+        customerInfo.customerIDOld = data.customerIDOld;
+        customerInfo.gender = data.gender;
+        customerInfo.dob = data.dob;
+        customerInfo.mobileNo = data.mobileNo;
+        customerInfo.nationality = data.nationality;
+        customerInfo.towncountry = data.towncountry;
+        customerInfo.expireDate = data.expireDate;
+        customerInfo.issueDate = data.issueDate;
+        customerInfo.address = data.address;
 
-      let auths = data[12].split(',');
+        let auths = data.authInfo.split(',');
 
-      for (let i = 0; i < auths.length; i++) {
-        let auth = new AuthenInfo();
-        auth.authType = auths[i];
-        auth.authDesVN = '';
-        this.authenInfo.push(auth);
+        for (let i = 0; i < auths.length; i++) {
+          let auth = new AuthenInfo();
+          auth.authType = this.getAuthType(auths[i]);
+          auth.authDesVN = '';
+          this.authenInfo.push(auth);
+        }
+
+        this.customerInfo = customerInfo;
+      });
+  }
+
+  getAuthType(value: any) {
+    let result;
+
+    switch (value) {
+      case '1': {
+        result = AuthType.SMSOTP;
+        break;
       }
+      case '2': {
+        result = AuthType.DeviceToken;
+        break;
+      }
+      case '3': {
+        result = AuthType.mCodeOTP;
+        break;
+      }
+      case '4': {
+        result = AuthType.mConnect;
+        break;
+      }
+      case '5': {
+        result = AuthType.SMSTTT;
+        break;
+      }
+      case '6': {
+        result = AuthType.AdvToken;
+        break;
+      }
+      case '8': {
+        result = AuthType.SmartOTP;
+        break;
+      }
+      case '9': {
+        result = AuthType.SmartOTPCode;
+        break;
+      }
+      default: {
+        result = AuthType.None;
+        break;
+      }
+    }
 
-      this.customerInfo = customerInfo;
-      this.next();
-    });
+    return result;
   }
 }

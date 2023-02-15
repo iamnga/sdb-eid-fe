@@ -12,6 +12,11 @@
         Quý khách vui lòng kiểm tra lại ảnh đã chụp
       </h3>
     </ng-container>
+    <ng-container *ngIf="isOutSide">
+      <h5 class="animate__animated animate__fadeIn font-weight-light mt-4">
+        Chưa xác định được khuôn mặt của Quý khách
+      </h5>
+    </ng-container>
   </div>
   <div class="text-center capture-box">
     <div class="video-container text-center" [ngClass]="{ 'o-0': captured }">
@@ -24,7 +29,7 @@
       [ngClass]="{ 'o-1': !isReadyDetect, 'o-05': isReadyDetect }"
     >
       <div class="countdown-text" *ngIf="!isReadyDetect">
-        <ng-container> <i class="fas fa-spinner fa-pulse"></i> </ng-container>
+        <ng-container> <i class="fa-solid fa-spinner fa-spin"></i> </ng-container>
       </div>
       <div class="countdown-text">
         <ng-container *ngIf="!isLoadingCountDown">

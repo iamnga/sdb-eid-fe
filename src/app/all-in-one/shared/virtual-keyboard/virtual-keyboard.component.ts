@@ -19,6 +19,7 @@ export class VirtualKeyboardComponent implements OnInit {
   @Output() onKeyPressEvent = new EventEmitter<string>();
   @Input() title = '';
   @Input() value = '';
+  @Input() type = 'input';
   keyboard: Keyboard;
   constructor() {}
 

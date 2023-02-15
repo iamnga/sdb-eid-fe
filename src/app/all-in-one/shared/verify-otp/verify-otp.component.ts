@@ -30,6 +30,8 @@ export class VerifyOtpComponent implements OnInit {
   faceLoad: AnimationOptions = {
     path: 'assets/all-in-one/shared/img/notifications.json',
   };
+  countDown = 5;
+  countDownInterval: any;
 
   constructor(public aioSvc: AioService) {
     aioSvc.currentStep = ServiceStep.VerifyOtp;
@@ -41,6 +43,26 @@ export class VerifyOtpComponent implements OnInit {
     this.currentService = this.aioSvc.currentSerice;
   }
   ngOnInit(): void {
+    this.countDownOTP();
+    if (this.aioSvc.currentSerice == Service.OnBoarding) {
+      this.requestOtp();
+    } else if (this.aioSvc.currentSerice == Service.UpdateCardId) {
+      this.getAuthMethod();
+    }
+
+    this.handleOTP();
+  }
+
+  countDownOTP() {
+    this.countDownInterval = setInterval(() => {
+      this.countDown--;
+      if (this.countDown == 0) {
+        clearInterval(this.countDownInterval);
+      }
+    }, 1000);
+  }
+
+  handleOTP() {
     if (this.aioSvc.currentSerice == Service.OnBoarding) {
       this.requestOtp();
     } else if (this.aioSvc.currentSerice == Service.UpdateCardId) {
@@ -76,7 +98,7 @@ export class VerifyOtpComponent implements OnInit {
 
         if (res.respCode) {
           if (res.respCode != '00') {
-            this.aioSvc.alert(`Có lỗi xảy ra getAuthMethod`);
+            this.aioSvc.alert(`Lỗi hệ thống`);
           } else {
             if (res.data.authInfo) {
               this.authenInfo = environment.production
@@ -92,11 +114,11 @@ export class VerifyOtpComponent implements OnInit {
             } else this.aioSvc.alert(`Không tồn tại phương thức xác thực`);
           }
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra getAuthMethod`);
+          this.aioSvc.alert(`Lỗi hệ thống`);
         }
       },
       (err: any) => {
-        this.aioSvc.alert(`Có lỗi xảy ra getAuthMethod`);
+        this.aioSvc.alert(`Lỗi hệ thống`);
         this.aioSvc.isProcessing = false;
       }
     );
@@ -113,7 +135,11 @@ export class VerifyOtpComponent implements OnInit {
       let data = new RequestOtpRequestData();
       data.customerID = this.aioSvc.customerInfo.customerID;
       data.cifNo = '1';
-      data.authType = this.currentAuthType;
+      data.authType =
+        this.currentAuthType == AuthType.None ||
+        this.currentAuthType == AuthType.Unknow
+          ? AuthType.SMSOTP
+          : this.currentAuthType;
       data.customerType = '1';
       data.mobileNo = this.aioSvc.customerInfo.mobileNo;
       data.channel = 'DigiZone';
@@ -127,14 +153,14 @@ export class VerifyOtpComponent implements OnInit {
             this.step = 2;
 
             if (res.respCode != '00') {
-              this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
+              this.aioSvc.alert(`Lỗi hệ thống`);
             }
           } else {
-            this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
+            this.aioSvc.alert(`Lỗi hệ thống`);
           }
         },
         (err) => {
-          this.aioSvc.alert(`Có lỗi xảy ra requestOtp`);
+          this.aioSvc.alert(`Lỗi hệ thống`);
           this.aioSvc.isProcessing = false;
         }
       );
@@ -157,16 +183,33 @@ export class VerifyOtpComponent implements OnInit {
 
         if (res.respCode) {
           if (res.respCode != '00') {
-            this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
+            if (res.respCode === '55') {
+              this.aioSvc.alert(
+                `OTP không hợp lệ, Quý khách vui lòng thử lại`,
+                false
+              );
+            }
+            if (res.respCode === '75') {
+              this.aioSvc.alert(`Đã vượt quá số lần nhập OTP cho phép`);
+            }
+            if (res.respCode === '36') {
+              this.aioSvc.alert(`Phương thức xác thực bị hạn chế`);
+            }
+            if (res.respCode === '68') {
+              this.aioSvc.alert(`Quá thời gian nhập OTP`);
+            }
+            if (res.respCode === '06') {
+              this.aioSvc.alert(`Lỗi hệ thống`);
+            }
           } else {
             this.aioSvc.next();
           }
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
+          this.aioSvc.alert(`Lỗi hệ thống`);
         }
       },
       (err) => {
-        this.aioSvc.alert(`Có lỗi xảy ra verifyOtp`);
+        this.aioSvc.alert(`Lỗi hệ thống`);
         this.aioSvc.isProcessing = false;
       }
     );

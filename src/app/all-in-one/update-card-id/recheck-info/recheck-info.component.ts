@@ -28,7 +28,10 @@ export class RecheckInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.checkCustomerByIdNo(this.aioSvc.customerInfo.customerIDOld);
+    this.aioSvc.fakeData();
+    setTimeout(() => {
+      this.checkCustomerByIdNo(this.aioSvc.customerInfo.customerIDOld);
+    }, 1000);
   }
 
   checkCustomerByIdNo(customerId: string) {

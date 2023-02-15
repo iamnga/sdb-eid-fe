@@ -25,24 +25,28 @@
         <h3 class="mb-3 font-weight-bold">Kiểm tra thông tin</h3>
         <h5>Quý khách vui lòng kiểm tra lại ảnh CCCD</h5>
       </div>
-      <div class="row py-5">
-        <div class="col">
+      <div class="row pb-5 pt-4">
+        <div class="col-6">
           <div class="text-right">
-            <div class="w-75 float-right">
+            <div>
               <div class="py-3 text-center">
                 <span>Mặt trước</span>
               </div>
-              <img [src]="aioSvc.frontCardId" alt="" class="img img-fluid" />
+              <div class="id-img">
+                <img [src]="aioSvc.frontCardId" alt="" />
+              </div>
             </div>
           </div>
         </div>
-        <div class="col">
+        <div class="col-6">
           <div>
-            <div class="w-75">
+            <div>
               <div class="py-3 text-center">
                 <span>Mặt sau</span>
               </div>
-              <img [src]="aioSvc.backCardId" alt="" class="img img-fluid" />
+              <div class="id-img">
+                <img [src]="aioSvc.backCardId" alt="" />
+              </div>
             </div>
           </div>
         </div>

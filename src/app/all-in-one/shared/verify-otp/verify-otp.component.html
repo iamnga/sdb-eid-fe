@@ -1,6 +1,5 @@
 <app-aio-header></app-aio-header>
 <app-aio-back-and-stepper [currentStep]="4"></app-aio-back-and-stepper>
-
 <section
   *ngIf="
     currentService == service.UpdateCardId &&
@@ -168,7 +167,10 @@
         >
           Xác nhận
         </button>
-        <div class="pt-4 text-sacom">Gửi lại mã (60s)</div>
+        <div class="pt-4 text-sacom" *ngIf="countDown > 0">
+          Gửi lại mã ({{ countDown }}s)
+        </div>
+        <div class="pt-4 text-sacom" *ngIf="countDown == 0">Gửi lại mã</div>
       </div>
     </div>
   </ng-container>

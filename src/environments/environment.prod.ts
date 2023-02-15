@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://istio-ingressgateway-istio-system.apps.ocptest.sacombank.local/digizone/',
+  apiUrl: 'https://172.20.18.5/digizone/',
   uploadCardIdUrl: 'https://beta-service.sacombank.com/digizoneqr/',
   publicKey: `-----BEGIN PUBLIC KEY-----
   MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuKwQibnz77qMV1EvF5Or

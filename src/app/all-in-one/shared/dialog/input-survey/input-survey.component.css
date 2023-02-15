@@ -1,0 +1,12 @@
+.reason-item{
+  display: inline-block;
+  background-color: aliceblue;
+  border-radius: 4px;
+  border: 2px solid aliceblue;
+}
+
+
+
+.selected {
+  border: 2px solid #2a81d0;
+}

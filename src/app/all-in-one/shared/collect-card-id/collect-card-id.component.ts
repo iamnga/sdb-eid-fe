@@ -25,6 +25,12 @@ export class CollectCardIdComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.genQR();
+    //  this.aioSvc.frontCardId = "assets/back.png"
+    //  this.aioSvc.backCardId = "assets/back.png"
+    this.loadImage();
+  }
+
+  loadImage() {
     this.loadImageInterval = setInterval(() => {
       this.aioSvc.loadImage().subscribe(
         (res: any) => {
@@ -94,15 +100,16 @@ export class CollectCardIdComponent implements OnInit, OnDestroy {
                   }
                   this.aioSvc.isProcessing = false;
                 } else {
-                  this.aioSvc.alert(`Xác thực thất bại`);
+                  this.aioSvc.alert(`Xác thực thất bại, Quý khách vui lòng thử lại`, false);
                   this.aioSvc.isProcessing = false;
                 }
               } else {
-                this.aioSvc.alert(`Có lỗi xảy ra compareFace`);
+                this.aioSvc.alert(`Có lỗi xảy ra, Quý khách vui lòng thử lại`, false);
+                this.aioSvc.isProcessing = false;
               }
             },
             (err) => {
-              this.aioSvc.alert(`Có lỗi xảy ra compareFace`);
+              this.aioSvc.alert(`Có lỗi xảy ra`);
               this.aioSvc.isProcessing = false;
             }
           );
@@ -121,8 +128,22 @@ export class CollectCardIdComponent implements OnInit, OnDestroy {
   }
 
   reUpload() {
-    this.aioSvc.frontCardId = '';
-    this.aioSvc.backCardId = '';
+    this.aioSvc.uploadImage('reUpload', 'clear').subscribe(
+      (res: any) => {
+        this.aioSvc.isProcessing = false;
+        if (res.respCode == '00') {
+          this.aioSvc.frontCardId = '';
+          this.aioSvc.backCardId = '';
+          this.loadImage();
+        } else {
+          this.aioSvc.alert(`Có lỗi xảy ra uploadImage-clear`);
+        }
+      },
+      (err) => {
+        this.aioSvc.alert(`Có lỗi xảy ra uploadImage-clear`);
+        this.aioSvc.isProcessing = false;
+      }
+    );
   }
 
   ngOnDestroy() {

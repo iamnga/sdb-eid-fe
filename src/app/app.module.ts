@@ -51,6 +51,17 @@ import { InputMobileNumberComponent } from './all-in-one/shared/dialog/input-mob
 import { RecheckInfoComponent } from './all-in-one/update-card-id/recheck-info/recheck-info.component';
 import { ProcessingComponent } from './all-in-one/shared/processing/processing.component';
 import { UpdateSuccessComponent } from './all-in-one/update-card-id/update-success/update-success.component';
+import {
+  FontAwesomeModule,
+  FaIconLibrary,
+} from '@fortawesome/angular-fontawesome';
+import {
+  faPhoneSquare
+} from '@fortawesome/free-solid-svg-icons';
+
+import { UserIdleModule } from 'angular-user-idle';
+import { InputSurveyComponent } from './all-in-one/shared/dialog/input-survey/input-survey.component';
+import { SurveyComponent } from './all-in-one/shared/survey/survey.component';
 
 export function playerFactory() {
   return player;
@@ -87,6 +98,8 @@ export function playerFactory() {
     RecheckInfoComponent,
     ProcessingComponent,
     UpdateSuccessComponent,
+    InputSurveyComponent,
+    SurveyComponent
   ],
   imports: [
     SlickCarouselModule,
@@ -107,6 +120,8 @@ export function playerFactory() {
     LottieModule.forRoot({ player: playerFactory }),
     ImageCropperModule,
     ModalModule.forRoot(),
+    FontAwesomeModule,
+    UserIdleModule.forRoot({idle: 1, timeout: 600, ping: 1})
   ],
   providers: [
     WebsocketService,
@@ -117,4 +132,10 @@ export function playerFactory() {
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(library: FaIconLibrary) {
+    library.addIcons(
+      faPhoneSquare
+    );
+  }
+}

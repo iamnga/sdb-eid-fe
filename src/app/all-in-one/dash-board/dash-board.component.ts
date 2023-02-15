@@ -36,9 +36,9 @@ export class DashBoardComponent implements OnInit {
             this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
 
           } else {
+            this.aioSvc.isProcessing = false;
             this.aioSvc.sessionID = result.data.sessionId;
             if (!environment.production) {
-              // this.aioSvc.fakeData();
               this.aioSvc.next();
             } else {
               this.aioSvc.next();

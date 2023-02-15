@@ -39,10 +39,12 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   isLoadingCountDown = true;
   captured = '';
   isReadyDetect = false;
+  isOutSide = false;
 
   subscription: Subscription;
 
   ngOnInit() {
+    this.aioSvc.isProcessing = true;
     this.aioSvc.faceCaptured = '';
     this.startCapture();
   }
@@ -97,7 +99,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
       height: this.HEIGHT,
     };
     faceapi.matchDimensions(this.canvas, this.displaySize);
-
+    this.aioSvc.isProcessing = false;
     this.countdown();
 
     setTimeout(() => {
@@ -122,6 +124,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
             box.height + box.y <= 390 &&
             box.width >= 150
           ) {
+            this.isOutSide = false;
             let canvasFaceBox = await faceapi.extractFaces(this.videoInput, [
               new faceapi.Rect(120, 0, 400, this.HEIGHT),
             ]);
@@ -148,7 +151,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
 
             clearInterval(x);
           } else {
-            // console.log('outside face loader: ', this.detection);
+            this.isOutSide = true;
           }
         }
       }, 100);
@@ -184,7 +187,8 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
 
   async startCapture() {
     await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri('assets/models')]).then(() => {
+      faceapi.nets.tinyFaceDetector.loadFromUri('assets/models'),
+    ]).then(() => {
       this.prepareFaceDetector();
     });
   }

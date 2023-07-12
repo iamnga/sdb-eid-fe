@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as faceapi from 'face-api.js';
-import { ServiceStep } from 'src/app/models/enum';
+import { Service, ServiceStep } from 'src/app/models/enum';
 import { Subscription } from 'rxjs';
 import { AnimationOptions } from 'ngx-lottie';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
@@ -194,7 +194,22 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   }
 
   next() {
-    this.aioSvc.next();
+    if (this.aioSvc.currentSerice === Service.TestMk) {
+      this.aioSvc.isProcessing = true;
+      this.aioSvc.callMkFaceICAO().subscribe(
+        (res) => {
+          this.aioSvc.isProcessing = false;
+          console.log(res);
+        },
+        (err) => {
+          this.aioSvc.isProcessing = false;
+          this.aioSvc.alert('Lỗi hệ thống');
+          console.log(err);
+        }
+      );
+    } else {
+      this.aioSvc.next();
+    }
   }
 
   async getBase64ImageFromUrl(imageUrl: any) {

@@ -27,13 +27,13 @@ export class FillInfoComponent implements OnInit {
 
   ngOnInit(): void {
     if (!environment.production) {
-      this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
+      // this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
       this.aioSvc.customerInfo.mobileNo = '0349' + this.randomId(6);
       this.aioSvc.customerInfo.customerID = this.randomId(12);
     }
     this.findAddressByText();
     //TODO: remove hard
-    this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
+    // this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
   }
 
   likeResidenceAddress() {
@@ -177,7 +177,6 @@ export class FillInfoComponent implements OnInit {
 
   confirm() {
     if (
-      this.aioSvc.customerInfo.email &&
       this.aioSvc.customerInfo.mobileNo &&
       this.aioSvc.customerInfo.jobCode &&
       this.aioSvc.customerInfo.contactAddress

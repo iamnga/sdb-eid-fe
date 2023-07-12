@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ServiceStep } from 'src/app/models/enum';
+import { Service, ServiceStep } from 'src/app/models/enum';
 import { FingerResponse } from 'src/app/models/mk';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { AnimationItem } from 'lottie-web';
@@ -56,16 +56,22 @@ export class InputFingerComponent implements OnInit {
             console.log(
               'Response from websocket: ' + this.fpResponse.verifyResponse
             );
-            //Success do something
+
             this.mappingData();
+
             setTimeout(() => {
               this.aioSvc.next();
             }, 3000);
           } else {
             if (this.aioSvc.fpAttemp == 2) {
-              this.aioSvc.alert(
-                `Quý khách đã xác thực thất bại <br>quá số lần quy định`
-              );
+              //TODO: Clear test
+              if (this.aioSvc.currentSerice === Service.TestMk) {
+                this.aioSvc.next();
+              } else {
+                this.aioSvc.alert(
+                  `Quý khách đã xác thực thất bại <br>quá số lần quy định`
+                );
+              }
             } else {
               this.alert();
             }
@@ -104,24 +110,48 @@ export class InputFingerComponent implements OnInit {
       console.log(result);
     });
   }
+
   mappingData() {
-    let customerInfo = new CustomerInfo();
-    let dg13 = this.fpResponse.icaoResponse.data.dg13;
+    if (this.fpResponse.icaoResponse.data.dg13) {
+      if (
+        this.checkDateOfExpiry(
+          this.fpResponse.icaoResponse.data.dg13.dateOfExpiry
+        )
+      ) {
+        let customerInfo = new CustomerInfo();
+        let dg13 = this.fpResponse.icaoResponse.data.dg13;
 
-    customerInfo.address = dg13.residenceAddress;
-    customerInfo.dob = dg13.dateOfBirth;
-    customerInfo.gender = dg13.gender;
-    customerInfo.customerID = dg13.idCardNo;
-    customerInfo.customerIDOld = dg13.oldIdCardNumber;
-    customerInfo.nationality = dg13.nationality;
-    customerInfo.towncountry = dg13.placeOfOrigin;
-    customerInfo.fullName = dg13.name;
-    customerInfo.expireDate = dg13.dateOfExpiry;
-    customerInfo.issueDate = dg13.dateOfIssuance;
+        customerInfo.address = dg13.residenceAddress;
+        customerInfo.dob = dg13.dateOfBirth;
+        customerInfo.gender = dg13.gender;
+        customerInfo.customerID = dg13.idCardNo;
+        customerInfo.customerIDOld = dg13.oldIdCardNumber;
+        customerInfo.nationality = dg13.nationality;
+        customerInfo.towncountry = dg13.placeOfOrigin;
+        customerInfo.fullName = dg13.name;
+        customerInfo.expireDate = dg13.dateOfExpiry;
+        customerInfo.issueDate = dg13.dateOfIssuance;
 
-    this.aioSvc.customerInfo = customerInfo;
+        this.aioSvc.customerInfo = customerInfo;
 
-    console.log(this.aioSvc.customerInfo);
+        console.log(this.aioSvc.customerInfo);
+
+        //TODO: Check customer info
+      } else {
+        this.aioSvc.alert(`CCCD của Quý khách đã hết hạn`);
+      }
+    } else {
+      this.aioSvc.alert(`Có lỗi xảy ra, không lấy được thông tin từ CCCD`);
+    }
+  }
+
+  checkDateOfExpiry(dateOfExpiry: string) {
+    let arr = dateOfExpiry.split('/');
+    let newDateOfExpiry = arr[1] + '/' + arr[0] + '/' + arr[2];
+    let dateExp = new Date(newDateOfExpiry);
+    let now = new Date();
+    now.setHours(0, 0, 0, 0);
+    return dateExp.getTime() - now.getTime() > 0 ? true : false;
   }
 
   recallMkFingerPrint() {

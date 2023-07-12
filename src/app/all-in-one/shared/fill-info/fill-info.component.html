@@ -80,7 +80,6 @@
         class="btn-next"
         (click)="confirm()"
         [disabled]="
-          !aioSvc.customerInfo.email ||
           !aioSvc.customerInfo.jobCode ||
           !aioSvc.customerInfo.mobileNo ||
           !contactAddress

@@ -2,6 +2,7 @@ export enum Service {
   None,
   OnBoarding,
   UpdateCardId,
+  TestMk
 }
 
 export enum ServiceStep {
@@ -10,6 +11,7 @@ export enum ServiceStep {
   CaptureFace,
   InputFinger,
   CollectCardId,
+  CheckCustomerInfo,
   VerifyCustomerInfo,
   RecheckInfo,
   UpdateCustomerInfo,

@@ -37,3 +37,19 @@
     <button class="btn btn-next mx-2" (click)="action('again')">Thử lại</button>
   </div>
 </ng-container>
+<ng-container *ngIf="data.template == template.UpdateCardId">
+  <div class="text-right">
+    <mat-icon matSuffix (click)="dialogRef.close()">close</mat-icon>
+  </div>
+  <div class="text-center .exist-account">
+    <h3>Thông báo</h3>
+    <div class="py-4">
+      Quý khách đang sử dụng CMND cũ. <br />
+      Vui lòng cập nhật từ CMND sang CCCD để tiếp tục thực hiện giao dịch.
+    </div>
+    <button class="btn btn-back mx-2" (click)="action('back')">Thoát</button>
+    <button class="btn btn-next mx-2" (click)="action('update')">
+      Cập nhật
+    </button>
+  </div>
+</ng-container>

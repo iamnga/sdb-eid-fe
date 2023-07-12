@@ -17,13 +17,13 @@ export class VerifyCustomerInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('verify: ', this.aioSvc.customerInfo);
-    if (environment.production) {
-      this.checkCustomerByIdNo(this.randomId(12));
-    } else {
-      this.face = this.aioSvc.faceCaptured;
-      this.checkCustomerByIdNo('051095009392');
-    }
+    // console.log('verify: ', this.aioSvc.customerInfo);
+    // if (environment.production) {
+    //   this.checkCustomerByIdNo(this.randomId(12));
+    // } else {
+    //   this.face = this.aioSvc.faceCaptured;
+    //   this.checkCustomerByIdNo('051095009392');
+    // }
   }
 
   randomId(length: number) {

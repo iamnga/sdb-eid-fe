@@ -9,4 +9,5 @@ export enum Template {
   Simple,
   ExistAccount,
   FingerPrintFailed,
+  UpdateCardId,
 }

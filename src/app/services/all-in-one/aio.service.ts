@@ -25,7 +25,7 @@ import { Alert, Template } from '../../models/alert';
 import { AlertComponent } from '../../all-in-one/shared/dialog/alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { FingerResponse } from '../../models/mk';
+import { BankData, FingerResponse } from '../../models/mk';
 import { CryptoUtils } from 'src/app/all-in-one/shared/utils/cryptoUtils';
 import * as jose from 'node-jose';
 import TestCase from '../../../assets/testCase.json';
@@ -266,32 +266,24 @@ export class AioService {
 
   loadImage() {
     let req = this.newRequest(null, this.deviceID, this.sessionID, false);
-    return this.http.post(this.apiUrl + 'load-image', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('load-image', req);
   }
 
   compareFace() {
     let req = this.newRequest();
-    return this.http.post(this.apiUrl + 'compareFace', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('compareFace', req);
   }
 
   verifyEmail(email: string) {
     let req = this.newRequest({ email: email });
-    return this.http.post(this.apiUrl + 'verify-email', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('verify-email', req);
   }
 
   checkAccount(accountNo: string) {
     let req = this.newRequest({
       accountNo: accountNo,
     });
-    return this.http.post(this.apiUrl + 'check-account', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('check-account', req);
   }
 
   checkCustomerByIdNo(customerID: string) {
@@ -299,109 +291,80 @@ export class AioService {
       legalId: customerID,
       legalIdType: '1',
     });
-    return this.http.post(this.apiUrl + 'check-customer', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+
+    return this.postAsync('check-customer', req);
   }
 
   checkCustomerSDB(data: CheckCustomerSDBRequestData) {
     let req = this.newRequest(data);
-    return this.http.post(this.apiUrl + 'check-customer-sdb', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('check-customer-sdb', req);
   }
 
   updateCustomer(data: UpdateCustomerRequestData) {
     let req = this.newRequest(data);
-    return this.http.post(this.apiUrl + 'update-customer', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('update-customer', req);
   }
 
   getAuthMethod(data: GetAuthMethodRequestData) {
     let req = this.newRequest(data);
-    return this.http.post(this.apiUrl + 'get-authMethod', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('get-authMethod', req);
   }
 
   requestOtp(data: RequestOtpRequestData) {
     let req = this.newRequest(data);
-    return this.http.post(this.apiUrl + 'request-otp', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('request-otp', req);
   }
 
   verifyOtp(data: VerifyOtpRequestData) {
     let req = this.newRequest(data);
-    return this.http.post(this.apiUrl + 'verify-otp', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('verify-otp', req);
   }
 
   customerEnroll() {
     let req = this.newRequest(this.customerEnrollInfo);
-    return this.http.post(this.apiUrl + 'create-customer', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('create-customer', req);
   }
 
   openAccount(data: OpenAccountRequestData) {
     let req = this.newRequest(data);
-    return this.http.post(this.apiUrl + 'create-account', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('create-account', req);
   }
 
   verifyAuthMethod(data: VerifyOtpRequestData) {
     let req = this.newRequest(data);
-    return this.http.post(this.apiUrl + 'verify-authMethod', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('verify-authMethod', req);
   }
 
   checkCustomer(data: CheckCustomerRequestData) {
     let req = this.newRequest(data);
-    return this.http.post(this.apiUrl + 'check-customer', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('check-customer', req);
   }
 
-  getProvinces(): Observable<any> {
+  getProvinces() {
     let req = this.newRequest();
-    return this.http.post(this.apiUrl + 'provinces', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('provinces', req);
   }
 
-  getDistricts(proId: string): Observable<any> {
+  getDistricts(proId: string) {
     let req = this.newRequest({ provinceID: proId });
-    return this.http.post(this.apiUrl + 'districts', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('districts', req);
   }
 
-  getWards(disId: string): Observable<any> {
+  getWards(disId: string) {
     let req = this.newRequest({ districtID: disId });
-    return this.http.post(this.apiUrl + 'wards', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('wards', req);
   }
 
-  getOccupations(): Observable<any> {
+  getOccupations() {
     let req = this.newRequest();
-    return this.http.post(this.apiUrl + 'occupations', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('occupations', req);
   }
 
   findAddressByText(addressText: string) {
     let req = this.newRequest({
       addressText: addressText,
     });
-    return this.http.post(this.apiUrl + 'find-address-by-text', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+    return this.postAsync('find-address-by-text', req);
   }
 
   alert(content: string, isRelease: boolean = true) {
@@ -471,20 +434,8 @@ export class AioService {
           if (environment.production) {
             this.router.navigate(['/aio/shared/capture-guide']);
           } else {
-            // this.router.navigate(['/aio/shared/verify-customer-info']);
-            //this.router.navigate(['/aio/shared/capture-guide']);
-            //this.router.navigate(['/aio/shared/collect-card-id']);
-            this.router.navigate(['/aio/on-boarding/end']);
-            //this.router.navigate(['/aio/shared/fill-info']);
+            this.router.navigate(['/aio/shared/input-finger']);
           }
-          break;
-        }
-        case ServiceStep.CaptureGuide: {
-          this.router.navigate(['/aio/shared/capture-face']);
-          break;
-        }
-        case ServiceStep.CaptureFace: {
-          this.router.navigate(['/aio/shared/input-finger']);
           break;
         }
         case ServiceStep.InputFinger: {
@@ -492,10 +443,17 @@ export class AioService {
           break;
         }
         case ServiceStep.CollectCardId: {
+          this.router.navigate(['/aio/shared/capture-guide']);
+          break;
+        }
+        case ServiceStep.CaptureGuide: {
+          this.router.navigate(['/aio/shared/capture-face']);
+          break;
+        }
+        case ServiceStep.CaptureFace: {
           this.router.navigate(['/aio/shared/verify-customer-info']);
           break;
         }
-
         case ServiceStep.VerifyCustomerInfo: {
           this.router.navigate(['/aio/shared/fill-info']);
           break;
@@ -578,6 +536,36 @@ export class AioService {
         }
       }
     }
+    if (this.currentSerice == Service.TestMk) {
+      switch (this.currentStep) {
+        case ServiceStep.DashBoard: {
+          this.router.navigate(['/aio/shared/input-finger']);
+          break;
+        }
+        case ServiceStep.InputFinger: {
+          this.router.navigate(['/aio/shared/capture-guide']);
+          break;
+        }
+        case ServiceStep.CaptureGuide: {
+          this.router.navigate(['/aio/shared/capture-face']);
+          break;
+        }
+        default: {
+          this.router.navigate(['/aio']);
+          break;
+        }
+      }
+    }
+  }
+
+  callMkFaceICAO() {
+    let bankData = new BankData();
+    bankData.bankAppId = 1;
+    bankData.bankTransactionId = new Date().getTime().toString();
+    return this.http.post('http://localhost:7171/moc/faceicao', {
+      image: this.faceCaptured.replace(/^data.*base64,/, ""),
+      bankData: bankData,
+    });
   }
 
   newRequest(

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://172.20.18.5/digizone/',
+  apiUrl: 'https://digizone.sacombank.local/',
   uploadCardIdUrl: 'https://localhost:44346/',
   publicKey: `-----BEGIN PUBLIC KEY-----
   MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuKwQibnz77qMV1EvF5Or

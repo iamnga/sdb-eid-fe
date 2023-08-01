@@ -1,0 +1,9 @@
+{
+    "/api": {
+        "target": "https://istio-ingressgateway-istio-system.apps.uat-cloud.sacombank.local/digizone_v2",
+        "secure": false,
+        "pathRewrite": {
+            "^/api": ""
+        }
+    }
+}

@@ -21,10 +21,43 @@ import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-i
 import { UpdateSuccessComponent } from './all-in-one/update-card-id/update-success/update-success.component';
 import { CollectComponent } from './collect/collect.component';
 import { HomeComponent } from './home/home.component';
+import { SelfExpComponent } from './self-exp/self-exp.component';
+import { GamesComponent } from './self-exp/games/games.component';
+import { GameBoardComponent } from './self-exp/games/matching-card/game-board/game-board.component';
+import { SelfExpHomeComponent } from './self-exp/home/self-exp-home.component';
+import { MatchingCardComponent } from './self-exp/games/matching-card/matching-card.component';
+import { ShowcaseComponent } from './self-exp/showcase/showcase.component';
+import { CaptureCardIdComponent } from './all-in-one/shared/capture-card-id/capture-card-id.component';
+import { CheckCustomerInfoComponent } from './all-in-one/shared/check-customer-info/check-customer-info.component';
+import { InputPhoneNumberComponent } from './all-in-one/shared/input-phone-number/input-phone-number.component';
+import { InquiryAuthenComponent } from './all-in-one/shared/inquiry-authen/inquiry-authen.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'collect/:deviceid/:sessionid', component: CollectComponent },
+  {
+    path: 'self-exp', component: SelfExpComponent, children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+      {
+        path: 'home',
+        component: SelfExpHomeComponent
+      },
+      {
+        path: 'showcase',
+        component: ShowcaseComponent
+      },
+      {
+
+        path: 'games', component: GamesComponent, children: [{
+          path: 'matching-card', component: MatchingCardComponent
+        }]
+      }
+    ]
+  },
   {
     path: 'aio',
     component: AllInOneComponent,
@@ -79,8 +112,20 @@ const routes: Routes = [
             component: InputFingerComponent,
           },
           {
+            path: 'input-phone-number',
+            component: InputPhoneNumberComponent,
+          },
+          {
+            path: 'check-customer-info',
+            component: CheckCustomerInfoComponent,
+          },
+          {
             path: 'collect-card-id',
             component: CollectCardIdComponent,
+          },
+          {
+            path: 'capture-card-id',
+            component: CaptureCardIdComponent,
           },
           {
             path: 'verify-customer-info',
@@ -91,7 +136,11 @@ const routes: Routes = [
             component: FillInfoComponent,
           },
           {
-            path: 'verify-otp',
+            path: 'inquiry-authen',
+            component: InquiryAuthenComponent,
+          },
+          {
+            path: 'verify-authen',
             component: VerifyOtpComponent,
           },
           {
@@ -116,4 +165,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

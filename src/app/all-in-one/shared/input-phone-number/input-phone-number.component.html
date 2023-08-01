@@ -1,0 +1,27 @@
+<app-aio-back-and-stepper [currentStep]="1"></app-aio-back-and-stepper>
+<section>
+  <div class="container text-center">
+    <div>
+      <h3 class="mb-4 font-weight-bold text-sacom-pri">
+        Nhập số điện thoại di động
+      </h3>
+    </div>
+    <div class="text-center keyboard-box">
+      <div>
+        <input type="text" [(ngModel)]="phoneNumber" readonly maxlength="10" />
+      </div>
+      <div class="text-danger my-3" [ngClass]="{ 'o-0': !err }">
+        <!-- <i class="fa-solid fa-exclamation-circle" aria-hidden="true"></i> -->
+        {{ errMsg }}
+      </div>
+      <app-keyboard-number (inputNumberEvent)="recieveInputNumber($event)"></app-keyboard-number>
+    </div>
+    <button class="btn-pri mt-4" (click)="next()" [disabled]="
+    phoneNumber.length < 10 ||
+    !phoneNumber ||
+    !isVietnamesePhoneNumber()
+  ">
+      Tiếp tục
+    </button>
+  </div>
+</section>

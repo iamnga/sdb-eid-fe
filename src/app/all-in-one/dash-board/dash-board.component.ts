@@ -62,17 +62,11 @@ export class DashBoardComponent implements OnInit {
 
   slides = [
     {
-      img: 'https://www.sacombank.com.vn/BannerHomeDK/283/Sacombank_ChienDich500kTheTD2022_PC.jpg',
+      img: 'assets/all-in-one/shared/img/banner_aio_1.png',
     },
     {
-      img: 'https://www.sacombank.com.vn/BannerHomeDK/283/Sacombank_OnlyOne_1920.jpg',
-    },
-    {
-      img: 'https://www.sacombank.com.vn/BannerHomeDK/283/Sacombank_GiamHetCoSaleBatNgo_Web.jpg',
-    },
-    {
-      img: 'https://www.sacombank.com.vn/BannerHomeDK/283/Sacombank_NapasCombo_BannerWeb.png',
-    },
+      img: 'assets/all-in-one/shared/img/banner_aio_2.png',
+    }
   ];
 
   slideConfig = {

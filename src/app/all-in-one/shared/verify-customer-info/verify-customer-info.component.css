@@ -6,6 +6,7 @@
   padding: 1rem;
 }
 
+
 mat-checkbox,
 mat-form-field,
 mat-option {
@@ -21,12 +22,8 @@ mat-option {
   padding: 0px 1rem;
 }
 
-.col-12 {
-  border-top: 2px solid #f0f2f7;
-}
-
-.left {
-  border-right: 2px solid #f0f2f7;
+.w-30{
+  width: 30%;
 }
 
 .fill-input {
@@ -41,6 +38,10 @@ mat-option {
   text-overflow: ellipsis;
 }
 
+td{
+  padding: 10px;
+  vertical-align: text-top;
+}
 .my-class {
   background-color: red !important;
 }
@@ -61,6 +62,7 @@ mat-option {
 .btn-next:hover {
   background-color: #1966af;
 }
+
 .btn-next:disabled:hover {
   background-color: #2a81d0;
 }
@@ -74,4 +76,9 @@ mat-option {
 .img-info img {
   max-height: 100px;
   border-radius: 1rem;
+}
+
+.img-customer,
+.img-customer img {
+  max-height: 100px;
 }

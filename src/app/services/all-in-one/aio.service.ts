@@ -54,10 +54,12 @@ export class AioService {
   frontCardId = '';
   backCardId = '';
   authenInfo: AuthenInfo[] = [];
+  currentAuthType: AuthType = AuthType.None;
   testCaseURL = 'assets/testCase.json';
   headerDict = {
     'Content-Type': 'application/json;',
     Accept: '*/*',
+    'Access-Control-Allow-Origin': '*'
   };
 
   constructor(
@@ -65,7 +67,7 @@ export class AioService {
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   release() {
     this.isProcessing = false;
@@ -91,9 +93,13 @@ export class AioService {
   // API
 
   postAsync(route: string, data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}${route}`, data, {
+    return this.http.post(`${this.apiUrl}api/${route}`, data, {
       headers: new HttpHeaders(this.headerDict),
     });
+  }
+
+  testProxy(route: string): Observable<any> {
+    return this.http.get(`api/${route}`)
   }
 
   getTestCase() {
@@ -250,18 +256,13 @@ export class AioService {
 
   uploadImage(
     img: string,
-    type: string,
-    deviceID: string = this.deviceID,
-    sessionID: string = this.sessionID
+    type: string
   ) {
     let req = this.newRequest(
-      { imageBas64: img, imageType: type },
-      deviceID,
-      sessionID
+      { imageBas64: img, imageType: type }
     );
-    return this.http.post(this.apiUrl + 'upload-image', req, {
-      headers: new HttpHeaders(this.headerDict),
-    });
+
+    return this.postAsync('upload-image', req);
   }
 
   loadImage() {
@@ -431,27 +432,26 @@ export class AioService {
     if (this.currentSerice == Service.OnBoarding) {
       switch (this.currentStep) {
         case ServiceStep.DashBoard: {
-          if (environment.production) {
-            this.router.navigate(['/aio/shared/capture-guide']);
-          } else {
-            this.router.navigate(['/aio/shared/input-finger']);
-          }
+
+          //this.router.navigate(['/aio/on-boarding/account-and-alert']);
+          this.router.navigate(['/aio/shared/input-finger']);
+
+          break;
+        }
+        case ServiceStep.InquiryAuthen: {
+          this.router.navigate(['/aio/shared/verify-authen']);
           break;
         }
         case ServiceStep.InputFinger: {
-          this.router.navigate(['/aio/shared/collect-card-id']);
+          this.router.navigate(['/aio/shared/verify-customer-info']);
           break;
         }
         case ServiceStep.CollectCardId: {
           this.router.navigate(['/aio/shared/capture-guide']);
           break;
         }
-        case ServiceStep.CaptureGuide: {
-          this.router.navigate(['/aio/shared/capture-face']);
-          break;
-        }
         case ServiceStep.CaptureFace: {
-          this.router.navigate(['/aio/shared/verify-customer-info']);
+          this.router.navigate(['/aio/shared/capture-card-id']);
           break;
         }
         case ServiceStep.VerifyCustomerInfo: {
@@ -466,7 +466,7 @@ export class AioService {
           this.router.navigate(['/aio/shared/verify-otp']);
           break;
         }
-        case ServiceStep.VerifyOtp: {
+        case ServiceStep.VerifyAuthen: {
           this.router.navigate(['/aio/on-boarding']);
           break;
         }
@@ -518,7 +518,7 @@ export class AioService {
           //this.router.navigate(['/aio/update-card-id']);
           break;
         }
-        case ServiceStep.VerifyOtp: {
+        case ServiceStep.VerifyAuthen: {
           this.router.navigate(['/aio/update-card-id']);
           break;
         }

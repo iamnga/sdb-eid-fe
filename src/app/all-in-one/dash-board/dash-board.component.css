@@ -9,12 +9,34 @@
   font-weight: bold;
 }
 
-.tab-bar {
+/* .tab-bar {
   border-radius: 100px;
   position: absolute;
   width: 100%;
-  top: -60px;
+  top: -3rem;
   color: #005aa3;
+  background: #FFF;
+  box-shadow: 0px 10px 30px 0px rgba(43, 159, 255, 0.30);
+} */
+
+.tab-bar {
+  border-radius: 100px;
+  position: absolute;
+  top: -3rem;
+  color: #005aa3;
+  background: #FFF;
+  box-shadow: 0px 10px 30px 0px rgba(43, 159, 255, 0.30);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tab-item {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .dash-board {
@@ -23,22 +45,23 @@
 }
 
 .footer {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 0px;
+  padding-top: 4.5rem;
+  color: #0058A0;
 }
 
 /* Rules for sizing the icon. */
 .material-icons.md-18 {
   font-size: 18px;
 }
+
 .material-icons.md-24 {
   font-size: 24px;
 }
+
 .material-icons.md-36 {
   font-size: 36px;
 }
+
 .material-icons.md-48 {
   font-size: 48px;
 }
@@ -47,6 +70,7 @@
 .material-icons.md-dark {
   color: rgba(0, 0, 0, 0.54);
 }
+
 .material-icons.md-dark.md-inactive {
   color: rgba(0, 0, 0, 0.26);
 }
@@ -55,6 +79,7 @@
 .material-icons.md-light {
   color: rgba(255, 255, 255, 1);
 }
+
 .material-icons.md-light.md-inactive {
   color: rgba(255, 255, 255, 0.3);
 }

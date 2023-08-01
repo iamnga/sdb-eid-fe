@@ -1,0 +1,7 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  border-top: 1px solid;
+  border-image: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 20%, rgba(0, 88, 160, 1) 50%, rgba(255, 255, 255, 1) 80%, rgba(255, 255, 255, 1) 100%);
+  border-image-slice: 1;
+}

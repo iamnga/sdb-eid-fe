@@ -1,0 +1,17 @@
+.game-background {
+    /* background: rgb(17, 127, 164);
+  background: radial-gradient(
+    circle,
+    rgba(17, 127, 164, 1) 0%,
+    rgba(17, 94, 164, 1) 100%
+  ); */
+    background-image: url("../../../../assets/self-exp/img/background.jpg");
+    /* The image used */
+    background-position: center;
+    /* Center the image */
+    background-repeat: no-repeat;
+    /* Do not repeat the image */
+    background-size: cover;
+    /* Resize the background image to cover the entire container */
+    margin: 0px;
+}

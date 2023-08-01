@@ -62,6 +62,18 @@ import {
 import { UserIdleModule } from 'angular-user-idle';
 import { InputSurveyComponent } from './all-in-one/shared/dialog/input-survey/input-survey.component';
 import { SurveyComponent } from './all-in-one/shared/survey/survey.component';
+import { SelfExpComponent } from './self-exp/self-exp.component';
+import { GameBoardComponent } from './self-exp/games/matching-card/game-board/game-board.component';
+import { CardComponent } from './self-exp/games/matching-card/card/card.component';
+import { GamesComponent } from './self-exp/games/games.component';
+import { SelfExpHomeComponent } from './self-exp/home/self-exp-home.component';
+import { MatchingCardComponent } from './self-exp/games/matching-card/matching-card.component';
+import { ShowcaseComponent } from './self-exp/showcase/showcase.component';
+import { CaptureCardIdComponent } from './all-in-one/shared/capture-card-id/capture-card-id.component';
+import { CheckCustomerInfoComponent } from './all-in-one/shared/check-customer-info/check-customer-info.component';
+import { InputPhoneNumberComponent } from './all-in-one/shared/input-phone-number/input-phone-number.component';
+import { FooterComponent } from './all-in-one/shared/footer/footer.component';
+import { InquiryAuthenComponent } from './all-in-one/shared/inquiry-authen/inquiry-authen.component';
 
 export function playerFactory() {
   return player;
@@ -99,7 +111,20 @@ export function playerFactory() {
     ProcessingComponent,
     UpdateSuccessComponent,
     InputSurveyComponent,
-    SurveyComponent
+    SurveyComponent,
+    SelfExpComponent,
+    GameBoardComponent,
+    CardComponent,
+    GamesComponent,
+    SelfExpHomeComponent,
+    MatchingCardComponent,
+    ShowcaseComponent,
+    CaptureCardIdComponent,
+    CheckCustomerInfoComponent,
+    InputPhoneNumberComponent,
+    FooterComponent,
+    InquiryAuthenComponent
+    
   ],
   imports: [
     SlickCarouselModule,

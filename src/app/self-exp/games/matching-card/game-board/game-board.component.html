@@ -1,0 +1,49 @@
+<!-- Game Play -->
+<section *ngIf="steps == 1">
+  <div class="header">
+    <div style="text-align: center">
+      <button>màn chơi: {{ round }} / 2</button>
+      <button>thời gian {{ remainingTime }}</button>
+    </div>
+  </div>
+  <div class="game-board">
+    <div class="card-container">
+      <app-card
+        *ngFor="let card of cards"
+        [card]="card"
+        (click)="flipCard(card)"
+      ></app-card>
+    </div>
+  </div>
+</section>
+
+<!-- Input Phone Number -->
+<section *ngIf="steps == 2">
+  <div class="container">
+    <div class="col-12 text-center title">
+      Quý khách vui lòng nhập số điện thoại để nhận mã quà tặng
+    </div>
+    <div class="col-4 offset-4">
+      <div class="phone">{{ phone }}</div>
+      <app-keyboard-number
+        (inputNumberEvent)="handleInputNumber($event)"
+      ></app-keyboard-number>
+    </div>
+    <div class="col-12 text-center next">
+      <button (click)="validatePhone()">TIẾP TỤC</button>
+    </div>
+  </div>
+</section>
+
+<!-- Alert -->
+<section *ngIf="steps == 3">
+  <div class="container">
+    <div class="col-12 text-center title">
+      Mã quà tặng đã được gửi qua số điện thoại của Quý khách, Quý khách vui
+      lòng kiểm tra tin nhắn. Sacombank chân thành cảm ơn
+    </div>
+    <div class="col-12 text-center next">
+      <button (click)="back()">VỀ TRANG CHỦ</button>
+    </div>
+  </div>
+</section>

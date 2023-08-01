@@ -4,15 +4,13 @@ import { AioService } from 'src/app/services/all-in-one/aio.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertComponent } from '../../shared/dialog/alert/alert.component';
 import { Alert, Template } from 'src/app/models/alert';
-import { Router } from '@angular/router';
-import { ifft } from '@tensorflow/tfjs-core';
 
 @Component({
   selector: 'app-account-and-alert',
   templateUrl: './account-and-alert.component.html',
-  styleUrls: ['./account-and-alert.component.css'],
+  styleUrls: ['./account-and-alert.component.css', '../../all-in-one.component.css'],
 })
-export class AccountAndAlertComponent implements OnInit {
+export class AccountAndAlertComponent {
   public accountType = AccountType;
   public alertType = AlertType;
   currentAccountType = this.accountType.None;
@@ -23,16 +21,18 @@ export class AccountAndAlertComponent implements OnInit {
   isValidCustomAccount = false;
   currentAccountNumber = '';
   tc = false;
-
+  errMsg = '';
+  err = false;
   constructor(
     public aioSvc: AioService,
     public dialog: MatDialog,
-    private router: Router
   ) {
     aioSvc.currentStep = ServiceStep.AccountAndAlert;
+    //TODO: remove hard data
+    aioSvc.customerInfo.mobileNo = "0349444440";
+    aioSvc.customerInfo.dob = "25/01/1995";
+    aioSvc.customerInfo.customerID = "352229667";
   }
-
-  ngOnInit() {}
 
   selectAccountType(type: any) {
     this.currentAccountType = type;
@@ -79,13 +79,18 @@ export class AccountAndAlertComponent implements OnInit {
   }
 
   handleInputNumber(key: string) {
-    if (key == 'c') {
+    if (key == 'clear') {
       this.customAccountTemp = this.customAccountTemp.substring(
         0,
         this.customAccountTemp.length - 1
       );
       this.validateCustomAccount();
-    } else {
+    }
+    else if (key == 'reset') {
+      this.customAccountTemp = '';
+      this.validateCustomAccount();
+    }
+    else {
       if (this.customAccountTemp.length >= 12) {
         return;
       } else {
@@ -95,50 +100,84 @@ export class AccountAndAlertComponent implements OnInit {
     }
   }
 
-  validateCustomAccount() {
-    let first = this.customAccountTemp.substring(0, 1);
-    let length = this.customAccountTemp.length;
-    this.rules[0].valid = length > 5 && length < 10 ? true : false;
-    this.rules[1].valid = length > 0 && first != '7' ? true : false;
-
-    // if (length > 5 && length < 13) {
-    //   this.rules[0].valid = true;
-    //   this.rules[1].valid = true;
-    //   this.rules[3].valid = true;
-    //   this.rules[4].valid = true;
-    //   if (first != '7') {
-    //     this.rules[2].valid = true;
-    //   } else {
-    //     this.rules[2].valid = false;
-    //   }
-
-    //   if (length == 10) {
-    //     if (/[7890]{1}/.test(first)) {
-    //       this.rules[3].valid = true;
-    //     } else {
-    //       this.rules[3].valid = false;
-    //     }
-    //   } else {
-    //     this.rules[3].valid = true;
-    //   }
-    //   if (length == 12) {
-    //     if (first != '0') {
-    //       this.rules[4].valid = true;
-    //     } else {
-    //       this.rules[4].valid = false;
-    //     }
-    //   }
-    // } else {
-    //   this.rules[0].valid = false;
-    //   this.rules[2].valid = false;
-    //   this.rules[3].valid = false;
-    //   this.rules[4].valid = false;
-    // }
-
-    this.isValidCustomAccount =
-      this.rules[0].valid && this.rules[1].valid ? true : false;
-    console.log(this.isValidCustomAccount);
+  setErrMsg(msg: string) {
+    this.errMsg = msg;
+    this.err = msg == '' ? false : true;
+    this.isValidCustomAccount = !this.err;
   }
+
+  validateCustomAccount() {
+    const numberLength = this.customAccountTemp.length;
+
+    // Độ dài từ 6 đến 12 chữ số
+    if (numberLength < 6 || numberLength > 12) {
+      this.setErrMsg('Độ dài phải từ 6 đến 12 chữ số')
+    }
+    else
+      // Không bắt đầu bằng số 7
+      if (this.customAccountTemp.startsWith('7')) {
+        this.setErrMsg('Không bắt đầu bằng số 7')
+      }
+      else
+        // Không bắt đầu bằng số 1 đến 6 nếu chuỗi số là 10 số
+        if (numberLength === 10 && /^[1-6]/.test(this.customAccountTemp)) {
+          this.setErrMsg('Không bắt đầu bằng số 1 đến 6 nếu số tài khoản là 10 số')
+        }
+        else
+          // Không bắt đầu bằng số 0 nếu chuỗi số là 12 số
+          if (numberLength === 12 && this.customAccountTemp.startsWith('0')) {
+            this.setErrMsg('Không bắt đầu bằng số 0 nếu số tài khoản là 12 số')
+          }
+          else {
+            // Các điều kiện khác thỏa mãn, trả về true
+            this.setErrMsg('');
+          }
+  }
+
+  // validateCustomAccount() {
+  //   let first = this.customAccountTemp.substring(0, 1);
+  //   let length = this.customAccountTemp.length;
+  //   this.rules[0].valid = length > 5 && length < 10 ? true : false;
+  //   this.rules[1].valid = length > 0 && first != '7' ? true : false;
+
+  //   // if (length > 5 && length < 13) {
+  //   //   this.rules[0].valid = true;
+  //   //   this.rules[1].valid = true;
+  //   //   this.rules[3].valid = true;
+  //   //   this.rules[4].valid = true;
+  //   //   if (first != '7') {
+  //   //     this.rules[2].valid = true;
+  //   //   } else {
+  //   //     this.rules[2].valid = false;
+  //   //   }
+
+  //   //   if (length == 10) {
+  //   //     if (/[7890]{1}/.test(first)) {
+  //   //       this.rules[3].valid = true;
+  //   //     } else {
+  //   //       this.rules[3].valid = false;
+  //   //     }
+  //   //   } else {
+  //   //     this.rules[3].valid = true;
+  //   //   }
+  //   //   if (length == 12) {
+  //   //     if (first != '0') {
+  //   //       this.rules[4].valid = true;
+  //   //     } else {
+  //   //       this.rules[4].valid = false;
+  //   //     }
+  //   //   }
+  //   // } else {
+  //   //   this.rules[0].valid = false;
+  //   //   this.rules[2].valid = false;
+  //   //   this.rules[3].valid = false;
+  //   //   this.rules[4].valid = false;
+  //   // }
+
+  //   this.isValidCustomAccount =
+  //     this.rules[0].valid && this.rules[1].valid ? true : false;
+  //   console.log(this.isValidCustomAccount);
+  // }
 
   verifyCustomAccount() {
     this.checkAccount(this.customAccountTemp);

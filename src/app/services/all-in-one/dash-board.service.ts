@@ -16,5 +16,6 @@ export class DashBoardService {
     console.log(req.toString());
 
     return this.aioSvc.postAsync('get-sessionId', req);
+    //return this.aioSvc.testProxy('hello');
   }
 }

@@ -44,34 +44,34 @@ export class InputFingerComponent implements OnInit {
       (msg: any) => {
         console.log(msg);
         this.fpResponse = msg;
-        if (this.fpResponse.quality > 0 && this.hasIcaoResponse == false) {
+        if (this.fpResponse.verifyResponse != null && this.hasIcaoResponse == false) {
           if (
-            this.fpResponse.icaoResponse &&
-            this.fpResponse.icaoResponse.success
+            this.fpResponse.verifyResponse.success
           ) {
             this.hasIcaoResponse = true;
-            console.log(this.fpResponse);
-            this.fpResponse.image =
-              'data:image/png;base64,' + this.fpResponse.image;
-            console.log(
-              'Response from websocket: ' + this.fpResponse.verifyResponse
-            );
+            if (this.fpResponse.icaoResponse.success && this.fpResponse.icaoResponse.data.dg13) {
+              console.log(this.fpResponse);
+              this.fpResponse.image =
+                'data:image/png;base64,' + this.fpResponse.image;
+              console.log(
+                'Response from websocket: ' + this.fpResponse.verifyResponse
+              );
 
-            this.mappingData();
-
-            setTimeout(() => {
+              this.mappingData();
               this.aioSvc.next();
-            }, 3000);
+            }
+            else {
+              this.aioSvc.alert(
+                `Đọc thông tin không thành công`
+              );
+            }
           } else {
             if (this.aioSvc.fpAttemp == 2) {
-              //TODO: Clear test
-              if (this.aioSvc.currentSerice === Service.TestMk) {
-                this.aioSvc.next();
-              } else {
-                this.aioSvc.alert(
-                  `Quý khách đã xác thực thất bại <br>quá số lần quy định`
-                );
-              }
+
+              this.aioSvc.alert(
+                `Quý khách đã xác thực thất bại <br>quá số lần quy định`
+              );
+
             } else {
               this.alert();
             }
@@ -131,6 +131,7 @@ export class InputFingerComponent implements OnInit {
         customerInfo.fullName = dg13.name;
         customerInfo.expireDate = dg13.dateOfExpiry;
         customerInfo.issueDate = dg13.dateOfIssuance;
+        customerInfo.issuePlace = 'CTCCSQLHCVTTXH';
 
         this.aioSvc.customerInfo = customerInfo;
 

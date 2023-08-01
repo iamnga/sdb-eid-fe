@@ -1,7 +1,147 @@
-<app-aio-header></app-aio-header>
 <app-aio-back-and-stepper [currentStep]="4"></app-aio-back-and-stepper>
-
 <section *ngIf="!isCustomAccount">
+  <div class="container">
+    <div class="row bg-white rounded border p-4">
+      <div class="col-12 px-0 text-sacom-pri">
+        <h4 class="font-weight-bold mb-0">Lựa chọn tài khoản VND (miễn phí)</h4>
+      </div>
+      <!-- Số điện thoại -->
+      <div class="col-6 mt-3" (click)="selectAccountType(accountType.Phone)">
+        <div class="w-50 d-inline-block">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="accountRadio" id="phone">
+            <label class="form-check-label" for="phone">
+              Số điện thoại
+            </label>
+          </div>
+        </div>
+        <div class="w-50 d-inline-block">
+          {{ aioSvc.customerInfo.mobileNo.substr(-9) }}
+        </div>
+      </div>
+      <!-- End Số điện thoại -->
+      <!-- Ngày sinh -->
+      <div class="col-6 mt-3" (click)="selectAccountType(accountType.DOB)">
+        <div class="w-50 d-inline-block">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="accountRadio" id="dob">
+            <label class="form-check-label" for="dob">
+              Ngày sinh
+            </label>
+          </div>
+        </div>
+        <div class="w-50 d-inline-block">
+          {{ aioSvc.customerInfo.dob.replaceAll("/", "") }}
+        </div>
+      </div>
+      <!-- End Ngày sinh -->
+      <!-- Số CMND/CCCD -->
+      <div class="col-6 mt-3" (click)="selectAccountType(accountType.CardId)">
+        <div class="w-50 d-inline-block">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="accountRadio" id="cardId">
+            <label class="form-check-label" for="cardId">
+              Số CMND/CCCD
+            </label>
+          </div>
+        </div>
+        <div class="w-50 d-inline-block">
+          {{ aioSvc.customerInfo.customerID.substr(-10) }}
+        </div>
+      </div>
+      <!-- End Số CMND/CCCD -->
+      <!-- Ngân hàng tạo tự động -->
+      <div class="col-6 mt-3" (click)="selectAccountType(accountType.Random)">
+        <div class="w-50 d-inline-block">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="accountRadio" id="random">
+            <label class="form-check-label" for="random">
+              Ngân hàng tạo tự động
+            </label>
+          </div>
+        </div>
+        <div class="w-50 d-inline-block">
+          xxxx xxxx xxxx
+        </div>
+      </div>
+      <!-- End Ngân hàng tạo tự động -->
+      <!-- Số tài khoản tự chọn -->
+      <div class="col-6 mt-3" (click)="selectAccountType(accountType.Custom)">
+        <div class="w-50 d-inline-block">
+          <div class="form-check">
+            <input [checked]="currentAccountType == accountType.Custom" class="form-check-input" type="radio" name="accountRadio" id="custom">
+            <label class="form-check-label" for="custom">
+              Số tài khoản tự chọn
+            </label>
+          </div>
+        </div>
+        <div class="w-50 d-inline-block">
+          <ng-container *ngIf="!customAccount">Nhập số</ng-container>
+          <ng-container *ngIf="customAccount">{{
+            customAccount
+            }}</ng-container>
+        </div>
+      </div>
+      <!-- End Số tài khoản tự chọn -->
+    </div>
+    <div class="row bg-white rounded border p-4 mt-3">
+      <div class="col-12 px-0 text-sacom-pri">
+        <h4 class="font-weight-bold mb-0">Đăng kí báo giao dịch tự động</h4>
+      </div>
+      <!-- Ứng dụng Sacombank Pay -->
+      <div class="col-6 mt-3" (click)="selectAlertType(alertType.OnlySPay)">
+        <div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="alertRadio" id="onlySPay">
+            <label class="form-check-label" for="onlySPay">
+              Ứng dụng Sacombank Pay
+            </label>
+          </div>
+        </div>
+        <div style="margin-left: 20px;">
+          Miễn phí
+        </div>
+      </div>
+      <!-- End Ứng dụng Sacombank Pay -->
+      <!-- SMS và Sacombank Pay -->
+      <div class="col-6 mt-3" (click)="selectAlertType(alertType.SmsAndSPay)">
+        <div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="alertRadio" id="smsAndSPay">
+            <label class="form-check-label" for="smsAndSPay">
+              SMS và Sacombank Pay
+            </label>
+          </div>
+        </div>
+        <div style="margin-left: 20px;">
+          Có phí
+        </div>
+      </div>
+      <!-- End SMS và Sacombank Pay -->
+    </div>
+    <div class="row pt-4 pb-3">
+      <div class="col-12 text-center">
+        <mat-checkbox [color]="'primary'" class="example-margin" [(ngModel)]="tc">Tôi đã đọc và đồng ý với Điều
+          khoản và
+          Điều kiện mở và sử dụng tài
+          khoản của Sacombank</mat-checkbox>
+      </div>
+    </div>
+    <div class="row">
+      <div class="text-center col-12">
+        <button class="btn-pri" (click)="confirm()" [disabled]="
+          !currentAccountType ||
+          !currentAlertType ||
+          !tc ||
+          (!currentAccountNumber && currentAccountType != accountType.Random)
+        ">Tiếp tục</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- <section *ngIf="!isCustomAccount">
   <div class="container">
     <div class="text-center">
       <h3 class="font-weight-bold mb-4">Lựa chọn tài khoản</h3>
@@ -161,36 +301,78 @@
       </button>
     </div>
   </div>
-</section>
+</section> -->
 
 <section *ngIf="isCustomAccount">
-  <div class="container-fluid px-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 mb-4">
+        <h4 class="text-sacom-pri font-weight-bold text-center">Nhập số tài khoản tự chọn</h4>
+      </div>
+    </div>
+    <div class="row bg-white rounded border p-4">
+      <div class="col-6">
+        <h4 class="text-sacom-pri">Quy định nhập số TKTT tự chọn</h4>
+        <div>
+          <table>
+            <tr>
+              <td><img src="assets/all-in-one/shared/img/check.svg" alt=""></td>
+              <td>Độ dài từ 6 tới 12 chữ số;</td>
+            </tr>
+            <tr>
+              <td><img src="assets/all-in-one/shared/img/check.svg" alt=""></td>
+              <td>Không bắt đầu bằng số 7;</td>
+            </tr>
+            <tr>
+              <td><img src="assets/all-in-one/shared/img/check.svg" alt=""></td>
+              <td>Không bắt đầu bằng số 1 đến 6 nếu chuỗi số TKTT là 10 số;</td>
+            </tr>
+            <tr>
+              <td><img src="assets/all-in-one/shared/img/check.svg" alt=""></td>
+              <td>Không bắt đầu bằng số 0 nếu chuỗi số TKTT là 12 số;</td>
+            </tr>
+            <tr>
+              <td><img src="assets/all-in-one/shared/img/check.svg" alt=""></td>
+              <td>Không có tối thiểu 1/2 dãy số liên tục có chứa cặp thần tài (39,79), phát lộc (68,86), số tiến, số
+                trùng, số lặp, số gánh, số soi gương.</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-6">
+        <div>
+          <input type="text" readonly maxlength="12" [(ngModel)]="customAccountTemp" />
+        </div>
+        <div class="text-danger mt-3 text-center" [ngClass]="{'o-0': !err}">
+          {{ errMsg }}
+        </div>
+        <app-keyboard-number (inputNumberEvent)="handleInputNumber($event)"></app-keyboard-number>
+      </div>
+    </div>
+    <div class="row pt-4">
+      <div class="col-12 text-center">
+        <button class="btn-sec mx-2" (click)="back()">Quay lại</button>
+        <button class="btn-pri mx-2" [disabled]="!isValidCustomAccount" (click)="verifyCustomAccount()">Tiếp tục</button>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="container-fluid px-5">
     <div class="row">
       <div class="col-4">
-        <div><h4>Quy định nhập số TKTT tự chọn</h4></div>
+        <div>
+          <h4>Quy định nhập số TKTT tự chọn</h4>
+        </div>
         <div>
           <table class="table-rule">
             <tr *ngFor="let item of rules; let last = last">
               <td>
                 <ng-container>
-                  <i
-                    *ngIf="!last && item.valid"
-                    class="fa fa-check-circle text-success"
-                    aria-hidden="true"
-                  ></i>
+                  <i *ngIf="!last && item.valid" class="fa fa-check-circle text-success" aria-hidden="true"></i>
                 </ng-container>
                 <ng-container>
-                  <i
-                    *ngIf="!last && !item.valid"
-                    class="fa fa-circle text-secondary"
-                    aria-hidden="true"
-                  ></i>
+                  <i *ngIf="!last && !item.valid" class="fa fa-circle text-secondary" aria-hidden="true"></i>
                 </ng-container>
-                <i
-                  *ngIf="last"
-                  class="fa fa-info-circle text-warning"
-                  aria-hidden="true"
-                ></i>
+                <i *ngIf="last" class="fa fa-info-circle text-warning" aria-hidden="true"></i>
               </td>
               <td>
                 {{ item.text }}
@@ -201,28 +383,19 @@
       </div>
       <div class="col-4">
         <div class="text-center keyboard-box">
-          <div class="mb-4"><h4>Nhập số tài khoản tự chọn</h4></div>
-          <div>
-            <input
-              type="text"
-              readonly
-              maxlength="10"
-              [(ngModel)]="customAccountTemp"
-            />
+          <div class="mb-4">
+            <h4>Nhập số tài khoản tự chọn</h4>
           </div>
-          <app-keyboard-number
-            (inputNumberEvent)="handleInputNumber($event)"
-          ></app-keyboard-number>
+          <div>
+            <input type="text" readonly maxlength="10" [(ngModel)]="customAccountTemp" />
+          </div>
+          <app-keyboard-number (inputNumberEvent)="handleInputNumber($event)"></app-keyboard-number>
           <div class="mt-4">
             <div class="w-50 d-inline-block pr-2">
               <button class="btn-back" (click)="back()">Quay lại</button>
             </div>
             <div class="w-50 d-inline-block pl-2">
-              <button
-                class="btn-next"
-                [disabled]="!isValidCustomAccount"
-                (click)="verifyCustomAccount()"
-              >
+              <button class="btn-next" [disabled]="!isValidCustomAccount" (click)="verifyCustomAccount()">
                 Xác nhận
               </button>
             </div>
@@ -230,5 +403,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </section>

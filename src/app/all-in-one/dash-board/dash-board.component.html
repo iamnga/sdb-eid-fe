@@ -1,41 +1,44 @@
 <section class="dash-board">
   <app-aio-header></app-aio-header>
   <div class="slick-wrapper">
-    <ngx-slick-carousel
-      class="carousel"
-      #slickModal="slick-carousel"
-      [config]="slideConfig"
-    >
+    <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
       <div ngxSlickItem *ngFor="let slide of slides" class="slide">
         <img src="{{ slide.img }}" alt="" width="100%" />
       </div>
     </ngx-slick-carousel>
   </div>
   <div class="container position-relative">
-    <div class="row bg-white text-center p-4 tab-bar">
-      <div class="col-3" (click)="startService(service.OnBoarding)">
-        <div><span class="material-icons md-48"> person_add </span></div>
-        <div>Đăng ký tài khoản</div>
+    <div class="row bg-white text-center tab-bar w-50 p-3">
+      <div class="col border-right" (click)="startService(service.OnBoarding)">
+        <div class="tab-item">
+          <div class="d-inline-block"><img src="assets/all-in-one/shared/img/icon_account.svg" alt=""></div>
+          <div class="d-inline-block text-left">Đăng ký <br>Tài khoản</div>
+        </div>
       </div>
-      <div class="col-3" (click)="startService(service.UpdateCardId)">
-        <div><span class="material-icons md-48"> contact_mail </span></div>
-        <div>Cập nhật CCCD</div>
-      </div>
-      <div class="col-3" (click)="startService(service.TestMk)">
-        <div><span class="material-icons md-48"> category </span></div>
-        <div>Sản phẩm dịch vụ</div>
-      </div>
-      <div class="col-3">
-        <div><span class="material-icons md-48"> sports_esports </span></div>
-        <div>Games lấy quà</div>
+      <div class="col" (click)="startService(service.UpdateCardId)">
+        <div class="tab-item">
+          <div class="d-inline-block"><img src="assets/all-in-one/shared/img/icon_cccd.svg" alt=""></div>
+          <div class="d-inline-block text-left">Cập nhật <br>CCCD</div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="container mt-5 footer">
-    <img
-      src="assets/all-in-one/dash-board/bo3-app.png"
-      class="img img-fluid"
-      alt=""
-    />
+  <div class="container footer">
+    <div class="row">
+      <div class="col small">
+        <div>
+          <b>
+            NGÂN HÀNG TMCP SÀI GÒN THƯƠNG TÍN
+          </b>
+        </div>
+        <div>
+          Hội sở: 266 - 268 Nam Kỳ Khởi Nghĩa, Phường Võ Thị Sáu, Quận 3, TP. HCM
+        </div>
+      </div>
+      <div class="col small text-right">
+        <div>&nbsp;</div>
+        <div>© 2023 Bản quyền thuộc về Ngân hàng TMCP Sài Gòn Thương Tín (Sacombank)</div>
+      </div>
+    </div>
   </div>
 </section>

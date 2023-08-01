@@ -13,7 +13,7 @@ import { AioService } from 'src/app/services/all-in-one/aio.service';
 @Component({
   selector: 'app-verify-otp',
   templateUrl: './verify-otp.component.html',
-  styleUrls: ['./verify-otp.component.css'],
+  styleUrls: ['./verify-otp.component.css', '../../all-in-one.component.css'],
 })
 export class VerifyOtpComponent implements OnInit {
   otp: Array<string> = [];
@@ -26,31 +26,26 @@ export class VerifyOtpComponent implements OnInit {
   currentAuthType: AuthType;
   authType = AuthType;
   authenInfo: AuthenInfo[] = [];
-  step = 1; //1: chọn authType - 2: verify
+  step = 2; //1: chọn authType - 2: verify
   faceLoad: AnimationOptions = {
     path: 'assets/all-in-one/shared/img/notifications.json',
   };
   countDown = 5;
   countDownInterval: any;
+  errMsg = 'OTP không hợp lệ, Quý khách vui lòng thử lại';
+  err = true;
 
   constructor(public aioSvc: AioService) {
-    aioSvc.currentStep = ServiceStep.VerifyOtp;
+    aioSvc.currentStep = ServiceStep.RequestAuthen;
     this.currentStep = this.aioSvc.currentSerice == Service.OnBoarding ? 4 : 3;
-    this.currentAuthType =
-      this.aioSvc.currentSerice == Service.OnBoarding
-        ? this.authType.SMSTTT
-        : this.authType.None;
     this.currentService = this.aioSvc.currentSerice;
+    // this.currentAuthType = this.aioSvc.currentAuthType;
+    this.currentAuthType = AuthType.mConnect;
   }
   ngOnInit(): void {
-    this.countDownOTP();
-    if (this.aioSvc.currentSerice == Service.OnBoarding) {
-      this.requestOtp();
-    } else if (this.aioSvc.currentSerice == Service.UpdateCardId) {
-      this.getAuthMethod();
-    }
-
-    this.handleOTP();
+    // this.handleOTP();
+    // this.getAuthMethod();
+    // this.requestAuthen();
   }
 
   countDownOTP() {
@@ -60,19 +55,6 @@ export class VerifyOtpComponent implements OnInit {
         clearInterval(this.countDownInterval);
       }
     }, 1000);
-  }
-
-  handleOTP() {
-    if (this.aioSvc.currentSerice == Service.OnBoarding) {
-      this.requestOtp();
-    } else if (this.aioSvc.currentSerice == Service.UpdateCardId) {
-      this.getAuthMethod();
-    }
-  }
-
-  selectAuthType(type: any) {
-    this.currentAuthType = type;
-    console.log(this.currentAuthType);
   }
 
   checkAuthType(type: any) {
@@ -85,61 +67,18 @@ export class VerifyOtpComponent implements OnInit {
     return result;
   }
 
-  getAuthMethod() {
-    let data = new GetAuthMethodRequestData();
-    data.cifNo = this.aioSvc.checkCustomerByIdNoResponseData.cifNo;
-    data.customerID = this.aioSvc.checkCustomerByIdNoResponseData.legalId;
-    data.customerType = '1';
-    data.mobileNo = this.aioSvc.checkCustomerByIdNoResponseData.mobileNumber;
-    this.aioSvc.getAuthMethod(data).subscribe(
-      (res: any) => {
-        console.log(res);
-        this.aioSvc.isProcessing = false;
-
-        if (res.respCode) {
-          if (res.respCode != '00') {
-            this.aioSvc.alert(`Lỗi hệ thống`);
-          } else {
-            if (res.data.authInfo) {
-              this.authenInfo = environment.production
-                ? res.data.authInfo
-                : this.aioSvc.authenInfo;
-
-              if (this.authenInfo.length == 1) {
-                this.currentAuthType = this.authenInfo[0].authType;
-                this.requestOtp();
-              } else {
-                this.currentAuthType = this.authType.None;
-              }
-            } else this.aioSvc.alert(`Không tồn tại phương thức xác thực`);
-          }
-        } else {
-          this.aioSvc.alert(`Lỗi hệ thống`);
-        }
-      },
-      (err: any) => {
-        this.aioSvc.alert(`Lỗi hệ thống`);
-        this.aioSvc.isProcessing = false;
-      }
-    );
-  }
-
-  requestOtp() {
+  requestAuthen() {
     if (
       this.currentAuthType == this.authType.mConnect ||
       this.currentAuthType == this.authType.SmartOTP
     ) {
-      this.verifyOtp();
+      this.verifyAuthen();
     } else {
       //TODO: hard code
       let data = new RequestOtpRequestData();
       data.customerID = this.aioSvc.customerInfo.customerID;
       data.cifNo = '1';
-      data.authType =
-        this.currentAuthType == AuthType.None ||
-        this.currentAuthType == AuthType.Unknow
-          ? AuthType.SMSOTP
-          : this.currentAuthType;
+      data.authType = this.currentAuthType;
       data.customerType = '1';
       data.mobileNo = this.aioSvc.customerInfo.mobileNo;
       data.channel = 'DigiZone';
@@ -167,7 +106,7 @@ export class VerifyOtpComponent implements OnInit {
     }
   }
 
-  verifyOtp() {
+  verifyAuthen() {
     let data = new VerifyOtpRequestData();
     data.authCode = this.otp.join('');
     data.customerID = this.aioSvc.customerInfo.customerID;
@@ -216,7 +155,7 @@ export class VerifyOtpComponent implements OnInit {
   }
 
   confirm() {
-    this.verifyOtp();
+    this.verifyAuthen();
   }
 
   recieveInputNumber(event: any) {
@@ -225,9 +164,11 @@ export class VerifyOtpComponent implements OnInit {
 
   handleInputNumber(key: string) {
     console.log(key);
-    if (key == 'c') {
+    if (key == 'clear') {
       this.otp.splice(-1);
       console.log(this.otp);
+    } else if (key == 'reset') {
+      this.otp = [];
     } else {
       if (this.otp.length >= 6) {
         return;

@@ -1,25 +1,30 @@
-<app-aio-header></app-aio-header>
 <app-aio-back-and-stepper [currentStep]="3"></app-aio-back-and-stepper>
 <section>
   <div class="container">
-    <div class="row pb-3">
-      <div class="col-6 p-0">
-        <h3 class="font-weight-bold mb-2">Xác nhận thông tin</h3>
-        Quý khách kiểm tra lại thông tin và nhập các thông tin còn thiếu
+    <h4 class="text-sacom-pri text-center mb-4 font-weight-bold">
+      Vui lòng kiểm tra và xác nhận thông tin
+    </h4>
+    <div class="row bg-white rounded px-3 border">
+      <div class="col-6 p-4 px-0">
+        <h4>Xin chào, <span class="text-sacom-pri">TRAN MINH HOANG LONG</span></h4>
+        <h5 class="mb-0">Quý khách kiểm tra lại thông tin</h5>
       </div>
-      <div class="col-6 img-info text-right p-0">
-        <img [src]="face" alt="" />
-        <img class="ml-3" [src]="aioSvc.frontCardId" alt="" />
-
-        <img class="ml-3" [src]="aioSvc.backCardId" alt="" />
+      <div class="col-6 py-2 px-0">
+        <div class="img-customer text-right">
+          <!-- // TODO: remove hard -->
+          <img src="assets/all-in-one/shared/img/face.jpg" class="rounded mr-2"/>
+          <img src="assets/all-in-one/shared/img/front.jpg" class="rounded mr-2"/>
+          <img src="assets/all-in-one/shared/img/back.jpg" class="rounded"/>
+        </div>
       </div>
     </div>
-    <div class="row p-3 bg-white box">
-      <div class="col-6 left">
+
+    <div class="row bg-white rounded px-3 py-4 mt-3 border">
+      <div class="col-6">
         <div>
-          <table>
+          <table class="w-100">
             <tr>
-              <td>Họ và tên</td>
+              <td class="w-30">Họ và tên</td>
               <td class="font-weight-bold">
                 {{ aioSvc.customerInfo.fullName }}
               </td>
@@ -32,6 +37,10 @@
               <td>Ngày sinh</td>
               <td class="font-weight-bold">{{ aioSvc.customerInfo.dob }}</td>
             </tr>
+            <tr>
+              <td>Số điện thoại</td>
+              <td class="font-weight-bold">{{ aioSvc.customerInfo.mobileNo }}</td>
+            </tr>
           </table>
         </div>
       </div>
@@ -39,7 +48,7 @@
         <div>
           <table>
             <tr>
-              <td>Số CCCD</td>
+              <td class="w-30">Số CCCD</td>
               <td class="font-weight-bold">
                 {{ aioSvc.customerInfo.customerID }}
               </td>
@@ -50,7 +59,12 @@
                 {{ aioSvc.customerInfo.issueDate }}
               </td>
             </tr>
-
+            <tr>
+              <td>Nơi cấp</td>
+              <td class="font-weight-bold">
+                {{ aioSvc.customerInfo.issuePlace }}
+              </td>
+            </tr>
             <tr>
               <td>Địa chỉ thường trú</td>
               <td class="font-weight-bold">
@@ -61,8 +75,11 @@
         </div>
       </div>
     </div>
-    <div class="text-center pt-5">
-      <button class="btn-next" (click)="confirm()">Xác nhận</button>
+
+    <div class="row mt-4">
+      <div class="col-12 text-center">
+        <button class="btn-pri" (click)="confirm()">Tiếp tục</button>
+      </div>
     </div>
   </div>
 </section>

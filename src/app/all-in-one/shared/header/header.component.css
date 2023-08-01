@@ -1,10 +1,27 @@
 .header {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-radius: 12px;
+  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.05);
+  left: 50%;
+  transform: translateX(-50%);
+  top: 2rem;
+  position: absolute;
+  z-index: 2;
 }
 
 .contact-header {
   vertical-align: middle;
   color: #005aa3;
   font-weight: bold;
+}
+
+.phone {
+  width: 30px;
+  height: 30px;
+  color: white;
+  background: #0058A0;
+  text-align: center;
+  border-radius: 50px;
+  line-height: 30px;
+  margin-right: 5px;
+  font-size: 14px;
 }

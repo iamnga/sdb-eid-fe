@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Service } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
 
@@ -7,7 +7,7 @@ import { AioService } from 'src/app/services/all-in-one/aio.service';
   templateUrl: './back-and-stepper.component.html',
   styleUrls: ['./back-and-stepper.component.css'],
 })
-export class BackAndStepperComponent implements OnInit {
+export class BackAndStepperComponent {
   @Input() currentStep = 1;
   @Input() isShowStepper = true;
   steps: Stepper[] = [];
@@ -16,10 +16,11 @@ export class BackAndStepperComponent implements OnInit {
     {
       service: Service.OnBoarding,
       steps: [
-        { stepNumber: 1, label: 'Chụp hình khuôn mặt' },
-        { stepNumber: 2, label: 'Xác thực CCCD & vân tay' },
-        { stepNumber: 3, label: 'Thu thập thông tin' },
-        { stepNumber: 4, label: 'Tạo tài khoản' },
+        { stepNumber: 1, label: 'Scan CCCD' },
+        { stepNumber: 2, label: 'Thu thập thông tin' },
+        { stepNumber: 3, label: 'Mở tài khoản' },
+        { stepNumber: 4, label: 'Xác thực' },
+        { stepNumber: 5, label: 'Hoàn tất' },
       ],
     },
 
@@ -38,6 +39,8 @@ export class BackAndStepperComponent implements OnInit {
   stepLines: any;
 
   constructor(private aioSvc: AioService) {
+    // TODO: Remove hard currentSerice
+    this.aioSvc.currentSerice = Service.OnBoarding
     let index = this.masterStepper.findIndex(
       (x) => x.service == this.aioSvc.currentSerice
     );
@@ -50,11 +53,6 @@ export class BackAndStepperComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
-
-  goHome() {
-    this.aioSvc.release();
-  }
 }
 export class MasterStepper {
   service: Service;

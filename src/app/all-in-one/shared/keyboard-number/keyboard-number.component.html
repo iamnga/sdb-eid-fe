@@ -1,5 +1,5 @@
 <div class="keyboard-panel bg-white mt-3">
-  <table>
+  <!-- <table>
     <tr>
       <td>
         <button class="btn-keyboard" (click)="inputNumber('1')">1</button>
@@ -42,5 +42,19 @@
       </td>
       <td><button class="btn-disabled" [disabled]="true">+</button></td>
     </tr>
-  </table>
+  </table> -->
+  <div class="grid-container">
+    <div class="numpad" (click)="inputNumber('1')">1</div>
+    <div class="numpad" (click)="inputNumber('2')">2</div>
+    <div class="numpad" (click)="inputNumber('3')">3</div>
+    <div class="numpad" (click)="inputNumber('4')">4</div>
+    <div class="numpad" (click)="inputNumber('5')">5</div>
+    <div class="numpad" (click)="inputNumber('6')">6</div>
+    <div class="numpad" (click)="inputNumber('7')">7</div>
+    <div class="numpad" (click)="inputNumber('8')">8</div>
+    <div class="numpad" (click)="inputNumber('9')">9</div>
+    <div class="numpad-util" (click)="inputNumber('reset')">Nhập lại</div>
+    <div class="numpad" (click)="inputNumber('0')">0</div>
+    <div class="numpad-util" (click)="inputNumber('clear')">Xóa</div>
+  </div>
 </div>

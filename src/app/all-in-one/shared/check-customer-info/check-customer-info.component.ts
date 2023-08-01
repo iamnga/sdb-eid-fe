@@ -15,17 +15,19 @@ export class CheckCustomerInfoComponent implements OnInit {
   face = '';
 
   constructor(public aioSvc: AioService, public dialog: MatDialog) {
+    this.aioSvc.isProcessing = true;
     aioSvc.currentStep = ServiceStep.CheckCustomerInfo;
   }
 
   ngOnInit(): void {
-    // console.log('verify: ', this.aioSvc.customerInfo);
-    // if (environment.production) {
-    //   this.checkCustomerByIdNo(this.randomId(12));
-    // } else {
-    //   this.face = this.aioSvc.faceCaptured;
-    //   this.checkCustomerByIdNo('051095009392');
-    // }
+    console.log('verify: ', this.aioSvc.customerInfo);
+    if (environment.production) {
+      this.checkCustomerByIdNo(this.randomId(12));
+    } else {
+      this.face = this.aioSvc.faceCaptured;
+      this.checkCustomerByIdNo('352229667');
+      //this.checkCustomerByIdNo(this.aioSvc.customerInfo.customerID);
+    }
   }
 
   randomId(length: number) {

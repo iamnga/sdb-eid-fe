@@ -1,0 +1,13 @@
+<div
+  class="card-game"
+  [class.flipped]="card.isFlipped"
+  card-game
+  [class.matched]="card.isMatched"
+>
+  <div class="front">
+    <img src="assets/self-exp/img/front.png" alt="Card Image" />
+  </div>
+  <div class="back">
+    <img [src]="card.imagePath" alt="Card Image" />
+  </div>
+</div>

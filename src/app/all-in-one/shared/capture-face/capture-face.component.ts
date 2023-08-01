@@ -74,14 +74,22 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
   async startVideo() {
     this.videoInput = this.video.nativeElement;
 
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: false })
-      .then((stream) => {
-        this.video.nativeElement.srcObject = stream;
-      })
-      .catch((err) => console.error(err));
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      console.log(devices)
+      const videoDevices = devices.filter(x => x.kind === "videoinput");
+      navigator.mediaDevices
+        .getUserMedia({ video: { deviceId: videoDevices[1].deviceId }, audio: false })
+        .then((stream) => {
+          this.video.nativeElement.srcObject = stream;
+        })
+        .catch((err) => console.error(err));
 
+    } catch (error) {
+      console.error('Error listing webcams:', error);
+    }
     await this.detect_Faces();
+
   }
 
   async detect_Faces() {
@@ -109,7 +117,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
         this.resultDetection = await faceapi.detectSingleFace(
           this.videoInput,
           new faceapi.TinyFaceDetectorOptions({
-            inputSize: 608,
+            inputSize: 224,
             scoreThreshold: 0.7,
           })
         );

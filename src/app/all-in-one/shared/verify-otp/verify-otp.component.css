@@ -26,7 +26,7 @@
   width: 62.5px;
   height: 62.5px;
   margin-right: 15px;
-  border: 1px solid #dcdcdc;
+  border: 1px solid #B2E0FF;
   border-radius: 6px;
   font-size: 28px;
   line-height: 62.5px;
@@ -80,4 +80,12 @@
 
 .w-10 {
   width: 10% !important;
+}
+
+.input-code{
+  max-width: 600px !important;
+}
+
+.text-danger {
+  min-height: 24px !important;
 }

@@ -1,8 +1,65 @@
 .aio {
-  /* background-image: url("assets/all-in-one/shared/bg.png"); */
-  background-color: #f1f2f7 !important;
+  background: linear-gradient(200deg, #FFF 17.62%, rgba(219, 241, 255, 0.91) 33.12%, rgba(217, 240, 255, 0.47) 50.32%, rgba(215, 239, 255, 0.90) 60.07%, #FFF 75.96%), radial-gradient(79.80% 61.12% at 50.00% 50.00%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.41) 65.11%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(110.86% 62.31% at 53.83% 50.19%, #FFF 27.08%, rgba(255, 255, 255, 0.45) 78.65%, rgba(255, 255, 255, 0.00) 100%), linear-gradient(90deg, #B0D8F7 0%, #9ACAF0 24.22%, #C7E5FE 100%) !important;
   min-height: 100vh;
   position: relative;
 
-  /* font-family: "Manrope", sans-serif !important; */
+  font-family: "Manrope", sans-serif !important;
 }
+
+.text-sacom-pri {
+  color: #0058A0;
+}
+
+.btn-pri {
+  border-radius: 12px;
+  border: 1px solid #FFF;
+  background: #2B9FFF;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.20);
+  color: #FFF;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 15px;
+  padding: 16px 48px;
+}
+
+.btn-sec {
+  border-radius: 12px;
+  border: 1px solid #FFF;
+  background: #B2E0FF;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.20);
+  color: #0058A0;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 15px;
+  padding: 16px 48px;
+}
+
+.btn-pri:disabled,
+.btn-sec:disabled {
+  border-radius: 12px;
+  border: 1px solid #FFF;
+  background: #ABC;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.20);
+  color: #FFF;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 15px;
+  padding: 16px 48px;
+}
+
+.o-0 {
+  opacity: 0;
+}
+
+.rounded {
+  border-radius: 8px !important;
+}
+
+
+/* TODO: Hệ thống lại CSS về 1 chỗ */

@@ -3,37 +3,38 @@
 }
 
 .step-circle {
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 25px;
+  width: 25px;
   margin: 0px auto;
   border-radius: 2rem;
-  background-color: white;
-  color: #0058a0;
-  line-height: 2.5rem;
-  font-size: 1rem;
+  background-color: #AABBCC;
+  color: white;
+  line-height: 25px;
+  font-size: 12px;
 }
 
 .step-circle.active {
-  background-color: #0058a0;
+  background-color: #F7941D;
   color: white;
 }
 
 .step-text {
-  margin-top: 1rem;
+  margin-bottom: 12px;
   color: black;
+  font-size: 12px;
 }
 
-.step-text.active {
+/* .step-text.active {
   color: #0058a0;
-}
+} */
 
 .line {
-  height: 1px;
-  background-color: #b9c0c6;
+  height: 2px;
+  background-color: #AABBCC;
 }
 
 .line.active {
-  background-color: #0058a0;
+  background-color: #F7941D;
 }
 
 .col-2 {
@@ -42,7 +43,7 @@
 
 .step-line {
   position: absolute;
-  top: 20px;
+  top: 42px;
   height: 100%;
   width: 100%;
   z-index: 0;

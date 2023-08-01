@@ -7,19 +7,48 @@ input[type="text"] {
   font-size: 2rem;
   text-align: center;
 }
+
 .keyboard-item {
-  border: 1px solid #2a81d0;
+  /* border: 1px solid #2a81d0;
   border-radius: 4px;
-  height: 60px;
+  height: 60px; */
+
+  border-radius: 8px;
+  border: 1px solid #B2E0FF;
+  background: rgba(178, 224, 255, 0.20);
 }
 
 .keyboard-panel {
   width: 100%;
-  border: 1px solid #dcdcdc;
-  border-radius: 6px;
-  padding: 5px;
+  /* border: 1px solid #dcdcdc;
+  border-radius: 6px; */
+  /* padding: 5px; */
   background-color: #f8f8f8;
 }
+
+.numpad, .numpad-util {
+  border-radius: 8px;
+  border: 1px solid #B2E0FF;
+  background: rgba(178, 224, 255, 0.20);
+  color: #2A9FFF;
+  text-align: center;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 2.6rem;
+}
+
+.numpad-util {
+  font-size: 16px;
+}
+
+.grid-container {
+  background-color: white;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px 12px;
+}
+
 table {
   width: 100%;
   border-radius: 6px;
@@ -54,23 +83,41 @@ td {
   opacity: 0.5;
 }
 
+.row-numpad {
+  display: flex;
+  height: 41.5px;
+  align-items: flex-start;
+  gap: 12px;
+  align-self: stretch;
+}
+
+.numpad {
+  border-radius: 8px;
+  border: 1px solid #B2E0FF;
+  background: rgba(178, 224, 255, 0.20);
+}
+
 @keyframes changeColor {
   0% {
     background-color: #2a81d0;
     color: white;
   }
+
   25% {
     background-color: #2a81d0;
     color: white;
   }
+
   50% {
     background-color: #2a81d0;
     color: white;
   }
+
   75% {
     background-color: #2a81d0;
     color: white;
   }
+
   100% {
     background-color: white;
   }

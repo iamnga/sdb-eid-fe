@@ -1,5 +1,44 @@
-<app-aio-back-and-stepper [currentStep]="1"></app-aio-back-and-stepper>
+<app-aio-back-and-stepper [currentStep]="2"></app-aio-back-and-stepper>
 <section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <ng-container *ngIf="!captured">
+          <h4 class="text-sacom-pri font-weight-bold">Camera đang chụp ảnh...</h4>
+          <h6>Quý khách vui lòng không di chuyển</h6>
+        </ng-container>
+        <ng-container *ngIf="captured">
+          <h4 class="text-sacom-pri font-weight-bold">Chụp ảnh thành công</h4>
+          <h6>Bấm “Tiếp tục" để di chuyển sang bước tiếp theo</h6>
+        </ng-container>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12 text-center">
+        <div class="video-container">
+          <video #video [width]="WIDTH" [height]="HEIGHT" autoplay muted [hidden]="captured"></video>
+          <div #canvas [hidden]></div>
+          <div style="transform: scaleX(-1);">
+            <img *ngIf="captured" class="img-face animate__animated animate__pulse" [src]="captured" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4" *ngIf="!captured">
+      <div class="col-12 text-center">
+        <img class="animate__animated animate__flipInX" src="assets/all-in-one/shared/img/capture_face_guide.svg"
+          alt="">
+      </div>
+    </div>
+    <div class="row mt-4 animate__animated animate__flipInX" *ngIf="captured">
+      <div class="col-12 text-center">
+        <button class="btn-sec mx-2" (click)="reCapture()">Chụp lại</button>
+        <button class="btn-pri mx-2" (click)="next()">Tiếp tục</button>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- <section>
   <div class="pb-5 text-center">
     <ng-container *ngIf="!captured">
       <h3 class="animate__animated animate__fadeIn">
@@ -60,4 +99,4 @@
     <button class="btn btn-back mx-2" (click)="reCapture()">Chụp lại</button>
     <button class="btn btn-next mx-2" (click)="next()">Tiếp tục</button>
   </div>
-</section>
+</section> -->

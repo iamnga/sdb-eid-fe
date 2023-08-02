@@ -1,8 +1,16 @@
-.stepper-box {
-  opacity: 0 !important;
+.container {
+  max-width: 800px !important;
 }
 
-/* .survey-item {
-  width: 150px;
-  display: inline-block;
-} */
+table {
+  width: 100%;
+}
+
+td {
+  padding: 8px 0px;
+  vertical-align: text-top;
+}
+
+.w-30 {
+  width: 30%;
+}

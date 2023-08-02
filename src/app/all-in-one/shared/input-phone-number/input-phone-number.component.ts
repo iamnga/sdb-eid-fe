@@ -1,5 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ServiceStep } from 'src/app/models/enum';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-input-phone-number',
@@ -12,16 +14,22 @@ export class InputPhoneNumberComponent implements OnInit {
   err = false;
 
   constructor(
-
+    private aioSvc: AioService
   ) {
+    this.aioSvc.isProcessing = false;
+    aioSvc.currentStep = ServiceStep.InputPhoneNumber;
+    if (this.aioSvc.customerInfo.mobileNo)
+      aioSvc.next();
   }
 
   ngOnInit(): void { }
 
   next() {
-    if (!this.isVietnamesePhoneNumber() || this.phoneNumber.length < 10) {
+    if (!this.isVietnamesePhoneNumber() || this.phoneNumber.replace(/\s/g, '').length < 10) {
       return;
     } else {
+      this.aioSvc.customerInfo.mobileNo = this.phoneNumber.replace(/\s/g, '');
+      this.aioSvc.next();
     }
   }
 
@@ -43,6 +51,7 @@ export class InputPhoneNumberComponent implements OnInit {
     }
     else {
       if (this.phoneNumber.length >= 10) {
+        this.phoneNumber = this.formatPhoneNumber(this.phoneNumber)
         return;
       } else {
         this.phoneNumber = this.phoneNumber + key;
@@ -59,7 +68,7 @@ export class InputPhoneNumberComponent implements OnInit {
   }
 
   isVietnamesePhoneNumber() {
-    return /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(this.phoneNumber);
+    return /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(this.phoneNumber.replace(/\s/g, ''));
   }
 
   formatPhoneNumber(phoneNumber: string) {

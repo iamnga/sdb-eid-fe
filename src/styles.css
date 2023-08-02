@@ -110,3 +110,7 @@ body {
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
+
+.bg-color .mat-dialog-container{
+  background-color: #DCECFC;
+}

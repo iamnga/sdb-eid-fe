@@ -24,7 +24,7 @@
   margin-left: 18px;
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #DCECFC;
   padding: 5px;
   border-radius: 5px;
 }
@@ -36,7 +36,7 @@
   border-radius: 5px;
   box-sizing: border-box;
   padding: 0;
-  background: white;
+  background: #2A9FFF;
   border-bottom: 1px solid #b5b5b5;
   cursor: pointer;
   display: flex;
@@ -49,19 +49,20 @@
   min-width: 60px;
   height: 60px;
   min-height: 60px;
+  color: #FFFFFF;
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button:active,
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button:focus {
   background: #e4e4e4;
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-functionBtn {
-  background-color: #adb5bb;
+  background-color: #2A9FFF;
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-button-space,
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-button-shift,
 .simple-keyboard.hg-theme-ios.hg-theme-default
   .hg-button.hg-button-shiftactivated {
-  background-color: #ffffff;
+  background-color: #2A9FFF;
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button-space {
   max-width: 448px;
@@ -77,13 +78,22 @@
   max-width: 80px;
 }
 
-input {
-  font-family: "Manrope", sans-serif !important;
-  line-height: 1rem !important;
-}
 
 .mat-form-field-infix {
   border-top: 0.5em solid transparent !important;
+}
+
+.mat-form-field-infix input {
+  font-family: "Manrope", sans-serif !important;
+  line-height: 1rem !important;
+  color: #0058A0 !important;
+}
+
+.mat-form-field-outline{
+  background-color: white;
+  border-radius: 10px;
+  border: none;
+  color: #0058A0;
 }
 
 .inner-addon {

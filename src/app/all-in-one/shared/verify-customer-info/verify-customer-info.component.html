@@ -1,4 +1,4 @@
-<app-aio-back-and-stepper [currentStep]="3"></app-aio-back-and-stepper>
+<app-aio-back-and-stepper [currentStep]="2"></app-aio-back-and-stepper>
 <section>
   <div class="container">
     <h4 class="text-sacom-pri text-center mb-4 font-weight-bold">
@@ -6,15 +6,20 @@
     </h4>
     <div class="row bg-white rounded px-3 border">
       <div class="col-6 p-4 px-0">
-        <h4>Xin chào, <span class="text-sacom-pri">TRAN MINH HOANG LONG</span></h4>
+        <h4 class="font-weight-bold">Xin chào, <span class="text-sacom-pri" style="text-transform: uppercase;">{{aioSvc.customerInfo.fullName}}</span></h4>
         <h5 class="mb-0">Quý khách kiểm tra lại thông tin</h5>
       </div>
       <div class="col-6 py-2 px-0">
         <div class="img-customer text-right">
           <!-- // TODO: remove hard -->
-          <img src="assets/all-in-one/shared/img/face.jpg" class="rounded mr-2"/>
+          <!-- <img src="assets/all-in-one/shared/img/face.jpg" class="rounded mr-2"/>
           <img src="assets/all-in-one/shared/img/front.jpg" class="rounded mr-2"/>
-          <img src="assets/all-in-one/shared/img/back.jpg" class="rounded"/>
+          <img src="assets/all-in-one/shared/img/back.jpg" class="rounded"/> -->
+
+          <img [src]="aioSvc.faceCaptured" class="rounded mr-2" />
+          <img [src]="aioSvc.frontCardId" class="rounded mr-2" />
+          <img [src]="aioSvc.backCardId" class="rounded" />
+
         </div>
       </div>
     </div>

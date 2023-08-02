@@ -29,7 +29,7 @@ export class CaptureCardIdComponent implements OnInit {
   constructor(
     public aioSvc: AioService
   ) {
-    aioSvc.currentStep = ServiceStep.CollectCardId;
+    aioSvc.currentStep = ServiceStep.CaptureCardId;
   }
 
   ngOnInit() {
@@ -111,120 +111,12 @@ export class CaptureCardIdComponent implements OnInit {
       console.log('back: ', this.back)
       this.aioSvc.frontCardId = this.front;
       this.aioSvc.backCardId = this.back;
-      this.compareFace();
+      this.aioSvc.next();
+      // this.compareFace();
     }
   }
 
-  compareFace() {
-    this.aioSvc
-      .uploadImage(this.front, 'front')
-      .subscribe(
-        (res: any) => {
-          if (res.respCode == '00') {
-            console.log('Upload front', res);
 
-            this.aioSvc
-              .uploadImage(
-                this.back,
-                'back'
-              )
-              .subscribe(
-                (res: any) => {
-                  if (res.respCode == '00') {
-                    console.log('Upload back', res);
-                    this.aioSvc.uploadImage(this.aioSvc.faceCaptured, 'face').subscribe(
-                      (res: any) => {
-                        if (res.respCode == '00') {
-                          console.log('Upload face', res);
-                          this.aioSvc.compareFace().subscribe(
-                            (res: any) => {
-                              console.log('compareFace', res);
-                              if (res.respCode == '00') {
-                                if (res.data.result == '1') {
-                                  if (
-                                    res.data.customerOCRInfo.customerID ==
-                                    this.aioSvc.customerInfo.customerID
-                                  ) {
-                                    this.aioSvc
-                                      .uploadImage(this.aioSvc.faceCaptured, 'done')
-                                      .subscribe(
-                                        (res: any) => {
-                                          if (res.respCode == '00') {
-                                            this.aioSvc.next();
-                                          } else {
-                                            this.aioSvc.alert(`Có lỗi xảy ra uploadImage-done`);
-                                            this.aioSvc.isProcessing = false;
-                                          }
-                                        },
-                                        (err) => {
-                                          this.aioSvc.alert(`Có lỗi xảy ra uploadImage-done`);
-                                          this.aioSvc.isProcessing = false;
-                                        }
-                                      );
-                                  } else {
-                                    this.aioSvc.alert(`Số CCCD không trùng khớp`);
-                                    this.aioSvc.isProcessing = false;
-                                  }
-                                  this.aioSvc.isProcessing = false;
-                                } else {
-                                  this.aioSvc.alert(`Xác thực thất bại, Quý khách vui lòng thử lại`, false);
-                                  this.aioSvc.isProcessing = false;
-                                }
-                              } else {
-                                this.aioSvc.alert(`Có lỗi xảy ra, Quý khách vui lòng thử lại`, false);
-                                this.aioSvc.isProcessing = false;
-                              }
-                            },
-                            (err) => {
-                              this.aioSvc.alert(`Có lỗi xảy ra`);
-                              this.aioSvc.isProcessing = false;
-                            }
-                          );
-                        } else {
-                          this.aioSvc.alert(`Có lỗi xảy ra uploadImage-face`);
-
-                          this.aioSvc.isProcessing = false;
-                        }
-                      },
-                      (err) => {
-                        this.aioSvc.alert(`Có lỗi xảy ra uploadImage-face`);
-
-                        this.aioSvc.isProcessing = false;
-                      }
-                    );
-                  } else {
-                    // this.alert(`Có lỗi xảy ra uploadImage-back`);
-
-                    this.aioSvc.isProcessing = false;
-                    return;
-                  }
-                },
-                (err) => {
-                  // this.alert(`Có lỗi xảy ra uploadImage-back`);
-                  console.log(err);
-                  this.aioSvc.isProcessing = false;
-                  return;
-                }
-              );
-          } else {
-            // this.alert(`Có lỗi xảy ra uploadImage-Front`);
-
-            this.aioSvc.isProcessing = false;
-            return;
-          }
-        },
-        (err) => {
-          // this.alert(`Có lỗi xảy ra uploadImage-Front`);
-          console.log(err);
-          this.aioSvc.isProcessing = false;
-          return;
-        }
-      );
-
-
-
-
-  }
 
 
   previous() {

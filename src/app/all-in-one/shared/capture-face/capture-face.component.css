@@ -51,11 +51,21 @@
   color: rgb(147, 171, 245);
 }
 
+.video-container {
+  display: inline-block;
+  border: 1px solid #AABBCC;
+  padding: 10px;
+  background: white;
+  border-radius: 20px;
+  line-height: 0;
+}
+
 video {
-  border: 2px solid rgb(147, 171, 245);
-  border-radius: 15px;
+  border-radius: 10px;
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
+  max-height: 280px;
+  max-width: 373.333px;
 }
 
 .capture-box {
@@ -75,8 +85,12 @@ video {
   z-index: 100;
 }
 
-.img {
-  border-radius: 15px;
+
+
+.img-face {
+  border-radius: 10px;
+  max-height: 280px;
+  transform: scaleX(-1);
 }
 
 .btn-next,
@@ -94,6 +108,7 @@ video {
 .btn-next:hover {
   background-color: #1966af;
 }
+
 .btn-next:disabled:hover {
   background-color: #2a81d0;
 }

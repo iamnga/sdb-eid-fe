@@ -1,28 +1,31 @@
-<app-aio-back-and-stepper [currentStep]="3"></app-aio-back-and-stepper>
+<app-aio-back-and-stepper [currentStep]="2"></app-aio-back-and-stepper>
 <section>
   <div class="container">
     <div class="text-center">
-      <h3 class="mb-3 font-weight-bold">Bổ sung thông tin</h3>
+      <h3 class="mb-3 font-weight-bold text-sacom-pri">Bổ sung thông tin</h3>
       <h5>Quý khách vui lòng nhập các thông tin còn thiếu</h5>
     </div>
-    <div class="row p-3 bg-white box mt-5">
+    <div class="row p-3 bg-white box mt-5 border">
       <div class="col-12 pt-2">
         <div>
           <table class="fill-table">
             <tr>
               <td class="w-50 pb-3">
-                <mat-checkbox
-                  [color]="'primary'"
-                  (change)="likeResidenceAddress()"
-                  [(ngModel)]="isLikeResidenceAddress"
-                  >Địa chỉ liên lạc trùng với địa chỉ thường trú</mat-checkbox
-                >
+                <mat-checkbox class="pt-3" [color]="'primary'" (change)="likeResidenceAddress()"
+                  [(ngModel)]="isLikeResidenceAddress">Địa chỉ liên lạc trùng với địa chỉ thường trú</mat-checkbox>
               </td>
               <td class="w-50 pl-3 pb-3">
-                <div
-                  class="fill-input ml-3"
-                  (click)="openContactAddressDialog()"
-                >
+                <div class="fill-input ml-3" (click)="openInputEmailDialog()">
+                  <ng-container *ngIf="!aioSvc.customerInfo.email">Nhập email của bạn</ng-container>
+                  <ng-container *ngIf="aioSvc.customerInfo.email">{{
+                    aioSvc.customerInfo.email
+                    }}</ng-container>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="w-50 pb-3">
+                <div class="fill-input" (click)="openContactAddressDialog()">
                   <ng-container *ngIf="!contactAddress">
                     Địa chỉ liên lạc
                   </ng-container>
@@ -32,59 +35,29 @@
                   </ng-container>
                 </div>
               </td>
-            </tr>
-            <tr>
-              <td class="w-50 pb-3" (click)="openInputEmailDialog()">
-                <div class="fill-input">
-                  <ng-container *ngIf="!aioSvc.customerInfo.email"
-                    >Nhập email của bạn</ng-container
-                  >
-                  <ng-container *ngIf="aioSvc.customerInfo.email">{{
-                    aioSvc.customerInfo.email
-                  }}</ng-container>
-                </div>
-              </td>
               <td class="w-50 pl-3 pb-3" (click)="openJobDialog()">
                 <div class="fill-input ml-3">
-                  <ng-container *ngIf="!this.currentOcc"
-                    >Vui lòng chọn nghề nghiệp
+                  <ng-container *ngIf="!this.currentOcc">Vui lòng chọn nghề nghiệp
                     <span class="float-right pr-3">
                       <i class="fa-solid fa-angle-down" aria-hidden="true"></i>
                     </span>
                   </ng-container>
                   <ng-container *ngIf="this.currentOcc">{{
                     this.currentOcc.name
-                  }}</ng-container>
+                    }}</ng-container>
                 </div>
               </td>
             </tr>
-            <!-- <tr>
-              <td class="w-50 pb-3" (click)="openMobileNoDialog()">
-                <div class="fill-input">
-                  <ng-container *ngIf="!aioSvc.customerInfo.mobileNo"
-                    >Nhập số điện thoại của bạn</ng-container
-                  >
-                  <ng-container *ngIf="aioSvc.customerInfo.mobileNo">{{
-                    aioSvc.customerInfo.mobileNo
-                  }}</ng-container>
-                </div>
-              </td>
-            </tr> -->
           </table>
         </div>
       </div>
     </div>
     <div class="text-center pt-5">
-      <button
-        class="btn-next"
-        (click)="confirm()"
-        [disabled]="
+      <button class="btn-pri" (click)="confirm()" [disabled]="
           !aioSvc.customerInfo.jobCode ||
-          !aioSvc.customerInfo.mobileNo ||
           !contactAddress
-        "
-      >
-        Xác nhận
+        ">
+        Tiếp tục
       </button>
     </div>
   </div>

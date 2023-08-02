@@ -85,7 +85,7 @@ export class ContactAddressComponent implements OnInit {
 
   getAddressDetail(wardName: AddressData) {
     this.currentWard = wardName;
-    this.title = 'Địa chỉ chi tiết';
+    this.title = 'Nhập địa chỉ liên lạc (Số nhà, tên đường)';
     this.step++;
   }
 

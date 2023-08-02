@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Service, ServiceStep } from 'src/app/models/enum';
+import { AuthType, Service, ServiceStep } from 'src/app/models/enum';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
 import { Alert, Template } from 'src/app/models/alert';
 import { AlertComponent } from '../dialog/alert/alert.component';
+import { AuthenInfo, GetAuthMethodRequestData } from 'src/app/models/aio';
 
 @Component({
   selector: 'app-check-customer-info',
@@ -12,7 +13,7 @@ import { AlertComponent } from '../dialog/alert/alert.component';
   styleUrls: ['./check-customer-info.component.css'],
 })
 export class CheckCustomerInfoComponent implements OnInit {
-  face = '';
+  authenInfo: AuthenInfo[] = [];
 
   constructor(public aioSvc: AioService, public dialog: MatDialog) {
     this.aioSvc.isProcessing = true;
@@ -21,13 +22,10 @@ export class CheckCustomerInfoComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('verify: ', this.aioSvc.customerInfo);
-    if (environment.production) {
-      this.checkCustomerByIdNo(this.randomId(12));
-    } else {
-      this.face = this.aioSvc.faceCaptured;
-      this.checkCustomerByIdNo('352229667');
-      //this.checkCustomerByIdNo(this.aioSvc.customerInfo.customerID);
-    }
+    //TODO: remove hard data
+    this.aioSvc.currentAuthType = AuthType.SMSOTP;
+    this.aioSvc.isProcessing = false;
+    this.aioSvc.next();
   }
 
   randomId(length: number) {
@@ -61,11 +59,14 @@ export class CheckCustomerInfoComponent implements OnInit {
         if (res.resultCode === 'C3' || res.resultCode === 'C4') {
           // C3: KH mới
           // C4: KH vãng lai
+          // Không có PTXT => AuthType = SMSOTP - theo luồng STM
           this.aioSvc.next();
         }
         if (res.resultCode === 'C0') {
           // C0: KH hiện hữu chuẩn
           // => check issue date CCCD
+          // => check get list account
+          // => check authMethod => 3 case: Không có PTXT - không có SĐT thì end; có PTXT thì lưu lại AuthType = PTXT hiện hữu; không có PTXT nhưng có số ĐT từ T24 (AuthType = SMSOTP)
         }
         if (res.resultCode === 'C1') {
           // C1: KH không trùng CCCD nhưng trùng họ tên + NTNS
@@ -88,6 +89,51 @@ export class CheckCustomerInfoComponent implements OnInit {
         this.aioSvc.isProcessing = false;
 
         console.log(err);
+      }
+    );
+  }
+
+
+  getAuthMethod() {
+    let data = new GetAuthMethodRequestData();
+    data.cifNo = this.aioSvc.checkCustomerByIdNoResponseData.cifNo;
+    data.customerID = this.aioSvc.checkCustomerByIdNoResponseData.legalId;
+    data.customerType = '1';
+    data.mobileNo = this.aioSvc.checkCustomerByIdNoResponseData.mobileNumber;
+    this.aioSvc.getAuthMethod(data).subscribe(
+      (res: any) => {
+        console.log(res);
+        this.aioSvc.isProcessing = false;
+
+        if (res.respCode) {
+          if (res.respCode != '00') {
+            this.aioSvc.alert(`Lỗi hệ thống`);
+          } else {
+            if (res.data.authInfo) {
+              this.authenInfo = res.data.authInfo;
+              // Có một PTXT
+              if (this.authenInfo.length == 1) {
+                this.aioSvc.currentAuthType = this.authenInfo[0].authType;
+              }
+              // mSign - SmartOTP
+              else {
+                this.aioSvc.authenInfo = this.authenInfo;
+              }
+              this.aioSvc.next();
+            } else {
+              this.aioSvc.alert(`Không tồn tại phương thức xác thực`);
+              // Check nếu không có SĐT từ api check-customer trả về => reject
+              // Nếu có SĐT => hiện alert lên "Sẽ gửi mã xác thực về sđt xxx"
+              this.aioSvc.next();
+            }
+          }
+        } else {
+          this.aioSvc.alert(`Lỗi hệ thống`);
+        }
+      },
+      (err: any) => {
+        this.aioSvc.alert(`Lỗi hệ thống`);
+        this.aioSvc.isProcessing = false;
       }
     );
   }
@@ -142,6 +188,9 @@ export class CheckCustomerInfoComponent implements OnInit {
       console.log(result);
     });
   }
+
+
+
 
   confirm() {
     this.aioSvc.next();

@@ -18,12 +18,16 @@ import { AioService } from 'src/app/services/all-in-one/aio.service';
 export class InputFingerComponent implements OnInit {
   fpResponse: FingerResponse = new FingerResponse();
   hasIcaoResponse = false;
+  isScanning = false;
 
   input: AnimationOptions = {
     path: 'assets/all-in-one/shared/img/cccd-vantay.json',
   };
   check: AnimationOptions = {
     path: 'assets/all-in-one/shared/img/check.json',
+  };
+  fingerScan: AnimationOptions = {
+    path: 'assets/all-in-one/shared/img/finger_scan.json',
   };
 
   constructor(private aioSvc: AioService, public dialog: MatDialog) {
@@ -36,6 +40,10 @@ export class InputFingerComponent implements OnInit {
 
   ngOnInit(): void {
     this.callMkFingerPrint();
+    //TODO: remove test API
+    // this.aioSvc.getListAccount('17856216').subscribe((res) => {
+    //   console.log(res)
+    // })
   }
 
   callMkFingerPrint() {
@@ -44,7 +52,11 @@ export class InputFingerComponent implements OnInit {
       (msg: any) => {
         console.log(msg);
         this.fpResponse = msg;
+        if (this.fpResponse.quality > 0) {
+          this.isScanning = true;
+        }
         if (this.fpResponse.verifyResponse != null && this.hasIcaoResponse == false) {
+          this.isScanning = false;
           if (
             this.fpResponse.verifyResponse.success
           ) {

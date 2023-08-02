@@ -33,14 +33,24 @@
   border-radius: 5px;
   color: white;
 }
-
+/* 
 .id-img{
-  height: 400px;
+  max-height: 300px;
   text-align: center;
 }
 
 .id-img img{
   max-height: 100%;
   max-width: 100%;
+} */
+
+img {
+  max-width: 533.333px;
+  max-height: 400px;
 }
 
+
+video{
+  max-width: 533.333px;
+  max-height: 400px;
+}

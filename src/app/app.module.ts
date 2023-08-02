@@ -15,7 +15,7 @@ import { CaptureFaceComponent } from './all-in-one/shared/capture-face/capture-f
 import { DashBoardComponent } from './all-in-one/dash-board/dash-board.component';
 import { VerifyCustomerInfoComponent } from './all-in-one/shared/verify-customer-info/verify-customer-info.component';
 import { AccountAndAlertComponent } from './all-in-one/on-boarding/account-and-alert/account-and-alert.component';
-import { VerifyOtpComponent } from './all-in-one/shared/verify-otp/verify-otp.component';
+import { VerifyOtpComponent } from './all-in-one/shared/verify-authen/verify-authen.component';
 import { EndComponent } from './all-in-one/on-boarding/end/end.component';
 import { CollectCardIdComponent } from './all-in-one/shared/collect-card-id/collect-card-id.component';
 import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-id.component';
@@ -73,7 +73,8 @@ import { CaptureCardIdComponent } from './all-in-one/shared/capture-card-id/capt
 import { CheckCustomerInfoComponent } from './all-in-one/shared/check-customer-info/check-customer-info.component';
 import { InputPhoneNumberComponent } from './all-in-one/shared/input-phone-number/input-phone-number.component';
 import { FooterComponent } from './all-in-one/shared/footer/footer.component';
-import { InquiryAuthenComponent } from './all-in-one/shared/inquiry-authen/inquiry-authen.component';
+import { HandleSmartAuthenComponent } from './all-in-one/shared/handle-smart-authen/handle-smart-authen.component';
+import { TestAPIComponent } from './all-in-one/shared/testAPI/testAPI';
 
 export function playerFactory() {
   return player;
@@ -123,7 +124,8 @@ export function playerFactory() {
     CheckCustomerInfoComponent,
     InputPhoneNumberComponent,
     FooterComponent,
-    InquiryAuthenComponent
+    HandleSmartAuthenComponent,
+    TestAPIComponent
     
   ],
   imports: [

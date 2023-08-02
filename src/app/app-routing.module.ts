@@ -14,7 +14,7 @@ import { InputFingerComponent } from './all-in-one/shared/input-finger/input-fin
 import { MobileCaptureCardIdComponent } from './all-in-one/shared/mobile-capture-card-id/mobile-capture-card-id.component';
 import { SharedComponent } from './all-in-one/shared/shared.component';
 import { VerifyCustomerInfoComponent } from './all-in-one/shared/verify-customer-info/verify-customer-info.component';
-import { VerifyOtpComponent } from './all-in-one/shared/verify-otp/verify-otp.component';
+import { VerifyOtpComponent } from './all-in-one/shared/verify-authen/verify-authen.component';
 import { VirtualKeyboardComponent } from './all-in-one/shared/virtual-keyboard/virtual-keyboard.component';
 import { RecheckInfoComponent } from './all-in-one/update-card-id/recheck-info/recheck-info.component';
 import { UpdateCardIdComponent } from './all-in-one/update-card-id/update-card-id.component';
@@ -30,7 +30,8 @@ import { ShowcaseComponent } from './self-exp/showcase/showcase.component';
 import { CaptureCardIdComponent } from './all-in-one/shared/capture-card-id/capture-card-id.component';
 import { CheckCustomerInfoComponent } from './all-in-one/shared/check-customer-info/check-customer-info.component';
 import { InputPhoneNumberComponent } from './all-in-one/shared/input-phone-number/input-phone-number.component';
-import { InquiryAuthenComponent } from './all-in-one/shared/inquiry-authen/inquiry-authen.component';
+import { HandleSmartAuthenComponent } from './all-in-one/shared/handle-smart-authen/handle-smart-authen.component';
+import { TestAPIComponent } from './all-in-one/shared/testAPI/testAPI';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -136,8 +137,8 @@ const routes: Routes = [
             component: FillInfoComponent,
           },
           {
-            path: 'inquiry-authen',
-            component: InquiryAuthenComponent,
+            path: 'handle-smart-authen',
+            component: HandleSmartAuthenComponent,
           },
           {
             path: 'verify-authen',
@@ -154,6 +155,10 @@ const routes: Routes = [
           {
             path: 'vk',
             component: VirtualKeyboardComponent,
+          },
+          {
+            path: 'test-api',
+            component: TestAPIComponent,
           },
         ],
       },

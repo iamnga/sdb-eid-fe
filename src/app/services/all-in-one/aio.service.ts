@@ -87,6 +87,7 @@ export class AioService {
     this.faceCaptured = '';
     this.fpAttemp = 0;
     this.authenInfo = [];
+    this.currentAuthType = AuthType.None;
     this.router.navigate(['/aio/dash-board']);
   }
 
@@ -118,130 +119,9 @@ export class AioService {
     });
   }
 
-  testHS() {
-    let shared = CryptoUtils.randomKeyString(32);
-    let sharedSecretBase64 = CryptoUtils.toBase64(shared);
-    let jwk: any;
-    let encryptedContent: any;
-    let rsaKey: any;
-    let keyFromServer: any;
-    console.log(
-      JSON.stringify({
-        kty: 'oct',
-        alg: 'dir',
-        kid: shared,
-        k: sharedSecretBase64,
-        length: 256,
-      })
-    );
-
-    jose.JWK.asKey(
-      JSON.stringify({
-        kty: 'oct',
-        alg: 'dir',
-        kid: shared,
-        k: sharedSecretBase64,
-        length: 256,
-      }),
-      'json'
-    ).then((result) => {
-      jwk = result;
-      console.log('jwk', jwk);
-
-      jose.JWK.asKey(environment.publicKey, 'pem').then((result) => {
-        rsaKey = result;
-        console.log('rsaKey', rsaKey);
-
-        jose.JWE.createEncrypt({ format: 'compact' }, rsaKey)
-          .update(jose.util.base64url.decode(sharedSecretBase64))
-          .final()
-          .then((result: any) => {
-            encryptedContent = result;
-            console.log('encryptedContent', encryptedContent);
-            this.http
-              .post(
-                this.apiUrl + 'handshake',
-                JSON.stringify({ key: encryptedContent }),
-                {
-                  headers: new HttpHeaders({
-                    'Content-Type': 'application/json;',
-                    Accept: '*/*',
-                    'Access-Control-Allow-Origin': '*',
-                  }),
-                }
-              )
-              .subscribe((res: any) => {
-                console.log('hsResp', res);
-                keyFromServer = res.key;
-
-                jose.JWE.createDecrypt(jwk)
-                  .decrypt(res.challenge)
-                  .then((res) => {
-                    console.log('decrypt challenge', res.plaintext.toString());
-                    if (res.plaintext.toString() == shared) {
-                      jose.JWK.asKey(
-                        JSON.stringify({
-                          kty: 'oct',
-                          alg: 'A256GCM',
-                          kid: shared,
-                          use: 'enc',
-                          k: sharedSecretBase64,
-                          length: 256,
-                        }),
-                        'json'
-                      ).then((jwk2) => {
-                        let req = this.newRequest({
-                          serviceCode: Service[this.currentSerice],
-                        });
-                        let reqBase64 = CryptoUtils.toBase64(req);
-                        console.log('jwk2', jwk2);
-                        console.log('reqBase64', reqBase64);
-
-                        jose.JWE.createEncrypt({ format: 'compact' }, jwk2)
-                          .update(jose.util.base64url.decode(reqBase64))
-                          .final()
-                          .then((dataEnc: any) => {
-                            console.log('dataEnc', dataEnc);
-
-                            let deviceIdBase64 = CryptoUtils.toBase64(
-                              this.deviceID
-                            );
-                            jose.JWE.createEncrypt(
-                              { format: 'compact' },
-                              rsaKey
-                            )
-                              .update(
-                                jose.util.base64url.decode(deviceIdBase64)
-                              )
-                              .final()
-                              .then((deviceIdEnc) => {
-                                console.log('deviceIdEnc', deviceIdEnc);
-                                this.http
-                                  .post(
-                                    this.apiUrl + 'test-handshake',
-                                    dataEnc,
-                                    {
-                                      headers: new HttpHeaders({
-                                        'Content-Type': 'application/json;',
-                                        Accept: '*/*',
-                                        'Access-Control-Allow-Origin': '*',
-                                        'x-hs-page-id': keyFromServer,
-                                        'co-prof-tranx': deviceIdEnc,
-                                      }),
-                                    }
-                                  )
-                                  .subscribe((res) => {
-                                    console.log(res);
-                                  });
-                              });
-                          });
-                      });
-                    }
-                  });
-              });
-          });
-      });
-    });
+  getListAccount(cifNo: string) {
+    let req = this.newRequest({ cifNo: cifNo });
+    return this.postAsync('get-list-account', req);
   }
 
   verifySessionID(deviceID: string, sessionID: string) {
@@ -432,26 +312,28 @@ export class AioService {
     if (this.currentSerice == Service.OnBoarding) {
       switch (this.currentStep) {
         case ServiceStep.DashBoard: {
-
-          //this.router.navigate(['/aio/on-boarding/account-and-alert']);
+          //this.router.navigate(['/aio/shared/test-api']);
           this.router.navigate(['/aio/shared/input-finger']);
-
-          break;
-        }
-        case ServiceStep.InquiryAuthen: {
-          this.router.navigate(['/aio/shared/verify-authen']);
           break;
         }
         case ServiceStep.InputFinger: {
-          this.router.navigate(['/aio/shared/verify-customer-info']);
+          this.router.navigate(['/aio/shared/check-customer-info']);
           break;
         }
-        case ServiceStep.CollectCardId: {
-          this.router.navigate(['/aio/shared/capture-guide']);
+        case ServiceStep.CheckCustomerInfo: {
+          this.router.navigate(['/aio/shared/input-phone-number']);
+          break;
+        }
+        case ServiceStep.InputPhoneNumber: {
+          this.router.navigate(['/aio/shared/capture-card-id']);
+          break;
+        }
+        case ServiceStep.CaptureCardId: {
+          this.router.navigate(['/aio/shared/capture-face']);
           break;
         }
         case ServiceStep.CaptureFace: {
-          this.router.navigate(['/aio/shared/capture-card-id']);
+          this.router.navigate(['/aio/shared/verify-customer-info']);
           break;
         }
         case ServiceStep.VerifyCustomerInfo: {
@@ -463,7 +345,11 @@ export class AioService {
           break;
         }
         case ServiceStep.AccountAndAlert: {
-          this.router.navigate(['/aio/shared/verify-otp']);
+          this.router.navigate(['/aio/shared/handle-smart-authen']);
+          break;
+        }
+        case ServiceStep.HandleSmartAuthen: {
+          this.router.navigate(['/aio/shared/verify-authen']);
           break;
         }
         case ServiceStep.VerifyAuthen: {
@@ -589,6 +475,132 @@ export class AioService {
   next() {
     // this.updateLogStep();
     this.navigate();
+  }
+
+  testHS() {
+    let shared = CryptoUtils.randomKeyString(32);
+    let sharedSecretBase64 = CryptoUtils.toBase64(shared);
+    let jwk: any;
+    let encryptedContent: any;
+    let rsaKey: any;
+    let keyFromServer: any;
+    console.log(
+      JSON.stringify({
+        kty: 'oct',
+        alg: 'dir',
+        kid: shared,
+        k: sharedSecretBase64,
+        length: 256,
+      })
+    );
+
+    jose.JWK.asKey(
+      JSON.stringify({
+        kty: 'oct',
+        alg: 'dir',
+        kid: shared,
+        k: sharedSecretBase64,
+        length: 256,
+      }),
+      'json'
+    ).then((result) => {
+      jwk = result;
+      console.log('jwk', jwk);
+
+      jose.JWK.asKey(environment.publicKey, 'pem').then((result) => {
+        rsaKey = result;
+        console.log('rsaKey', rsaKey);
+
+        jose.JWE.createEncrypt({ format: 'compact' }, rsaKey)
+          .update(jose.util.base64url.decode(sharedSecretBase64))
+          .final()
+          .then((result: any) => {
+            encryptedContent = result;
+            console.log('encryptedContent', encryptedContent);
+            this.http
+              .post(
+                this.apiUrl + 'handshake',
+                JSON.stringify({ key: encryptedContent }),
+                {
+                  headers: new HttpHeaders({
+                    'Content-Type': 'application/json;',
+                    Accept: '*/*',
+                    'Access-Control-Allow-Origin': '*',
+                  }),
+                }
+              )
+              .subscribe((res: any) => {
+                console.log('hsResp', res);
+                keyFromServer = res.key;
+
+                jose.JWE.createDecrypt(jwk)
+                  .decrypt(res.challenge)
+                  .then((res) => {
+                    console.log('decrypt challenge', res.plaintext.toString());
+                    if (res.plaintext.toString() == shared) {
+                      jose.JWK.asKey(
+                        JSON.stringify({
+                          kty: 'oct',
+                          alg: 'A256GCM',
+                          kid: shared,
+                          use: 'enc',
+                          k: sharedSecretBase64,
+                          length: 256,
+                        }),
+                        'json'
+                      ).then((jwk2) => {
+                        let req = this.newRequest({
+                          serviceCode: Service[this.currentSerice],
+                        });
+                        let reqBase64 = CryptoUtils.toBase64(req);
+                        console.log('jwk2', jwk2);
+                        console.log('reqBase64', reqBase64);
+
+                        jose.JWE.createEncrypt({ format: 'compact' }, jwk2)
+                          .update(jose.util.base64url.decode(reqBase64))
+                          .final()
+                          .then((dataEnc: any) => {
+                            console.log('dataEnc', dataEnc);
+
+                            let deviceIdBase64 = CryptoUtils.toBase64(
+                              this.deviceID
+                            );
+                            jose.JWE.createEncrypt(
+                              { format: 'compact' },
+                              rsaKey
+                            )
+                              .update(
+                                jose.util.base64url.decode(deviceIdBase64)
+                              )
+                              .final()
+                              .then((deviceIdEnc) => {
+                                console.log('deviceIdEnc', deviceIdEnc);
+                                this.http
+                                  .post(
+                                    this.apiUrl + 'test-handshake',
+                                    dataEnc,
+                                    {
+                                      headers: new HttpHeaders({
+                                        'Content-Type': 'application/json;',
+                                        Accept: '*/*',
+                                        'Access-Control-Allow-Origin': '*',
+                                        'x-hs-page-id': keyFromServer,
+                                        'co-prof-tranx': deviceIdEnc,
+                                      }),
+                                    }
+                                  )
+                                  .subscribe((res) => {
+                                    console.log(res);
+                                  });
+                              });
+                          });
+                      });
+                    }
+                  });
+              });
+          });
+      });
+    });
   }
 
   fakeData() {

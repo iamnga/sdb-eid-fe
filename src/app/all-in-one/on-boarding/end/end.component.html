@@ -1,36 +1,50 @@
-<app-aio-back-and-stepper
-  [currentStep]="3"
-  [isShowStepper]="false"
-></app-aio-back-and-stepper>
+<app-aio-back-and-stepper [currentStep]="5" [isShowStepper]="true"></app-aio-back-and-stepper>
 
 <section>
   <div class="container">
     <div class="text-center">
-      <h3 class="font-weight-bold mb-4">
-        Xin chúc mừng, Quý khách đã mở tài khoản thành công
-      </h3>
+      <h4 class="font-weight-bold text-sacom-pri">
+        Mở tài khoản thanh toán thành công!
+      </h4>
     </div>
-
-    <div class="row bg-white rounded p-4">
+    <div class="py-3 text-center">
+      <img src="assets/all-in-one/shared/img/check_success.svg" alt="">
+    </div>
+    <div class="row bg-white rounded border p-4">
+      <div class="col-8">
+        <table>
+          <tr>
+            <td class="w-30">Tên tài khoản</td>
+            <td><b> {{ aioSvc.customerInfo.fullName }}</b></td>
+          </tr>
+          <tr>
+            <td>Số tài khoản</td>
+            <td><b> {{ aioSvc.openAccountResponseData.accountNumber }}</b></td>
+          </tr>
+          <tr>
+            <td>Ngày hiệu lực</td>
+            <td>{{effectiveDate}}</td>
+          </tr>
+          <tr>
+            <td>Chi nhánh</td>
+            <td>Sacombank Hội Sở</td>
+          </tr>
+          <tr>
+            <td>Địa chỉ</td>
+            <td>266-268 Nam Kỳ Khởi Nghĩa, P. Võ Thị Sáu, Q.3, TP.HCM</td>
+          </tr>
+        </table>
+      </div>
       <div class="col-4">
-        <div class="mb-3">Họ và tên</div>
-        <div>
-          <b> {{ aioSvc.customerInfo.fullName }}</b>
+        <div class="d-inline-block" style="border-radius: 10px;
+        border: 10px solid #ededed;">
+          <qrcode [qrdata]="qrValue" [width]="200" [errorCorrectionLevel]="'H'" [margin]="2"></qrcode>
         </div>
       </div>
-      <div class="col-4">
-        <div class="mb-3">Số tài khoản</div>
-        <div class="mb-3">
-          <b> {{ aioSvc.openAccountResponseData.accountNumber }}</b>
-        </div>
-        <div>Ngày hiệu lực <b>(Unknow)</b></div>
-      </div>
-      <div class="col-4">
-        <div class="mb-3">Chi nhánh</div>
-        <div class="mb-3"><b> Sacombank Hội Sở</b></div>
-        <div>266-268 Nam Kỳ Khởi Nghĩa, P. 8, Q.3, TP.HCM</div>
-      </div>
     </div>
-    <app-survey></app-survey>
+    <div class="text-center mt-4">
+      <button class="btn-pri" (click)="goHome()">Về trang chủ</button>
+    </div>
+    <!-- <app-survey></app-survey> -->
   </div>
 </section>

@@ -29,9 +29,9 @@ export class AccountAndAlertComponent {
   ) {
     aioSvc.currentStep = ServiceStep.AccountAndAlert;
     //TODO: remove hard data
-    aioSvc.customerInfo.mobileNo = "0349444440";
-    aioSvc.customerInfo.dob = "25/01/1995";
-    aioSvc.customerInfo.customerID = "352229667";
+    // aioSvc.customerInfo.mobileNo = "0349444440";
+    // aioSvc.customerInfo.dob = "25/01/1995";
+    // aioSvc.customerInfo.customerID = "352229667";
   }
 
   selectAccountType(type: any) {

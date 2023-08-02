@@ -12,7 +12,7 @@ import { JobComponent } from '../dialog/job/job.component';
 @Component({
   selector: 'app-fill-info',
   templateUrl: './fill-info.component.html',
-  styleUrls: ['./fill-info.component.css'],
+  styleUrls: ['./fill-info.component.css', '../../all-in-one.component.css'],
 })
 export class FillInfoComponent implements OnInit {
   isLikeResidenceAddress = false;
@@ -26,12 +26,13 @@ export class FillInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.findAddressByText();
+
     if (!environment.production) {
       // this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
       // this.aioSvc.customerInfo.mobileNo = '0349' + this.randomId(6);
       // this.aioSvc.customerInfo.customerID = this.randomId(12);
     }
-    this.findAddressByText();
     //TODO: remove hard
     // this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
   }
@@ -119,6 +120,7 @@ export class FillInfoComponent implements OnInit {
   openContactAddressDialog() {
     const dialogRef = this.dialog.open(ContactAddressComponent, {
       data: this.provinces,
+      panelClass: 'bg-color'
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -137,6 +139,7 @@ export class FillInfoComponent implements OnInit {
   openInputEmailDialog() {
     const dialogRef = this.dialog.open(InputEmailComponent, {
       data: this.aioSvc.customerInfo.email,
+      panelClass: 'bg-color'
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.aioSvc.customerInfo.email = result;
@@ -148,6 +151,7 @@ export class FillInfoComponent implements OnInit {
   openJobDialog() {
     const dialogRef = this.dialog.open(JobComponent, {
       data: this.occupations,
+      panelClass: 'bg-color'
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -159,25 +163,8 @@ export class FillInfoComponent implements OnInit {
     });
   }
 
-  openMobileNoDialog() {
-    const dialogRef = this.dialog.open(InputMobileNumberComponent, {
-      data: this.aioSvc.customerInfo.mobileNo
-        ? this.aioSvc.customerInfo.mobileNo
-        : '',
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        //   this.currentOcc = result;
-        this.aioSvc.customerInfo.mobileNo = result;
-      }
-      console.log(result);
-      console.log('The MobileNoDialog was closed', result);
-    });
-  }
-
   confirm() {
     if (
-      this.aioSvc.customerInfo.mobileNo &&
       this.aioSvc.customerInfo.jobCode &&
       this.aioSvc.customerInfo.contactAddress
     ) {

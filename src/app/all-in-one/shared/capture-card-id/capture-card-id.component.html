@@ -1,41 +1,43 @@
 <app-aio-back-and-stepper [currentStep]="2"></app-aio-back-and-stepper>
 
 <section>
-  <div class="container text-center">
-    <div>
-      <h3 class="mb-4 font-weight-bold text-sacom-pri">
-        <ng-container *ngIf="step === 1">
-          Chụp mặt trước CCCD
-        </ng-container>
-        <ng-container *ngIf="step === 2">
-          Chụp mặt sau CCCD
-        </ng-container>
-      </h3>
-    </div>
-    <video class="rounded" #videoPreview autoplay [hidden]="captured"></video>
-    <canvas #canvas [hidden]="true"></canvas>
-    <div>
-      <ng-container *ngIf="step === 1 && front">
-        <img class="rounded animate__animated animate__pulse" [src]="front" alt="">
+  <div class="container text-center" style="line-height: 0;">
+    <!-- Title -->
+    <h4 class="mb-4 font-weight-bold text-sacom-pri">
+      <ng-container *ngIf="step === 1">
+        Chụp ảnh mặt trước CCCD
       </ng-container>
-      <ng-container *ngIf="step === 2 && back">
-        <img class="rounded animate__animated animate__pulse" [src]="back" alt="">
+      <ng-container *ngIf="step === 2">
+        Chụp ảnh mặt sau CCCD
       </ng-container>
+    </h4>
+    <!-- End Title -->
+    <!-- Video & Canvas -->
+    <div style="min-height: 400px;">
+      <video class="rounded" #videoPreview autoplay [hidden]="captured"></video>
+      <canvas #canvas [hidden]="true"></canvas>
+      <div class="img-captured">
+        <ng-container *ngIf="step === 1 && front">
+          <img class="rounded animate__animated animate__pulse" [src]="front" alt="">
+        </ng-container>
+        <ng-container *ngIf="step === 2 && back">
+          <img class="rounded animate__animated animate__pulse" [src]="back" alt="">
+        </ng-container>
+      </div>
     </div>
+    <!-- End Video & Canvas -->
+    <!-- Button -->
     <div class="text-center mt-4">
       <div>
-        <button *ngIf="step == 2 && !captured" class="btn-sec mx-2 animate__animated animate__zoomIn"
-          (click)="previous()">Quay lại</button>
-        <button class="btn-pri mx-2 animate__animated "
-          [ngClass]="{'animate__zoomIn': !captured, 'animate__zoomOut': captured}" (click)="takePicture()"
-          [hidden]="captured">Chụp ảnh</button>
+        <button *ngIf="step == 2 && !captured" class="btn-sec mx-2" (click)="previous()">Xem lại mặt trước</button>
+        <button class="btn-pri mx-2" (click)="takePicture()" [hidden]="captured">Chụp ảnh</button>
       </div>
       <div>
-        <button class="btn-sec mx-2 animate__animated animate__flipInX" (click)="retryPicture()"
-          [hidden]="!captured">Chụp lại</button>
-        <button class="btn-pri mx-2 animate__animated animate__flipInX" (click)="next()" [hidden]="!captured">Tiếp
+        <button class="btn-sec mx-2" (click)="retryPicture()" [hidden]="!captured">Chụp lại</button>
+        <button class="btn-pri mx-2" (click)="next()" [hidden]="!captured">Tiếp
           theo</button>
       </div>
     </div>
+    <!-- End Button -->
   </div>
 </section>

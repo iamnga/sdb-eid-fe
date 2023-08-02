@@ -1,4 +1,4 @@
-<app-aio-back-and-stepper [currentStep]="2"></app-aio-back-and-stepper>
+<app-aio-back-and-stepper [currentStep]="1"></app-aio-back-and-stepper>
 <section>
   <div class="container text-center">
     <div>
@@ -8,17 +8,15 @@
     <ng-container *ngIf="!fpResponse.icaoResponse">
       <div class="py-4 gif">
         <ng-lottie
+        *ngIf="!isScanning"
           [options]="input"
           (animationCreated)="animationCreated($event)"
         ></ng-lottie>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="fpResponse.icaoResponse">
-      <div class="py-4 gif animate__animated animate__zoomIn">
         <ng-lottie
-          [options]="check"
-          (animationCreated)="animationCreated($event)"
-        ></ng-lottie>
+        *ngIf="isScanning"
+        [options]="fingerScan"
+        (animationCreated)="animationCreated($event)"
+      ></ng-lottie>
       </div>
     </ng-container>
   </div>

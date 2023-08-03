@@ -1,6 +1,80 @@
 <app-aio-back-and-stepper [currentStep]="2"></app-aio-back-and-stepper>
 <section>
   <div class="container">
+    <div class="text-center">
+      <h4 class="mb-4 font-weight-bold text-sacom-pri">Xác nhận thông tin cập nhật</h4>
+    </div>
+    <div class="row p-4 bg-white rounded border">
+      <div class="col-8">
+        <table class="w-100">
+          <tr>
+            <td class="w-50">
+              <h5 class="font-weight-bold text-sacom-pri">Thông tin hiện tại</h5>
+            </td>
+            <td class="font-weight-bold text-sacom-pri">
+              <h5 class="font-weight-bold text-sacom-pri">Thông tin điều chỉnh</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h6 class="font-weight-light">Số CMNN</h6>
+              <h5 class="font-weight-bold">231053235256</h5>
+            </td>
+            <td>
+              <h6 class="font-weight-light">Số CMNN</h6>
+              <h5 class="font-weight-bold">231053235256</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h6 class="font-weight-light">Ngày cấp</h6>
+              <h5 class="font-weight-bold">02/02/2012</h5>
+            </td>
+            <td>
+              <h6 class="font-weight-light">Ngày cấp</h6>
+              <h5 class="font-weight-bold">06/05/2022</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h6 class="font-weight-light">Nơi cấp</h6>
+              <h5 class="font-weight-bold">CCS QLHC về TTXH</h5>
+            </td>
+            <td>
+              <h6 class="font-weight-light">Nơi cấp</h6>
+              <h5 class="font-weight-bold">CCS QLHC về TTXH</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h6 class="font-weight-light">Địa chỉ thường trú</h6>
+              <h5 class="font-weight-bold">268 Nam Kỳ Khởi Nghĩa, P.8, Q.3, TP.HCM</h5>
+            </td>
+            <td>
+              <h6 class="font-weight-light">Địa chỉ thường trú</h6>
+              <h5 class="font-weight-bold">268 Nam Kỳ Khởi Nghĩa, P.8, Q.3, TP.HCM</h5>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-4 rounded border p-3">
+        <div class="text-center">
+          <h6 class="font-weight-light">Căn cước công dân</h6>
+          <h5 class="font-weight-bold">Phạm Đào Quỳnh Hương</h5>
+          <img src="assets/all-in-one/shared/img/front.jpg" alt="" class="rounded mt-2">
+          <img src="assets/all-in-one/shared/img/front.jpg" alt="" class="rounded mt-3">
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12 text-center">
+        <button class="btn-pri" (click)="confirm()">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- <section>
+  <div class="container">
     <div class="text-center mb-4">
       <h3 class="font-weight-bold mb-2">
         Xin chào,
@@ -94,4 +168,4 @@
       <button class="btn-next" (click)="confirm()">Xác nhận</button>
     </div>
   </div>
-</section>
+</section> -->

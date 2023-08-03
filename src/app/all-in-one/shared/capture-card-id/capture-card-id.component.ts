@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   OnDestroy,
@@ -25,6 +26,8 @@ export class CaptureCardIdComponent implements OnInit {
   step = 1 // Step 1 = Front; Step 2 = Back
   front = '';
   back = '';
+  width = 1920;
+  height = 1080;
 
   constructor(
     public aioSvc: AioService
@@ -45,7 +48,7 @@ export class CaptureCardIdComponent implements OnInit {
       console.log(videoDevices)
       if (videoDevices.length > 1) {
         navigator.mediaDevices
-          .getUserMedia({ video: { deviceId: videoDevices[0].deviceId }, audio: false })
+          .getUserMedia({ video: { deviceId: videoDevices[0].deviceId, width: this.width, height: this.height }, audio: false })
           .then((stream) => {
             this.videoPreview.nativeElement.srcObject = stream;
           })
@@ -71,6 +74,7 @@ export class CaptureCardIdComponent implements OnInit {
       if (ctx) {
         canvasEl.width = videoEl.videoWidth;
         canvasEl.height = videoEl.videoHeight;
+        console.log(videoEl.videoWidth + '-' + videoEl.videoHeight);
         ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
         this.captured = true;
 

@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, } from '@angular/core';
+import { ServiceStep } from 'src/app/models/enum';
+import { AioService } from 'src/app/services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-update-success',
   templateUrl: './update-success.component.html',
-  styleUrls: ['./update-success.component.css']
+  styleUrls: ['./update-success.component.css', '../../all-in-one.component.css']
 })
-export class UpdateSuccessComponent implements OnInit {
+export class UpdateSuccessComponent {
 
-  constructor() { }
+  constructor(public aioSvc: AioService) { 
+    aioSvc.currentStep = ServiceStep.UpdateCustomerSuccess
+  }
 
-  ngOnInit(): void {
+  goHome() {
+    this.aioSvc.release();
   }
 
 }

@@ -8,13 +8,12 @@ import { AioService } from 'src/app/services/all-in-one/aio.service';
 })
 export class TestAPIComponent {
   constructor(private aioSvc: AioService) {
-    // aioSvc.getListAccount('17856216').subscribe((res) => {
-    //   console.log(res)
-    // })
-
-    aioSvc.checkCustomerByIdNo('352229667').subscribe((res) => {
+    aioSvc.createAccountVerify('17856216').subscribe((res) => {
       console.log(res)
     })
-  }
 
+    // aioSvc.checkCustomerByIdNo('089095020514').subscribe((res) => {
+    //   console.log(res)
+    // })
+  }
 }

@@ -28,10 +28,6 @@ export class AccountAndAlertComponent {
     public dialog: MatDialog,
   ) {
     aioSvc.currentStep = ServiceStep.AccountAndAlert;
-    //TODO: remove hard data
-    // aioSvc.customerInfo.mobileNo = "0349444440";
-    // aioSvc.customerInfo.dob = "25/01/1995";
-    // aioSvc.customerInfo.customerID = "352229667";
   }
 
   selectAccountType(type: any) {
@@ -134,51 +130,6 @@ export class AccountAndAlertComponent {
           }
   }
 
-  // validateCustomAccount() {
-  //   let first = this.customAccountTemp.substring(0, 1);
-  //   let length = this.customAccountTemp.length;
-  //   this.rules[0].valid = length > 5 && length < 10 ? true : false;
-  //   this.rules[1].valid = length > 0 && first != '7' ? true : false;
-
-  //   // if (length > 5 && length < 13) {
-  //   //   this.rules[0].valid = true;
-  //   //   this.rules[1].valid = true;
-  //   //   this.rules[3].valid = true;
-  //   //   this.rules[4].valid = true;
-  //   //   if (first != '7') {
-  //   //     this.rules[2].valid = true;
-  //   //   } else {
-  //   //     this.rules[2].valid = false;
-  //   //   }
-
-  //   //   if (length == 10) {
-  //   //     if (/[7890]{1}/.test(first)) {
-  //   //       this.rules[3].valid = true;
-  //   //     } else {
-  //   //       this.rules[3].valid = false;
-  //   //     }
-  //   //   } else {
-  //   //     this.rules[3].valid = true;
-  //   //   }
-  //   //   if (length == 12) {
-  //   //     if (first != '0') {
-  //   //       this.rules[4].valid = true;
-  //   //     } else {
-  //   //       this.rules[4].valid = false;
-  //   //     }
-  //   //   }
-  //   // } else {
-  //   //   this.rules[0].valid = false;
-  //   //   this.rules[2].valid = false;
-  //   //   this.rules[3].valid = false;
-  //   //   this.rules[4].valid = false;
-  //   // }
-
-  //   this.isValidCustomAccount =
-  //     this.rules[0].valid && this.rules[1].valid ? true : false;
-  //   console.log(this.isValidCustomAccount);
-  // }
-
   verifyCustomAccount() {
     this.checkAccount(this.customAccountTemp);
   }
@@ -258,30 +209,4 @@ export class AccountAndAlertComponent {
     });
   }
 
-  rules = [
-    { text: 'Độ dài tối thiểu 6 chữ số tối đa 9 chữ số;', valid: false },
-    { text: 'Không bắt đầu bằng số 7;', valid: false },
-    {
-      text: 'Dãy số miễn phí không có tối thiểu 1/2 dãy số liên tục có chứa cặp thần tài(39,79), phát lộc (68,86), số thứ tự, số tiến, số trùng, số lặp, số gánh, số soi gương.',
-      valid: true,
-    },
-  ];
-
-  // rules = [
-  //   { text: 'Độ dài tối thiểu 6 chữ số tối đa 12 chữ số;', valid: false },
-  //   { text: 'Không chứa chữ và ký tự đặc biệt;', valid: false },
-  //   { text: 'Không bắt đầu bằng số 7;', valid: false },
-  //   {
-  //     text: 'Không bắt đầu bằng số 1 đến 6 nếu chuỗi số TKTT là 10 số;',
-  //     valid: false,
-  //   },
-  //   {
-  //     text: 'Không bắt đầu bằng số 0 nếu chuỗi số TKTT là 12 số;',
-  //     valid: false,
-  //   },
-  //   {
-  //     text: 'Dãy số miễn phí không có tối thiểu 1/2 dãy số liên tục có chứa cặp thần tài(39,79), phát lộc (68,86), số thứ tự, số tiến, số trùng, số lặp, số gánh, số soi gương.',
-  //     valid: true,
-  //   },
-  // ];
 }

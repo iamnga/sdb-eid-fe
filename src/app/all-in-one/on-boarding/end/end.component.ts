@@ -17,8 +17,7 @@ export class EndComponent implements OnInit {
   constructor(public aioSvc: AioService, public dialog: MatDialog) {
     aioSvc.currentStep = ServiceStep.End;
     this.effectiveDate = this.getFormattedDate();
-    this.qrValue = 'ngann';
-    //this.qrValue = aioSvc.openAccountResponseData.dataStreamQR;
+    this.qrValue = aioSvc.openAccountResponseData.dataStreamQR;
   }
 
   ngOnInit(): void {

@@ -17,6 +17,7 @@ export enum ServiceStep {
   VerifyCustomerInfo,
   RecheckInfo,
   UpdateCustomerInfo,
+  UpdateCustomerSuccess,
   FillInfo,
   AccountAndAlert,
   HandleSmartAuthen,

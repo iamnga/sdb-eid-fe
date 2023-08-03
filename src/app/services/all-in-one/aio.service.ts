@@ -56,6 +56,8 @@ export class AioService {
   authenInfo: AuthenInfo[] = [];
   currentAuthType: AuthType = AuthType.None;
   testCaseURL = 'assets/testCase.json';
+  testAPI = true;
+
   headerDict = {
     'Content-Type': 'application/json;',
     Accept: '*/*',
@@ -119,9 +121,9 @@ export class AioService {
     });
   }
 
-  getListAccount(cifNo: string) {
+  createAccountVerify(cifNo: string) {
     let req = this.newRequest({ cifNo: cifNo });
-    return this.postAsync('get-list-account', req);
+    return this.postAsync('create-account-verify', req);
   }
 
   verifySessionID(deviceID: string, sessionID: string) {
@@ -309,10 +311,14 @@ export class AioService {
   }
 
   navigate() {
+    if (this.testAPI) {
+      this.router.navigate(['/aio/shared/test-api']);
+      return;
+    }
+    this.router.navigate(['/aio/shared/test-api']);
     if (this.currentSerice == Service.OnBoarding) {
       switch (this.currentStep) {
         case ServiceStep.DashBoard: {
-          //this.router.navigate(['/aio/shared/test-api']);
           this.router.navigate(['/aio/shared/input-finger']);
           break;
         }

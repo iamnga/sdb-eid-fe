@@ -1,15 +1,19 @@
-<app-aio-back-and-stepper
-  [currentStep]="3"
-  [isShowStepper]="false"
-></app-aio-back-and-stepper>
-
+<app-aio-back-and-stepper [currentStep]="3"></app-aio-back-and-stepper>
 <section>
   <div class="container">
-    <div class="text-center">
-      <h3 class="font-weight-bold mb-4">
-        Xin chúc mừng, Quý khách đã cập nhật thông tin thành công
-      </h3>
+    <div class="py-3 text-center">
+      <img src="assets/all-in-one/shared/img/check_success.svg" alt="">
     </div>
-    <app-survey></app-survey>
+    <div class="row bg-white rounded border p-5">
+      <div class="col-12 text-center">
+        <h5 class="text-sacom-pri font-weight-bold">Cập nhật CCCD thành công</h5>
+        <h5 class="mt-3">Cảm ơn Quý khách đã sử dụng sản phẩm dịch vụ của Sacombank</h5>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12 text-center">
+        <button class="btn-pri" (click)="goHome()">Về trang chủ</button>
+      </div>
+    </div>
   </div>
 </section>

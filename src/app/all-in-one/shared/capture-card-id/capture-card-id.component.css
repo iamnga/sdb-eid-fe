@@ -13,6 +13,7 @@
 .btn-next:hover {
   background-color: #1966af;
 }
+
 .btn-next:disabled:hover {
   background-color: #2a81d0;
 }
@@ -33,6 +34,7 @@
   border-radius: 5px;
   color: white;
 }
+
 /* 
 .id-img{
   max-height: 300px;
@@ -45,12 +47,18 @@
 } */
 
 img {
-  max-width: 533.333px;
+  /* max-width: 533.333px; */
+  max-width: 711px;
   max-height: 400px;
 }
 
-
-video{
-  max-width: 533.333px;
+video {
+  object-fit: cover;
+  max-width: 711px;
   max-height: 400px;
 }
+
+/* video{
+  max-width: 1280px;
+  max-height: 720px;
+} */

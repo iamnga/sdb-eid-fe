@@ -13,7 +13,7 @@ import Utils from '../../shared/utils/utils';
 @Component({
   selector: 'app-recheck-info',
   templateUrl: './recheck-info.component.html',
-  styleUrls: ['./recheck-info.component.css'],
+  styleUrls: ['./recheck-info.component.css', '../../all-in-one.component.css'],
 })
 export class RecheckInfoComponent implements OnInit {
   updateCustomerRequestData = new UpdateCustomerRequestData();
@@ -28,10 +28,10 @@ export class RecheckInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.aioSvc.fakeData();
-    setTimeout(() => {
-      this.checkCustomerByIdNo(this.aioSvc.customerInfo.customerIDOld);
-    }, 1000);
+    // this.aioSvc.fakeData();
+    // setTimeout(() => {
+    //   this.checkCustomerByIdNo(this.aioSvc.customerInfo.customerIDOld);
+    // }, 1000);
   }
 
   checkCustomerByIdNo(customerId: string) {

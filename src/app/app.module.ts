@@ -148,7 +148,7 @@ export function playerFactory() {
     ImageCropperModule,
     ModalModule.forRoot(),
     FontAwesomeModule,
-    UserIdleModule.forRoot({idle: 1, timeout: 600, ping: 1})
+    UserIdleModule.forRoot({idle: 60, timeout: 0, ping: undefined})
   ],
   providers: [
     WebsocketService,

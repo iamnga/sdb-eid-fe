@@ -1,4 +1,4 @@
-<section class="processing-panel">
+<section class="processing-panel" *ngIf="aioSvc.isProcessing">
   <div class="processing-box">
     <div class="processing-animate">
       <ng-lottie [options]="processing"></ng-lottie>

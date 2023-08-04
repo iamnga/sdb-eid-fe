@@ -1,6 +1,5 @@
 <section class="aio">
   <router-outlet></router-outlet>
-  <!-- <ngx-loading [show]="aioSvc.isProcessing"></ngx-loading> -->
-  <app-processing *ngIf="aioSvc.isProcessing"></app-processing>
+  <app-processing></app-processing>
   <app-aio-footer *ngIf="aioSvc.currentStep != serviceStep.DashBoard"></app-aio-footer>
 </section>

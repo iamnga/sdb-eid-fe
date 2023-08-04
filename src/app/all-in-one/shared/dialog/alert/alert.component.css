@@ -1,35 +1,20 @@
 *:not(.mat-icon) {
   font-family: "Manrope", sans-serif !important;
 }
-.btn-next,
-.btn-back {
-  width: 150px;
-  height: 50px;
-  outline: none;
-  border: 1px solid #2a81d0;
-  border-radius: 4px;
-  color: white;
-  background-color: #2a81d0;
-  font-size: 1rem;
-}
-
-.btn-next:hover {
-  background-color: #1966af;
-}
-.btn-next:disabled:hover {
-  background-color: #2a81d0;
-}
-
-.btn-next:disabled {
-  opacity: 0.5;
-}
-
-.btn-back {
-  background-color: white;
-  border: 1px solid #2a81d0;
-  color: #2a81d0;
-}
 
 .exist-account {
   max-width: 400px;
+}
+
+.title{
+  color: #0058A0;
+  text-align: center;
+  font-family: Manrope;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.content{
+  font-weight: 400;
 }

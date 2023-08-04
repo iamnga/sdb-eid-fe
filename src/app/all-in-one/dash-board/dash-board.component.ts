@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Service, ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './dash-board.component.html',
   styleUrls: ['./dash-board.component.css'],
 })
-export class DashBoardComponent implements OnInit {
+export class DashBoardComponent implements OnInit, AfterViewInit {
   service = Service;
   constructor(
     public aioSvc: AioService,
@@ -18,10 +18,15 @@ export class DashBoardComponent implements OnInit {
     private router: Router
   ) {
     aioSvc.currentStep = ServiceStep.DashBoard;
+    aioSvc.isProcessing = true;
   }
 
   ngOnInit(): void {
     // this.aioSvc.testHS()
+  }
+
+  ngAfterViewInit(): void {
+    this.aioSvc.isProcessing = false;
   }
 
   startService(serviceCd: any) {
@@ -41,11 +46,8 @@ export class DashBoardComponent implements OnInit {
             } else {
               this.aioSvc.isProcessing = false;
               this.aioSvc.sessionID = result.data.sessionId;
-              if (!environment.production) {
-                this.aioSvc.next();
-              } else {
-                this.aioSvc.next();
-              }
+              this.aioSvc.runIdle();
+              this.aioSvc.next();
             }
           } else {
             this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);

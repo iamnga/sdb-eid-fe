@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AioService } from '../services/all-in-one/aio.service';
 import { ServiceStep } from '../models/enum';
+import { UserIdleService } from 'angular-user-idle';
 
 @Component({
   selector: 'app-all-in-one',
@@ -10,5 +11,6 @@ import { ServiceStep } from '../models/enum';
 export class AllInOneComponent {
   serviceStep = ServiceStep;
   constructor(public aioSvc: AioService) {
+
   }
 }

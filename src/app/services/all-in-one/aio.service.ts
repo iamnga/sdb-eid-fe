@@ -31,6 +31,8 @@ import * as jose from 'node-jose';
 import TestCase from '../../../assets/testCase.json';
 import { AuthType } from '../../models/enum';
 import Utils from 'src/app/all-in-one/shared/utils/utils';
+import { UserIdleService } from 'angular-user-idle';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +40,7 @@ import Utils from 'src/app/all-in-one/shared/utils/utils';
 export class AioService {
   currentSerice = Service.None;
   currentStep = ServiceStep.DashBoard;
-  isProcessing = false;
+  isProcessing: boolean;
   apiUrl = environment.apiUrl;
   deviceID = environment.production ? '00000001' : '00000002';
   sessionID = '';
@@ -56,8 +58,8 @@ export class AioService {
   authenInfo: AuthenInfo[] = [];
   currentAuthType: AuthType = AuthType.None;
   testCaseURL = 'assets/testCase.json';
-  testAPI = true;
-
+  testAPI = false;
+  private timerStartSubscription!: Subscription;
   headerDict = {
     'Content-Type': 'application/json;',
     Accept: '*/*',
@@ -68,10 +70,42 @@ export class AioService {
     private router: Router,
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private userIdle: UserIdleService
   ) { }
 
+
+  runIdle() {
+    console.log("run idle")
+    this.userIdle.startWatching();
+
+    this.timerStartSubscription = this.userIdle.onTimerStart().subscribe((countdown) => {
+      if (countdown == 1) {
+        this.alertWithAction(`Quý đã không tương tác với thiết bị trong thời gian quá lâu <br> Quý khách có muốn tiếp tục giao dịch không?`, ``, `Hủy`, 'Tiếp tục', 15).subscribe((res: Alert) => {
+          console.log(res);
+          if (res) {
+            if (res.action === "pri") {
+              this.userIdle.stopTimer();
+            }
+            else {
+              this.release();
+            }
+          } else {
+            this.release();
+          }
+        })
+      }
+    });
+  }
+
+  stopWatching() {
+    this.userIdle.stopWatching();
+    this.timerStartSubscription.unsubscribe();
+  }
+
   release() {
+    this.stopWatching();
+    this.dialog.closeAll();
     this.isProcessing = false;
     this.currentSerice = Service.None;
     this.currentStep = ServiceStep.DashBoard;
@@ -126,6 +160,11 @@ export class AioService {
     return this.postAsync('create-account-verify', req);
   }
 
+  getListAccount(cifNo: string) {
+    let req = this.newRequest({ cifNo: cifNo });
+    return this.postAsync('get-list-account', req);
+  }
+
   verifySessionID(deviceID: string, sessionID: string) {
     let req = this.newRequest(null, deviceID, sessionID);
 
@@ -169,14 +208,11 @@ export class AioService {
     return this.postAsync('check-account', req);
   }
 
-  checkCustomerByIdNo(customerID: string) {
-    let req = this.newRequest({
-      legalId: customerID,
-      legalIdType: '1',
-    });
+  // checkCustomerByIdNo(data: CheckCustomerSDBRequestData) {
+  //   let req = this.newRequest(data);
 
-    return this.postAsync('check-customer', req);
-  }
+  //   return this.postAsync('check-customer-sdb', req);
+  // }
 
   checkCustomerSDB(data: CheckCustomerSDBRequestData) {
     let req = this.newRequest(data);
@@ -250,6 +286,48 @@ export class AioService {
     return this.postAsync('find-address-by-text', req);
   }
 
+  alertWithGoHome(title: string = '', content: string = '', countDownTime: number = 30) {
+    let data = new Alert();
+
+    data.template = Template.GoHome;
+    data.title = title;
+    data.content = content;
+    data.countDownTime = countDownTime;
+
+    const dialogRef = this.dialog.open(AlertComponent, {
+      data: data,
+      autoFocus: false,
+      panelClass: 'aio-alert'
+    });
+
+    dialogRef.afterClosed().subscribe((result: Alert) => {
+      this.release();
+    });
+  }
+
+  alertWithAction(title: string = '', content: string = '', btnSecText: string = '', btnPriText: string = '', countDownTime: number = 30) {
+    let data = new Alert();
+
+    data.template = Template.HasAction;
+    data.title = title;
+    data.content = content;
+    data.btnPriText = btnPriText;
+    data.btnSecText = btnSecText;
+    data.countDownTime = countDownTime;
+
+    const dialogRef = this.dialog.open(AlertComponent, {
+      data: data,
+      autoFocus: false,
+      panelClass: 'aio-alert'
+    });
+
+    // dialogRef.afterClosed().subscribe((result: Alert) => {
+    //   return result;
+    // });
+
+    return dialogRef.afterClosed();
+  }
+
   alert(content: string, isRelease: boolean = true) {
     let data = new Alert();
 
@@ -260,6 +338,7 @@ export class AioService {
     const dialogRef = this.dialog.open(AlertComponent, {
       data: data,
       autoFocus: false,
+      panelClass: 'aio-alert'
     });
 
     dialogRef.afterClosed().subscribe((result: Alert) => {
@@ -313,9 +392,7 @@ export class AioService {
   navigate() {
     if (this.testAPI) {
       this.router.navigate(['/aio/shared/test-api']);
-      return;
     }
-    this.router.navigate(['/aio/shared/test-api']);
     if (this.currentSerice == Service.OnBoarding) {
       switch (this.currentStep) {
         case ServiceStep.DashBoard: {
@@ -428,26 +505,6 @@ export class AioService {
         }
       }
     }
-    if (this.currentSerice == Service.TestMk) {
-      switch (this.currentStep) {
-        case ServiceStep.DashBoard: {
-          this.router.navigate(['/aio/shared/input-finger']);
-          break;
-        }
-        case ServiceStep.InputFinger: {
-          this.router.navigate(['/aio/shared/capture-guide']);
-          break;
-        }
-        case ServiceStep.CaptureGuide: {
-          this.router.navigate(['/aio/shared/capture-face']);
-          break;
-        }
-        default: {
-          this.router.navigate(['/aio']);
-          break;
-        }
-      }
-    }
   }
 
   callMkFaceICAO() {
@@ -479,7 +536,6 @@ export class AioService {
   }
 
   next() {
-    // this.updateLogStep();
     this.navigate();
   }
 

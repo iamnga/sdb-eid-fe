@@ -3,6 +3,9 @@ export class Alert {
   title: string;
   content: string;
   action: string;
+  btnPriText: string;
+  btnSecText: string;
+  countDownTime: number;
 }
 
 export enum Template {
@@ -10,4 +13,6 @@ export enum Template {
   ExistAccount,
   FingerPrintFailed,
   UpdateCardId,
+  GoHome,
+  HasAction
 }

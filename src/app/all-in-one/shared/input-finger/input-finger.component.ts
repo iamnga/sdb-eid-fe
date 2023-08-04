@@ -40,10 +40,6 @@ export class InputFingerComponent implements OnInit {
 
   ngOnInit(): void {
     this.callMkFingerPrint();
-    //TODO: remove test API
-    // this.aioSvc.getListAccount('17856216').subscribe((res) => {
-    //   console.log(res)
-    // })
   }
 
   callMkFingerPrint() {
@@ -73,55 +69,68 @@ export class InputFingerComponent implements OnInit {
               this.aioSvc.next();
             }
             else {
-              this.aioSvc.alert(
+              this.aioSvc.alertWithGoHome(
                 `Đọc thông tin không thành công`
               );
             }
           } else {
             if (this.aioSvc.fpAttemp == 2) {
 
-              this.aioSvc.alert(
+              this.aioSvc.alertWithGoHome(
                 `Quý khách đã xác thực thất bại <br>quá số lần quy định`
               );
 
             } else {
-              this.alert();
+              this.aioSvc.alertWithAction(`Xác thực vân tay không thành công`, ``, `Thoát`, `Thử lại`).subscribe((res: Alert) => {
+                if (res) {
+                  if (res.action === "pri") {
+                    this.aioSvc.fpAttemp++;
+                    this.recallMkFingerPrint();
+                  }
+                  else {
+                    this.aioSvc.release();
+                  }
+                }
+                else {
+                  this.aioSvc.release();
+                }
+              })
             }
           }
         }
       },
       (err) => {
-        this.aioSvc.alert(`Có lỗi xảy ra callMkFingerPrint`);
+        this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này`);
         console.log(err);
       }
     );
   }
 
-  alert() {
-    let data = new Alert();
+  // alert() {
+  //   let data = new Alert();
 
-    data.template = Template.FingerPrintFailed;
-    data.title = 'Thông báo';
+  //   data.template = Template.FingerPrintFailed;
+  //   data.title = 'Thông báo';
 
-    const dialogRef = this.dialog.open(AlertComponent, {
-      data: data,
-      autoFocus: false,
-    });
+  //   const dialogRef = this.dialog.open(AlertComponent, {
+  //     data: data,
+  //     autoFocus: false,
+  //   });
 
-    dialogRef.afterClosed().subscribe((result: Alert) => {
-      if (result) {
-        if (result.action == 'back') {
-          this.aioSvc.release();
-        } else {
-          this.aioSvc.fpAttemp++;
-          this.recallMkFingerPrint();
-        }
-      } else {
-        this.aioSvc.release();
-      }
-      console.log(result);
-    });
-  }
+  //   dialogRef.afterClosed().subscribe((result: Alert) => {
+  //     if (result) {
+  //       if (result.action == 'back') {
+  //         this.aioSvc.release();
+  //       } else {
+  //         this.aioSvc.fpAttemp++;
+  //         this.recallMkFingerPrint();
+  //       }
+  //     } else {
+  //       this.aioSvc.release();
+  //     }
+  //     console.log(result);
+  //   });
+  // }
 
   mappingData() {
     if (this.fpResponse.icaoResponse.data.dg13) {
@@ -151,10 +160,10 @@ export class InputFingerComponent implements OnInit {
 
         //TODO: Check customer info
       } else {
-        this.aioSvc.alert(`CCCD của Quý khách đã hết hạn`);
+        this.aioSvc.alertWithGoHome(`CCCD của Quý khách đã hết hạn`);
       }
     } else {
-      this.aioSvc.alert(`Có lỗi xảy ra, không lấy được thông tin từ CCCD`);
+      this.aioSvc.alertWithGoHome(`Đọc thông tin không thành công`);
     }
   }
 

@@ -1,17 +1,21 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-input-phone-number',
   templateUrl: './input-phone-number.component.html',
-  styleUrls: ['./input-phone-number.component.css'],
+  styleUrls: ['./input-phone-number.component.css', '../../all-in-one.component.css'],
 })
 export class InputPhoneNumberComponent implements OnInit {
   phoneNumber = '';
   errMsg = 'Số điện thoại không đúng định dạng. Vui lòng nhập lại';
   err = false;
+  @Output() phoneNumberValue = new EventEmitter<string>();
+
+  addNewItem(value: string) {
+
+  }
 
   constructor(
     private aioSvc: AioService
@@ -28,8 +32,7 @@ export class InputPhoneNumberComponent implements OnInit {
     if (!this.isVietnamesePhoneNumber() || this.phoneNumber.replace(/\s/g, '').length < 10) {
       return;
     } else {
-      this.aioSvc.customerInfo.mobileNo = this.phoneNumber.replace(/\s/g, '');
-      this.aioSvc.next();
+      this.phoneNumberValue.emit(this.phoneNumber.replace(/\s/g, ''));
     }
   }
 

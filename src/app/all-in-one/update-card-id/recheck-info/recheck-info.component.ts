@@ -36,7 +36,9 @@ export class RecheckInfoComponent implements OnInit {
 
   checkCustomerByIdNo(customerId: string) {
     console.log(this.aioSvc.customerInfo);
-    this.aioSvc.checkCustomerByIdNo(customerId).subscribe(
+    let req = new CheckCustomerSDBRequestData()
+
+    this.aioSvc.checkCustomerSDB(req).subscribe(
       (res: any) => {
         console.log(res);
 

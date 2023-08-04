@@ -5,7 +5,8 @@ import { environment } from 'src/environments/environment';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
 import { Alert, Template } from 'src/app/models/alert';
 import { AlertComponent } from '../dialog/alert/alert.component';
-import { AuthenInfo, GetAuthMethodRequestData } from 'src/app/models/aio';
+import { AuthenInfo, CheckCustomerSDBRequestData, CheckCustomerSDBResponsetData, GetAuthMethodRequestData } from 'src/app/models/aio';
+import Utils from '../utils/utils';
 
 @Component({
   selector: 'app-check-customer-info',
@@ -14,6 +15,9 @@ import { AuthenInfo, GetAuthMethodRequestData } from 'src/app/models/aio';
 })
 export class CheckCustomerInfoComponent implements OnInit {
   authenInfo: AuthenInfo[] = [];
+  isInputPhoneNumber = false;
+  phoneNumberFromT24 = '';
+  currentC = '';
 
   constructor(public aioSvc: AioService, public dialog: MatDialog) {
     this.aioSvc.isProcessing = true;
@@ -21,11 +25,29 @@ export class CheckCustomerInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('verify: ', this.aioSvc.customerInfo);
-    //TODO: remove hard data
-    this.aioSvc.currentAuthType = AuthType.SMSOTP;
-    this.aioSvc.isProcessing = false;
-    this.aioSvc.next();
+    this.checkCustomer();
+  }
+
+  setPhoneNumber(phoneNumber: string) {
+    this.isInputPhoneNumber = false;
+
+    if (this.currentC == 'C3' || this.currentC == 'C4') {
+      this.aioSvc.customerInfo.mobileNo = phoneNumber;
+      this.aioSvc.currentAuthType = AuthType.SMSOTP;
+      this.aioSvc.next();
+    }
+    // C1 check customerIdOld
+    else if (this.currentC == 'C1') {
+      if (this.phoneNumberFromT24 != phoneNumber) {
+        this.aioSvc.customerInfo.mobileNo = phoneNumber;
+        this.aioSvc.currentAuthType = AuthType.SMSOTP;
+        this.aioSvc.next();
+      }
+      // Trùng SĐT, họ tên, NTNS. Không trùng CMND
+      else {
+        this.aioSvc.alertWithGoHome("Số CCCD ko trùng khớp với thông tin lưu trữ ở Sacombank")
+      }
+    }
   }
 
   randomId(length: number) {
@@ -38,50 +60,113 @@ export class CheckCustomerInfoComponent implements OnInit {
     return result;
   }
 
-  //New API
-  checkCustomerByIdNo(customerId: string) {
+  checkCustomer() {
+
     console.log(this.aioSvc.customerInfo);
-    this.aioSvc.checkCustomerByIdNo(customerId).subscribe(
+
+    let req = new CheckCustomerSDBRequestData();
+    req.customerID = this.aioSvc.customerInfo.customerID;
+    req.fullName = this.aioSvc.customerInfo.fullName;
+    req.dob = Utils.formatDate(
+      this.aioSvc.customerInfo.dob
+    );
+    req.residentAddress = this.aioSvc.customerInfo.address;
+    req.serviceType = this.aioSvc.currentSerice == Service.OnBoarding ? 'OA' : 'CI';
+
+    this.aioSvc.checkCustomerSDB(req).subscribe(
       (res: any) => {
-        this.aioSvc.isProcessing = false;
+        if (res.data && res.respCode == "00") {
+          let resData = new CheckCustomerSDBResponsetData();
+          resData = res.data;
+          this.currentC = resData.resultCode;
+          console.log(res);
 
-        // if (res.respCode == '14') {
-        //   this.face = this.aioSvc.faceCaptured;
-        // } else if (res.respCode == '00') {
-        //   this.aioSvc.alert(
-        //     `Quý khách đã có tài khoản tại Sacombank <br> Xin cảm ơn Quý khách đã quan tâm dịch vụ`
-        //   );
-        // } else {
-        //   this.aioSvc.alert(`Có lỗi xảy ra checkCustomerByIdNo`);
-        // }
-        // console.log(res);
-
-        if (res.resultCode === 'C3' || res.resultCode === 'C4') {
-          // C3: KH mới
-          // C4: KH vãng lai
-          // Không có PTXT => AuthType = SMSOTP - theo luồng STM
-          this.aioSvc.next();
-        }
-        if (res.resultCode === 'C0') {
+          if (resData.resultCode === 'C3' || resData.resultCode === 'C4') {
+            // Hiển thị màn hình nhập SĐT
+            this.isInputPhoneNumber = true;
+          }
           // C0: KH hiện hữu chuẩn
-          // => check issue date CCCD
-          // => check get list account
-          // => check authMethod => 3 case: Không có PTXT - không có SĐT thì end; có PTXT thì lưu lại AuthType = PTXT hiện hữu; không có PTXT nhưng có số ĐT từ T24 (AuthType = SMSOTP)
-        }
-        if (res.resultCode === 'C1') {
+          if (resData.resultCode === 'C0') {
+
+            // check issueDate CCCD
+            if (resData.customerInfo.issueDate === Utils.formatDate(this.aioSvc.customerInfo.issueDate)) {
+              // check KH có thỏa điều kiện mở TKTT hay không
+              this.aioSvc.createAccountVerify(resData.customerInfo.cifNo).subscribe((res) => {
+                if (res) {
+                  //Thỏa điều kiện mở tài khoản thanh toán
+                  if (res.respCode == "00") {
+                    // Lấy PTXT của khách hàng
+                    let getAuthData = new GetAuthMethodRequestData();
+                    getAuthData.cifNo = resData.customerInfo.cifNo;
+                    getAuthData.mobileNo = resData.customerInfo.mobileNo;
+                    this.getAuthMethod(getAuthData);
+                  }
+                  else {
+                    this.aioSvc.alertWithGoHome(`Không thỏa điều kiện mở tài khoản thanh toán`);
+                  }
+                }
+                else {
+                  this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này`);
+                }
+                console.log(res);
+              }, (err) => { })
+            }
+            else {
+              this.aioSvc.isProcessing = false;
+              this.aioSvc.alertWithGoHome('Ngày cấp trên CCCD ko trùng khớp với thông tin lưu trữ ở Sacombank')
+            }
+
+          }
           // C1: KH không trùng CCCD nhưng trùng họ tên + NTNS
-          // => check khớp thông tin CMND có trùng ko
-          // Nếu trùng thì cho qua cập nhật CCCD, ngược lại out
+          if (res.resultCode === 'C1') {
 
-          // Xử lý luồng cập nhật CCCD
-
-          this.alert();
+            // KH không có CMND thì reject
+            if (!this.aioSvc.customerInfo.customerIDOld) {
+              this.aioSvc.alertWithGoHome('Số CCCD ko trùng khớp với thông tin lưu trữ ở Sacombank')
+            }
+            // Có CMND thì kiểm tra tiếp
+            else {
+              req.customerID = this.aioSvc.customerInfo.customerIDOld;
+              this.checkCustomerWithCustomerIdOld(req);
+            }
+          }
         }
-        //TH khách hàng đã có TKTT
-        if (res.resultCode == 'HasAccount') {
-          this.aioSvc.alert(
-            `Quý khách đã có tài khoản tại Sacombank <br> Xin cảm ơn Quý khách đã quan tâm dịch vụ`
-          );
+        else {
+          this.aioSvc.isProcessing = false;
+          this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này`);
+        }
+      },
+      (err) => {
+        this.aioSvc.isProcessing = false;
+        this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này`);
+        console.log(err);
+      }
+    );
+  }
+
+  checkCustomerWithCustomerIdOld(req: CheckCustomerSDBRequestData) {
+    this.aioSvc.checkCustomerSDB(req).subscribe(
+      (res: any) => {
+
+        if (res.data && res.respCode == "00") {
+
+          let resData = new CheckCustomerSDBResponsetData();
+          resData = res.data;
+          this.currentC = resData.resultCode;
+          console.log(res);
+
+          // C0: KH hiện hữu chuẩn thì báo cập nhật CCCD
+          if (resData.resultCode === 'C0') {
+
+            this.aioSvc.alertWithGoHome('Quý khách vui lòng cập nhật thông tin từ CMND sang CCCD');
+          }
+          // C1: KH không trùng CMND nhưng trùng họ tên + NTNS
+          if (res.resultCode === 'C1') {
+            this.isInputPhoneNumber = true;
+          }
+        }
+        else {
+          this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này`);
         }
       },
       (err) => {
@@ -94,20 +179,14 @@ export class CheckCustomerInfoComponent implements OnInit {
   }
 
 
-  getAuthMethod() {
-    let data = new GetAuthMethodRequestData();
-    data.cifNo = this.aioSvc.checkCustomerByIdNoResponseData.cifNo;
-    data.customerID = this.aioSvc.checkCustomerByIdNoResponseData.legalId;
-    data.customerType = '1';
-    data.mobileNo = this.aioSvc.checkCustomerByIdNoResponseData.mobileNumber;
+  getAuthMethod(data: GetAuthMethodRequestData) {
     this.aioSvc.getAuthMethod(data).subscribe(
       (res: any) => {
         console.log(res);
-        this.aioSvc.isProcessing = false;
 
         if (res.respCode) {
           if (res.respCode != '00') {
-            this.aioSvc.alert(`Lỗi hệ thống`);
+            this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này`);
           } else {
             if (res.data.authInfo) {
               this.authenInfo = res.data.authInfo;
@@ -121,78 +200,50 @@ export class CheckCustomerInfoComponent implements OnInit {
               }
               this.aioSvc.next();
             } else {
-              this.aioSvc.alert(`Không tồn tại phương thức xác thực`);
-              // Check nếu không có SĐT từ api check-customer trả về => reject
-              // Nếu có SĐT => hiện alert lên "Sẽ gửi mã xác thực về sđt xxx"
-              this.aioSvc.next();
+              if (!data.mobileNo) {
+                this.aioSvc.alertWithGoHome(`Quý khách không có PTXT và không có số điện thoại T24`);
+              }
+              else {
+                this.aioSvc.alertWithAction(
+                  `Để hoàn tất mở tài khoản, Sacombank sẽ gửi mã xác thực đến số điện thoại của Quý khách 
+                  đã đăng ký tại Sacombank là ${this.maskingPhoneNumber(data.mobileNo)}`
+                  , ''
+                  , 'Hủy'
+                  , 'Tiếp tục'
+                  , 15).subscribe((res: Alert) => {
+                    if (res) {
+                      if (res.action === "pri") {
+                        this.aioSvc.customerInfo.mobileNo = data.mobileNo;
+                        this.aioSvc.currentAuthType = AuthType.SMSOTP;
+                        this.aioSvc.next();
+                      }
+                      else {
+                        this.aioSvc.release();
+                      }
+                    }
+                    else {
+                      this.aioSvc.release();
+                    }
+                  });
+              }
             }
           }
         } else {
-          this.aioSvc.alert(`Lỗi hệ thống`);
+          this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này`);
         }
       },
       (err: any) => {
-        this.aioSvc.alert(`Lỗi hệ thống`);
+        this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này`);
         this.aioSvc.isProcessing = false;
       }
     );
   }
 
-  alert() {
-    let data = new Alert();
+  maskingPhoneNumber(phoneNumber: string) {
+    const prefix = phoneNumber.slice(0, 4);
+    const suffix = phoneNumber.slice(-2);
+    const maskedMiddle = 'x'.repeat(phoneNumber.length - 6);
 
-    data.template = Template.UpdateCardId;
-    data.title = 'Thông báo';
-
-    const dialogRef = this.dialog.open(AlertComponent, {
-      data: data,
-      autoFocus: false,
-    });
-
-    dialogRef.afterClosed().subscribe((result: Alert) => {
-      if (result) {
-        if (result.action == 'back') {
-          this.aioSvc.release();
-        } else {
-          this.aioSvc.currentSerice = Service.UpdateCardId;
-          this.aioSvc.getSessionId().subscribe(
-            (result: any) => {
-              if (result) {
-                console.log(result);
-                if (result.respCode != '00') {
-                  this.aioSvc.isProcessing = false;
-                  this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
-                } else {
-                  this.aioSvc.isProcessing = false;
-                  this.aioSvc.sessionID = result.data.sessionId;
-                  if (!environment.production) {
-                    this.aioSvc.next();
-                  } else {
-                    this.aioSvc.next();
-                  }
-                }
-              } else {
-                this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
-                this.aioSvc.isProcessing = false;
-              }
-            },
-            (err: any) => {
-              this.aioSvc.isProcessing = false;
-              this.aioSvc.alert(`Có lỗi xảy ra`);
-            }
-          );
-        }
-      } else {
-        this.aioSvc.release();
-      }
-      console.log(result);
-    });
-  }
-
-
-
-
-  confirm() {
-    this.aioSvc.next();
+    return `${prefix}${maskedMiddle}${suffix}`;
   }
 }

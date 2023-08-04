@@ -1,6 +1,6 @@
 .aio {
   /* background: linear-gradient(200deg, #FFF 17.62%, rgba(219, 241, 255, 0.91) 33.12%, rgba(217, 240, 255, 0.47) 50.32%, rgba(215, 239, 255, 0.90) 60.07%, #FFF 75.96%), radial-gradient(79.80% 61.12% at 50.00% 50.00%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.41) 65.11%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(110.86% 62.31% at 53.83% 50.19%, #FFF 27.08%, rgba(255, 255, 255, 0.45) 78.65%, rgba(255, 255, 255, 0.00) 100%), linear-gradient(90deg, #B0D8F7 0%, #9ACAF0 24.22%, #C7E5FE 100%) !important; */
-  
+
   background: radial-gradient(79.80% 61.12% at 50.00% 50.00%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.41) 65.11%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(110.86% 62.31% at 53.83% 50.19%, #FFF 27.08%, rgba(255, 255, 255, 0.45) 78.65%, rgba(255, 255, 255, 0.00) 100%), linear-gradient(90deg, #B0D8F7 0%, #9ACAF0 24.22%, #C7E5FE 100%);
   min-height: 100vh;
   position: relative;
@@ -10,6 +10,14 @@
 
 .text-sacom-pri {
   color: #0058A0;
+}
+
+.text-sacom-sec {
+  color: #F7941D;
+}
+
+.font-weight-600{
+  font-weight: 600px;
 }
 
 .btn-pri {

@@ -168,6 +168,21 @@ export class CheckCustomerSDBRequestData {
   isEdit: boolean;
 }
 
+export class CustomerInfoFromCheckCustomerSDB {
+  cifNo: string;
+  expireDate: string;
+  issueDate: string;
+  issuePlace: string;
+  mobileNo: string;
+  contactAddress: AddressInfo;
+  residentialAddress: AddressInfo;
+}
+
+export class CheckCustomerSDBResponsetData {
+  resultCode: string;
+  customerInfo: CustomerInfoFromCheckCustomerSDB;
+}
+
 export class CustomerUpdateData {
   customerIDOld: string;
   customerIDNew: string;

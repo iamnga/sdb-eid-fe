@@ -80,24 +80,21 @@ export class UpdateCardIdComponent implements OnInit {
               if (res.respCode == '00') {
                 this.aioSvc.next();
               } else {
-                this.aioSvc.alert(`Có lỗi xảy ra updateCustomer`);
+                this.aioSvc.alertWithGoHome();
               }
             },
             (err) => {
-              this.aioSvc.alert(`Có lỗi xảy ra updateCustomer`);
-              this.aioSvc.isProcessing = false;
+              this.aioSvc.alertWithGoHome();
 
               console.log(err);
             }
           );
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra checkCustomerSDB`);
-          this.aioSvc.isProcessing = false;
+          this.aioSvc.alertWithGoHome();
         }
       },
       (err) => {
-        this.aioSvc.alert(`Có lỗi xảy ra checkCustomerSDB`);
-        this.aioSvc.isProcessing = false;
+        this.aioSvc.alertWithGoHome();
       }
     );
   }

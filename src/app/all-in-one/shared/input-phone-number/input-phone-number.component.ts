@@ -20,10 +20,6 @@ export class InputPhoneNumberComponent implements OnInit {
   constructor(
     private aioSvc: AioService
   ) {
-    this.aioSvc.isProcessing = false;
-    aioSvc.currentStep = ServiceStep.InputPhoneNumber;
-    if (this.aioSvc.customerInfo.mobileNo)
-      aioSvc.next();
   }
 
   ngOnInit(): void { }

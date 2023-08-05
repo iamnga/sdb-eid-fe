@@ -32,34 +32,31 @@ export class DashBoardComponent implements OnInit, AfterViewInit {
   startService(serviceCd: any) {
     this.aioSvc.currentSerice = serviceCd;
     console.log('serviceCd', serviceCd);
-    //TODO Clear test
-    if (this.aioSvc.currentSerice === Service.TestMk) {
-      this.aioSvc.next();
-    } else {
-      this.dbSvc.getSessionId().subscribe(
-        (result: any) => {
-          if (result) {
-            console.log(result);
-            if (result.respCode != '00') {
-              this.aioSvc.isProcessing = false;
-              this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
-            } else {
-              this.aioSvc.isProcessing = false;
-              this.aioSvc.sessionID = result.data.sessionId;
-              this.aioSvc.runIdle();
-              this.aioSvc.next();
-            }
-          } else {
-            this.aioSvc.alert(`Có lỗi xảy ra: ${result.respDescription}`);
+
+    this.dbSvc.getSessionId().subscribe(
+      (result: any) => {
+        if (result) {
+          console.log(result);
+          if (result.respCode != '00') {
             this.aioSvc.isProcessing = false;
+            this.aioSvc.alertWithGoHome();
+          } else {
+            this.aioSvc.isProcessing = false;
+            this.aioSvc.sessionID = result.data.sessionId;
+            this.aioSvc.runIdle();
+            this.aioSvc.next();
           }
-        },
-        (err: any) => {
+        } else {
+          this.aioSvc.alertWithGoHome();
           this.aioSvc.isProcessing = false;
-          this.aioSvc.alert(`Có lỗi xảy ra`);
         }
-      );
-    }
+      },
+      (err: any) => {
+        this.aioSvc.isProcessing = false;
+        this.aioSvc.alertWithGoHome();
+      }
+    );
+
   }
 
   slides = [

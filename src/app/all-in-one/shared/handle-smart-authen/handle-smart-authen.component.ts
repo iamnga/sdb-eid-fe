@@ -34,8 +34,11 @@ export class HandleSmartAuthenComponent {
     aioSvc.currentStep = ServiceStep.HandleSmartAuthen;
     this.currentStep = this.aioSvc.currentSerice == Service.OnBoarding ? 4 : 3;
     this.currentService = this.aioSvc.currentSerice;
-    if (aioSvc.currentAuthType)
+    if (aioSvc.currentAuthType != AuthType.None) {
       aioSvc.next();
+    } else {
+      this.authenInfo = aioSvc.authenInfo;
+    }
   }
 
   selectAuthType(type: any) {

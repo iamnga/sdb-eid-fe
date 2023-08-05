@@ -56,3 +56,17 @@ export enum AuthType {
   SmartOTP = '8',
   SmartOTPCode = '9',
 }
+
+export enum CustomerType {
+  KHHienHuu = 'C0',
+  KHChuaXacDinhDoTrungHoTenNTNS = 'C1',
+  KHChuaXacDinh = 'C2',
+  KHVangLai = 'C3',
+  KHMoi = 'C4',
+  KHChuaXacDinhDoTrungCCCDKoTrungHoTen = 'C5',
+  KHChuaXacDinhDoTrungCCCDKoTrungNTNS = 'C6',
+  KHChuaXacDinhDoTrungCCCDKoTrungSDT = 'C7',
+  KHHienHuuAMLKhongHopLe = 'C8',
+  KHDieuChinhThongTin = 'C9',
+  KHTiemNang = 'C10'
+}

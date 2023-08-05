@@ -48,12 +48,11 @@ export class ContactAddressComponent implements OnInit {
         if (res.data.districts) {
           this.districts = res.data.districts;
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra getDistrict`);
+          this.aioSvc.alertWithGoHome();
         }
       },
       (err) => {
-        this.aioSvc.isProcessing = false;
-        this.aioSvc.alert(`Có lỗi xảy ra getDistrict ${err}`);
+        this.aioSvc.alertWithGoHome();
       }
     );
     this.title = 'Quận / Huyện';
@@ -70,12 +69,12 @@ export class ContactAddressComponent implements OnInit {
           this.wards = res.data.wards;
           console.log(this.wards);
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra getWard`);
+          this.aioSvc.alertWithGoHome();
         }
       },
       (err) => {
         this.aioSvc.isProcessing = false;
-        this.aioSvc.alert(`Có lỗi xảy ra getWard ${err}`);
+        this.aioSvc.alertWithGoHome();
       }
     );
     this.title = 'Phường / Xã';

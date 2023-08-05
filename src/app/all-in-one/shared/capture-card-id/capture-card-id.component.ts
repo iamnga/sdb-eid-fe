@@ -1,15 +1,11 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { ServiceStep } from 'src/app/models/enum';
-import { AnimationOptions } from 'ngx-lottie';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-capture-card-id',
@@ -52,14 +48,14 @@ export class CaptureCardIdComponent implements OnInit {
           .then((stream) => {
             this.videoPreview.nativeElement.srcObject = stream;
           })
-          .catch((err) => console.error(err));
+          .catch((err) => this.aioSvc.alertWithGoHome('Không tải được camera'));
       }
       else {
-        alert('Không tồn tại 2 camera')
+        this.aioSvc.alertWithGoHome('Không tải được camera')
       }
 
     } catch (error) {
-      console.error('Lỗi khi lấy danh sách camera:', error);
+      this.aioSvc.alertWithGoHome('Không tải được camera')
     }
   }
 
@@ -87,12 +83,12 @@ export class CaptureCardIdComponent implements OnInit {
 
       } else {
         console.error('getContext 2D không được hỗ trợ trong trình duyệt này.');
+        this.aioSvc.alertWithGoHome('Không chụp được ảnh do trình duyệt không hỗ trợ')
       }
     } else {
-      console.error('Không tìm thấy canvas element.');
+      this.aioSvc.alertWithGoHome('Không chụp được ảnh do không tìm thấy canvas')
     }
   }
-
 
   // Hàm cho phép chụp lại ảnh từ camera
   retryPicture() {
@@ -116,12 +112,8 @@ export class CaptureCardIdComponent implements OnInit {
       this.aioSvc.frontCardId = this.front;
       this.aioSvc.backCardId = this.back;
       this.aioSvc.next();
-      // this.compareFace();
     }
   }
-
-
-
 
   previous() {
     this.step--;

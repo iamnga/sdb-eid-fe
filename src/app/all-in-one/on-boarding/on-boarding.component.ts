@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { OpenAccountRequestData } from 'src/app/models/aio';
 import { ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
@@ -34,13 +33,13 @@ export class OnBoardingComponent implements OnInit {
           this.cifNo = res.data.cifNo;
           this.openAccount();
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra customerEnroll`);
+          this.aioSvc.alertWithGoHome();
           this.aioSvc.isProcessing = false;
         }
       },
       (err) => {
         console.log(err);
-        this.aioSvc.alert(`Có lỗi xảy ra customerEnroll`);
+        this.aioSvc.alertWithGoHome();
         this.aioSvc.isProcessing = false;
       }
     );
@@ -68,8 +67,7 @@ export class OnBoardingComponent implements OnInit {
     this.aioSvc.customerEnrollInfo.customerInfo.customerType = '1';
     this.aioSvc.customerEnrollInfo.customerInfo.categoryCustomer = 'N';
     this.aioSvc.customerEnrollInfo.customerInfo.issuePlace = 'CTCCSQLHCVTTXH';
-    //TODO
-    this.aioSvc.customerEnrollInfo.customerInfo.issueDate = '20200101';
+
   }
 
   openAccount() {
@@ -94,12 +92,12 @@ export class OnBoardingComponent implements OnInit {
           this.aioSvc.openAccountResponseData = res.data;
           this.aioSvc.next();
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra openAccount`);
+          this.aioSvc.alertWithGoHome();
         }
       },
       (err) => {
         console.log(err);
-        this.aioSvc.alert(`Có lỗi xảy ra openAccount`);
+        this.aioSvc.alertWithGoHome();
         this.aioSvc.isProcessing = false;
       }
     );

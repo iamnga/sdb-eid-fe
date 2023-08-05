@@ -28,7 +28,6 @@ import { Observable } from 'rxjs';
 import { BankData, FingerResponse } from '../../models/mk';
 import { CryptoUtils } from 'src/app/all-in-one/shared/utils/cryptoUtils';
 import * as jose from 'node-jose';
-import TestCase from '../../../assets/testCase.json';
 import { AuthType } from '../../models/enum';
 import Utils from 'src/app/all-in-one/shared/utils/utils';
 import { UserIdleService } from 'angular-user-idle';
@@ -60,6 +59,7 @@ export class AioService {
   testCaseURL = 'assets/testCase.json';
   testAPI = false;
   private timerStartSubscription!: Subscription;
+
   headerDict = {
     'Content-Type': 'application/json;',
     Accept: '*/*',
@@ -80,6 +80,7 @@ export class AioService {
     this.userIdle.startWatching();
 
     this.timerStartSubscription = this.userIdle.onTimerStart().subscribe((countdown) => {
+      console.log(`Idle count: ${countdown}`);
       if (countdown == 1) {
         this.alertWithAction(`Quý đã không tương tác với thiết bị trong thời gian quá lâu <br> Quý khách có muốn tiếp tục giao dịch không?`, ``, `Hủy`, 'Tiếp tục', 15).subscribe((res: Alert) => {
           console.log(res);
@@ -100,10 +101,12 @@ export class AioService {
 
   stopWatching() {
     this.userIdle.stopWatching();
-    this.timerStartSubscription.unsubscribe();
+    if (this.timerStartSubscription)
+      this.timerStartSubscription.unsubscribe();
   }
 
   release() {
+
     this.stopWatching();
     this.dialog.closeAll();
     this.isProcessing = false;
@@ -286,7 +289,8 @@ export class AioService {
     return this.postAsync('find-address-by-text', req);
   }
 
-  alertWithGoHome(title: string = '', content: string = '', countDownTime: number = 30) {
+  alertWithGoHome(title: string = 'Dịch vụ không thể thực hiện lúc này', content: string = '', countDownTime: number = 30) {
+    this.isProcessing = false;
     let data = new Alert();
 
     data.template = Template.GoHome;
@@ -306,6 +310,7 @@ export class AioService {
   }
 
   alertWithAction(title: string = '', content: string = '', btnSecText: string = '', btnPriText: string = '', countDownTime: number = 30) {
+    this.isProcessing = false;
     let data = new Alert();
 
     data.template = Template.HasAction;
@@ -371,7 +376,7 @@ export class AioService {
           if (res) {
             if (res.respCode != '00') {
               this.isProcessing = false;
-              this.alert(`Có lỗi xảy ra: updateLogStep`);
+              this.alertWithGoHome();
             } else {
               this.isProcessing = false;
               if (isNext) {
@@ -383,8 +388,7 @@ export class AioService {
           }
         },
         (err) => {
-          this.isProcessing = false;
-          this.alert(`Có lỗi xảy ra: updateLogStep`);
+          this.alertWithGoHome();
         }
       );
   }
@@ -404,10 +408,6 @@ export class AioService {
           break;
         }
         case ServiceStep.CheckCustomerInfo: {
-          this.router.navigate(['/aio/shared/input-phone-number']);
-          break;
-        }
-        case ServiceStep.InputPhoneNumber: {
           this.router.navigate(['/aio/shared/capture-card-id']);
           break;
         }

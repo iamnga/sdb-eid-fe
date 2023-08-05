@@ -89,15 +89,14 @@ export class VerifyOtpComponent implements OnInit {
           this.aioSvc.isProcessing = false;
           if (res.respCode) {
             if (res.respCode != '00') {
-              this.aioSvc.alert(`Lỗi hệ thống`);
+              this.aioSvc.alertWithGoHome();
             }
           } else {
-            this.aioSvc.alert(`Lỗi hệ thống`);
+            this.aioSvc.alertWithGoHome();
           }
         },
         (err) => {
-          this.aioSvc.alert(`Lỗi hệ thống`);
-          this.aioSvc.isProcessing = false;
+          this.aioSvc.alertWithGoHome();
         }
       );
     }
@@ -123,27 +122,26 @@ export class VerifyOtpComponent implements OnInit {
               this.setErrMsg('OTP không hợp lệ, Quý khách vui lòng thử lại');
             }
             if (res.respCode === '75') {
-              this.aioSvc.alert(`Đã vượt quá số lần nhập OTP cho phép`);
+              this.aioSvc.alertWithGoHome(`Đã vượt quá số lần nhập OTP cho phép`);
             }
             if (res.respCode === '36') {
-              this.aioSvc.alert(`Phương thức xác thực bị hạn chế`);
+              this.aioSvc.alertWithGoHome(`Phương thức xác thực bị hạn chế`);
             }
             if (res.respCode === '68') {
-              this.aioSvc.alert(`Quá thời gian nhập OTP`);
+              this.aioSvc.alertWithGoHome(`Quá thời gian nhập OTP`);
             }
             if (res.respCode === '06') {
-              this.aioSvc.alert(`Lỗi hệ thống`);
+              this.aioSvc.alertWithGoHome();
             }
           } else {
             this.aioSvc.next();
           }
         } else {
-          this.aioSvc.alert(`Lỗi hệ thống`);
+          this.aioSvc.alertWithGoHome();
         }
       },
       (err) => {
-        this.aioSvc.alert(`Lỗi hệ thống`);
-        this.aioSvc.isProcessing = false;
+        this.aioSvc.alertWithGoHome();
       }
     );
   }

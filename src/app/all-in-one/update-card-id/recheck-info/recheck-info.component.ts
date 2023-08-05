@@ -67,14 +67,11 @@ export class RecheckInfoComponent implements OnInit {
             this.aioSvc.checkCustomerByIdNoResponseData.mobileNumber;
           this.aioSvc.isProcessing = false;
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra checkCustomerByIdNo`);
-          this.aioSvc.isProcessing = false;
+          this.aioSvc.alertWithGoHome();
         }
       },
       (err: any) => {
-        this.aioSvc.alert(`Có lỗi xảy ra checkCustomerByIdNo`);
-        this.aioSvc.isProcessing = false;
-
+        this.aioSvc.alertWithGoHome();
         console.log(err);
       }
     );

@@ -165,12 +165,12 @@ export class AccountAndAlertComponent {
             }
           }
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra checkAccount`);
+          this.aioSvc.alertWithGoHome();
         }
       },
       (err) => {
         this.aioSvc.isProcessing = false;
-        this.aioSvc.alert(`Có lỗi xảy ra checkAccount`);
+        this.aioSvc.alertWithGoHome();
         console.log(err);
       }
     );

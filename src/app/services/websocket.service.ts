@@ -20,6 +20,7 @@ export class WebsocketService {
     this.messages = <Subject<FingerResponse>>this.connect(CHAT_URL).pipe(
       map((response: MessageEvent): FingerResponse => {
         let data = JSON.parse(response.data);
+        console.log(data);
         return data;
       })
     );

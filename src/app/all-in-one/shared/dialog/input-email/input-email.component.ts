@@ -54,7 +54,7 @@ export class InputEmailComponent implements OnInit {
           },
           (err) => {
             this.aioSvc.isProcessing = false;
-            this.aioSvc.alert(`Có lỗi hệ thống`);
+            this.aioSvc.alertWithGoHome();
           }
         );
       }

@@ -240,62 +240,43 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
                                   ) {
                                     this.aioSvc.next();
                                   } else {
-                                    this.aioSvc.alert(`Số CCCD không trùng khớp`);
-                                    this.aioSvc.isProcessing = false;
+                                    this.aioSvc.alertWithGoHome(`Số CCCD không trùng khớp`);
                                   }
                                   this.aioSvc.isProcessing = false;
                                 } else {
-                                  this.aioSvc.alert(`Xác thực thất bại, Quý khách vui lòng thử lại`, false);
-                                  this.aioSvc.isProcessing = false;
+                                  this.aioSvc.alertWithGoHome();
                                 }
                               } else {
-                                this.aioSvc.alert(`Có lỗi xảy ra, Quý khách vui lòng thử lại`, false);
-                                this.aioSvc.isProcessing = false;
+                                this.aioSvc.alertWithGoHome();
                               }
                             },
                             (err) => {
-                              this.aioSvc.alert(`Có lỗi xảy ra`);
-                              this.aioSvc.isProcessing = false;
+                              this.aioSvc.alertWithGoHome();
                             }
                           );
                         } else {
-                          this.aioSvc.alert(`Có lỗi xảy ra uploadImage-face`);
-
-                          this.aioSvc.isProcessing = false;
+                          this.aioSvc.alertWithGoHome();
                         }
                       },
                       (err) => {
-                        this.aioSvc.alert(`Có lỗi xảy ra uploadImage-face`);
-
-                        this.aioSvc.isProcessing = false;
+                        this.aioSvc.alertWithGoHome();
                       }
                     );
                   } else {
-                    // this.alert(`Có lỗi xảy ra uploadImage-back`);
-
                     this.aioSvc.isProcessing = false;
                     return;
                   }
                 },
                 (err) => {
-                  // this.alert(`Có lỗi xảy ra uploadImage-back`);
-                  console.log(err);
-                  this.aioSvc.isProcessing = false;
-                  return;
+                  this.aioSvc.alertWithGoHome();
                 }
               );
           } else {
-            // this.alert(`Có lỗi xảy ra uploadImage-Front`);
-
-            this.aioSvc.isProcessing = false;
-            return;
+            this.aioSvc.alertWithGoHome();
           }
         },
         (err) => {
-          // this.alert(`Có lỗi xảy ra uploadImage-Front`);
-          console.log(err);
-          this.aioSvc.isProcessing = false;
-          return;
+          this.aioSvc.alertWithGoHome();
         }
       );
 

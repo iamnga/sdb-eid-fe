@@ -1,24 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Service, ServiceStep } from 'src/app/models/enum';
 import { FingerResponse } from 'src/app/models/mk';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { AnimationItem } from 'lottie-web';
 import { AnimationOptions } from 'ngx-lottie';
-import { Alert, Template } from 'src/app/models/alert';
+import { Alert } from 'src/app/models/alert';
 import { MatDialog } from '@angular/material/dialog';
-import { AlertComponent } from '../dialog/alert/alert.component';
 import { CustomerInfo } from 'src/app/models/aio';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-input-finger',
   templateUrl: './input-finger.component.html',
   styleUrls: ['./input-finger.component.css'],
 })
-export class InputFingerComponent implements OnInit {
+export class InputFingerComponent implements OnInit, OnDestroy {
   fpResponse: FingerResponse = new FingerResponse();
   hasIcaoResponse = false;
   isScanning = false;
+  private mkSubscription!: Subscription;
 
   input: AnimationOptions = {
     path: 'assets/all-in-one/shared/img/cccd-vantay.json',
@@ -44,59 +45,69 @@ export class InputFingerComponent implements OnInit {
 
   callMkFingerPrint() {
     let websocketService = new WebsocketService();
-    websocketService.messages.subscribe(
+    this.mkSubscription = websocketService.messages.subscribe(
       (msg: any) => {
-        console.log(msg);
-        this.fpResponse = msg;
-        if (this.fpResponse.quality > 0) {
-          this.isScanning = true;
-        }
-        if (this.fpResponse.verifyResponse != null && this.hasIcaoResponse == false) {
-          this.isScanning = false;
-          if (
-            this.fpResponse.verifyResponse.success
-          ) {
-            this.hasIcaoResponse = true;
-            if (this.fpResponse.icaoResponse.success && this.fpResponse.icaoResponse.data.dg13) {
-              console.log(this.fpResponse);
-              this.fpResponse.image =
-                'data:image/png;base64,' + this.fpResponse.image;
-              console.log(
-                'Response from websocket: ' + this.fpResponse.verifyResponse
-              );
+        if (msg) {
+          console.log(msg);
+          this.fpResponse = msg;
+          if (this.fpResponse.quality > 0) {
+            this.isScanning = true;
+          }
+          if (this.fpResponse.verifyResponse != null && this.hasIcaoResponse == false) {
+            this.isScanning = false;
+            if (
+              this.fpResponse.verifyResponse.success
+            ) {
+              this.hasIcaoResponse = true;
+              if (this.fpResponse.icaoResponse.success && this.fpResponse.icaoResponse.data.dg13) {
+                console.log(this.fpResponse);
+                this.fpResponse.image =
+                  'data:image/png;base64,' + this.fpResponse.image;
+                console.log(
+                  'Response from websocket: ' + this.fpResponse.verifyResponse
+                );
 
-              this.mappingData();
-              this.aioSvc.next();
+                this.mappingData();
+                this.aioSvc.next();
+              }
+              else {
+                this.aioSvc.alertWithGoHome(
+                  `Đọc thông tin không thành công`
+                );
+              }
+            }
+            // Lỗi FINGERPRINT READER CANNOT OPENED - do không nhận được thiết bị đọc CCCD chip
+            else if (this.fpResponse.verifyResponse.code === "218") {
+              this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này <br> do không nhận được thiết bị đọc CCCD chip`);
             }
             else {
-              this.aioSvc.alertWithGoHome(
-                `Đọc thông tin không thành công`
-              );
-            }
-          } else {
-            if (this.aioSvc.fpAttemp == 2) {
+              if (this.aioSvc.fpAttemp == 2) {
 
-              this.aioSvc.alertWithGoHome(
-                `Quý khách đã xác thực thất bại <br>quá số lần quy định`
-              );
+                this.aioSvc.alertWithGoHome(
+                  `Quý khách đã xác thực thất bại <br>quá số lần quy định`
+                );
 
-            } else {
-              this.aioSvc.alertWithAction(`Xác thực vân tay không thành công`, ``, `Thoát`, `Thử lại`).subscribe((res: Alert) => {
-                if (res) {
-                  if (res.action === "pri") {
-                    this.aioSvc.fpAttemp++;
-                    this.recallMkFingerPrint();
+              } else {
+                this.aioSvc.alertWithAction(`Xác thực vân tay không thành công`, ``, `Thoát`, `Thử lại`).subscribe((res: Alert) => {
+                  if (res) {
+                    if (res.action === "pri") {
+                      this.aioSvc.fpAttemp++;
+                      this.recallMkFingerPrint();
+                    }
+                    else {
+                      this.aioSvc.release();
+                    }
                   }
                   else {
                     this.aioSvc.release();
                   }
-                }
-                else {
-                  this.aioSvc.release();
-                }
-              })
+                })
+              }
             }
           }
+        }
+        else {
+          this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này`);
         }
       },
       (err) => {
@@ -105,32 +116,6 @@ export class InputFingerComponent implements OnInit {
       }
     );
   }
-
-  // alert() {
-  //   let data = new Alert();
-
-  //   data.template = Template.FingerPrintFailed;
-  //   data.title = 'Thông báo';
-
-  //   const dialogRef = this.dialog.open(AlertComponent, {
-  //     data: data,
-  //     autoFocus: false,
-  //   });
-
-  //   dialogRef.afterClosed().subscribe((result: Alert) => {
-  //     if (result) {
-  //       if (result.action == 'back') {
-  //         this.aioSvc.release();
-  //       } else {
-  //         this.aioSvc.fpAttemp++;
-  //         this.recallMkFingerPrint();
-  //       }
-  //     } else {
-  //       this.aioSvc.release();
-  //     }
-  //     console.log(result);
-  //   });
-  // }
 
   mappingData() {
     if (this.fpResponse.icaoResponse.data.dg13) {
@@ -153,12 +138,11 @@ export class InputFingerComponent implements OnInit {
         customerInfo.expireDate = dg13.dateOfExpiry;
         customerInfo.issueDate = dg13.dateOfIssuance;
         customerInfo.issuePlace = 'CTCCSQLHCVTTXH';
+        customerInfo.customerType = '1'; // 1: CCCD/CMND - 2: Passport
 
         this.aioSvc.customerInfo = customerInfo;
 
         console.log(this.aioSvc.customerInfo);
-
-        //TODO: Check customer info
       } else {
         this.aioSvc.alertWithGoHome(`CCCD của Quý khách đã hết hạn`);
       }
@@ -179,5 +163,9 @@ export class InputFingerComponent implements OnInit {
   recallMkFingerPrint() {
     this.fpResponse = new FingerResponse();
     this.callMkFingerPrint();
+  }
+
+  ngOnDestroy(): void {
+    this.mkSubscription.unsubscribe();
   }
 }

@@ -8,7 +8,7 @@ export class FingerResponse {
 
 class VerifyResponse {
   success: boolean;
-  code: number;
+  code: string;
   message: string;
   data: string;
 }

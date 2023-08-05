@@ -67,13 +67,13 @@ export class FillInfoComponent implements OnInit {
           this.aioSvc.customerInfo.residentialAddress = res.data;
           this.getOccupations();
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra findAddressByText`);
+          this.aioSvc.alertWithGoHome();
           this.aioSvc.isProcessing = false;
         }
       },
       (err) => {
         console.log(err);
-        this.aioSvc.alert(`Có lỗi xảy ra findAddressByText`);
+        this.aioSvc.alertWithGoHome();
         this.aioSvc.isProcessing = false;
       }
     );
@@ -87,13 +87,13 @@ export class FillInfoComponent implements OnInit {
           this.occupations = res.data.occupations;
           this.getProvinces();
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra getOccupations`);
+          this.aioSvc.alertWithGoHome();
           this.aioSvc.isProcessing = false;
         }
       },
       (err) => {
         this.aioSvc.isProcessing = false;
-        this.aioSvc.alert(`Có lỗi xảy ra getOccupations`);
+        this.aioSvc.alertWithGoHome();
       }
     );
   }
@@ -106,12 +106,12 @@ export class FillInfoComponent implements OnInit {
           this.provinces = res.data.provinces;
           this.aioSvc.isProcessing = false;
         } else {
-          this.aioSvc.alert(`Có lỗi xảy ra getProvinces`);
+          this.aioSvc.alertWithGoHome();
           this.aioSvc.isProcessing = false;
         }
       },
       (err) => {
-        this.aioSvc.alert(`Có lỗi xảy ra getProvinces ${err}`);
+        this.aioSvc.alertWithGoHome();
         this.aioSvc.isProcessing = false;
       }
     );

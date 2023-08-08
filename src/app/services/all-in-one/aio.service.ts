@@ -326,10 +326,6 @@ export class AioService {
       panelClass: 'aio-alert'
     });
 
-    // dialogRef.afterClosed().subscribe((result: Alert) => {
-    //   return result;
-    // });
-
     return dialogRef.afterClosed();
   }
 

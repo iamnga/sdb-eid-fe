@@ -14,7 +14,6 @@ import Utils from '../utils/utils';
 export class CheckCustomerInfoComponent implements OnInit {
   authenInfo: AuthenInfo[] = [];
   isInputPhoneNumber = false;
-  phoneNumberFromT24 = '';
   currentCustomerType = '';
 
   constructor(public aioSvc: AioService, public dialog: MatDialog) {
@@ -24,39 +23,6 @@ export class CheckCustomerInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkCustomer();
-  }
-
-  setPhoneNumber(phoneNumber: string) {
-
-    this.isInputPhoneNumber = false;
-
-    if (this.currentCustomerType == 'C3' || this.currentCustomerType == 'C4') {
-      this.aioSvc.customerInfo.mobileNo = phoneNumber;
-      this.aioSvc.currentAuthType = AuthType.SMSOTP;
-      this.aioSvc.next();
-    }
-    // C1 checkCustomerWithCustomerIdOld
-    else if (this.currentCustomerType == 'C1') {
-      if (this.aioSvc.customerInfo.mobileNo != phoneNumber) {
-        this.aioSvc.customerInfo.mobileNo = phoneNumber;
-        this.aioSvc.currentAuthType = AuthType.SMSOTP;
-        this.aioSvc.next();
-      }
-      // Trùng SĐT, họ tên, NTNS. Không trùng CMND
-      else {
-        this.aioSvc.alertWithGoHome("Số CCCD ko trùng khớp với thông tin lưu trữ ở Sacombank")
-      }
-    }
-  }
-
-  randomId(length: number) {
-    var result = '';
-    var characters = '0123456789';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
   }
 
   checkCustomer() {
@@ -285,6 +251,29 @@ export class CheckCustomerInfoComponent implements OnInit {
         this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này`);
       }
     );
+  }
+
+  setPhoneNumber(phoneNumber: string) {
+
+    this.isInputPhoneNumber = false;
+
+    if (this.currentCustomerType === CustomerType.KHVangLai || this.currentCustomerType === CustomerType.KHMoi) {
+      this.aioSvc.customerInfo.mobileNo = phoneNumber;
+      this.aioSvc.currentAuthType = AuthType.SMSOTP;
+      this.aioSvc.next();
+    }
+    // C1 checkCustomerWithCustomerIdOld
+    else if (this.currentCustomerType === CustomerType.KHChuaXacDinhDoTrungHoTenNTNS) {
+      if (this.aioSvc.customerInfo.mobileNo != phoneNumber) {
+        this.aioSvc.customerInfo.mobileNo = phoneNumber;
+        this.aioSvc.currentAuthType = AuthType.SMSOTP;
+        this.aioSvc.next();
+      }
+      // Trùng SĐT, họ tên, NTNS. Không trùng CMND
+      else {
+        this.aioSvc.alertWithGoHome("Số CCCD ko trùng khớp với thông tin lưu trữ ở Sacombank")
+      }
+    }
   }
 
   maskingPhoneNumber(phoneNumber: string) {

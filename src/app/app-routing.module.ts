@@ -32,32 +32,39 @@ import { CheckCustomerInfoComponent } from './all-in-one/shared/check-customer-i
 import { InputPhoneNumberComponent } from './all-in-one/shared/input-phone-number/input-phone-number.component';
 import { HandleSmartAuthenComponent } from './all-in-one/shared/handle-smart-authen/handle-smart-authen.component';
 import { TestAPIComponent } from './all-in-one/shared/testAPI/testAPI';
+import { NotFoundComponent } from './all-in-one/shared/404/404.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'collect/:deviceid/:sessionid', component: CollectComponent },
   {
-    path: 'self-exp', component: SelfExpComponent, children: [
+    path: 'self-exp',
+    component: SelfExpComponent,
+    children: [
       {
         path: '',
         redirectTo: 'home',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'home',
-        component: SelfExpHomeComponent
+        component: SelfExpHomeComponent,
       },
       {
         path: 'showcase',
-        component: ShowcaseComponent
+        component: ShowcaseComponent,
       },
       {
-
-        path: 'games', component: GamesComponent, children: [{
-          path: 'matching-card', component: MatchingCardComponent
-        }]
-      }
-    ]
+        path: 'games',
+        component: GamesComponent,
+        children: [
+          {
+            path: 'matching-card',
+            component: MatchingCardComponent,
+          },
+        ],
+      },
+    ],
   },
   {
     path: 'aio',
@@ -162,12 +169,14 @@ const routes: Routes = [
           },
         ],
       },
+      { path: '**', redirectTo: 'dash-board' },
     ],
   },
+  { path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -27,14 +27,6 @@ export class FillInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.findAddressByText();
-
-    if (!environment.production) {
-      // this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
-      // this.aioSvc.customerInfo.mobileNo = '0349' + this.randomId(6);
-      // this.aioSvc.customerInfo.customerID = this.randomId(12);
-    }
-    //TODO: remove hard
-    // this.aioSvc.customerInfo.email = this.randomId(6) + '@gmail.com';
   }
 
   likeResidenceAddress() {

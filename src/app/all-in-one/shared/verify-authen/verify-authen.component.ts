@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import {
   AuthenInfo,
-  GetAuthMethodRequestData,
   RequestOtpRequestData,
   VerifyOtpRequestData,
 } from 'src/app/models/aio';
 import { AuthType, Service, ServiceStep } from 'src/app/models/enum';
 import { AnimationOptions } from 'ngx-lottie';
-import { environment } from 'src/environments/environment';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
 
 @Component({
   selector: 'app-verify-authen',
   templateUrl: './verify-authen.component.html',
-  styleUrls: ['./verify-authen.component.css', '../../all-in-one.component.css'],
+  styleUrls: [
+    './verify-authen.component.css',
+    '../../all-in-one.component.css',
+  ],
 })
 export class VerifyOtpComponent implements OnInit {
   otp: Array<string> = [];
@@ -26,11 +27,10 @@ export class VerifyOtpComponent implements OnInit {
   currentAuthType: AuthType;
   authType = AuthType;
   authenInfo: AuthenInfo[] = [];
-  step = 2; //1: chọn authType - 2: verify
   faceLoad: AnimationOptions = {
     path: 'assets/all-in-one/shared/img/notifications.json',
   };
-  countDown = 5;
+  countDown: number;
   countDownInterval: any;
   errMsg = '';
   err = false;
@@ -42,12 +42,11 @@ export class VerifyOtpComponent implements OnInit {
     this.currentAuthType = aioSvc.currentAuthType;
   }
   ngOnInit(): void {
-    // this.handleOTP();
-    // this.getAuthMethod();
     this.requestAuthen();
   }
 
   countDownOTP() {
+    this.countDown = 120;
     this.countDownInterval = setInterval(() => {
       this.countDown--;
       if (this.countDown == 0) {
@@ -73,7 +72,9 @@ export class VerifyOtpComponent implements OnInit {
     ) {
       this.verifyAuthen();
     } else {
-      //TODO: hard code
+      
+      if (this.countDown > 0) return;
+
       let data = new RequestOtpRequestData();
       data.customerID = this.aioSvc.customerInfo.customerID;
       data.cifNo = '1';
@@ -81,7 +82,7 @@ export class VerifyOtpComponent implements OnInit {
       data.customerType = '1';
       data.mobileNo = this.aioSvc.customerInfo.mobileNo;
       data.channel = 'DigiZone';
-      data.smsContent = 'NGANN';
+      data.smsContent = 'Request OTP';
 
       this.aioSvc.requestOtp(data).subscribe(
         (res: any) => {
@@ -90,6 +91,8 @@ export class VerifyOtpComponent implements OnInit {
           if (res.respCode) {
             if (res.respCode != '00') {
               this.aioSvc.alertWithGoHome();
+            } else {
+              this.countDownOTP();
             }
           } else {
             this.aioSvc.alertWithGoHome();
@@ -110,7 +113,8 @@ export class VerifyOtpComponent implements OnInit {
     data.authType = this.currentAuthType;
     data.customerType = '1';
     data.mobileNo = this.aioSvc.customerInfo.mobileNo;
-    data.serviceType = 'OA';
+    data.serviceType =
+      this.aioSvc.currentSerice == Service.OnBoarding ? 'OA' : 'CI';
     this.aioSvc.verifyOtp(data).subscribe(
       (res: any) => {
         console.log('verifyOtp', res);
@@ -119,16 +123,21 @@ export class VerifyOtpComponent implements OnInit {
         if (res.respCode) {
           if (res.respCode != '00') {
             if (res.respCode === '55') {
-              this.setErrMsg('OTP không hợp lệ, Quý khách vui lòng thử lại');
+              this.setErrMsg('Mã OTP không đúng hoặc đã hết hạn');
             }
             if (res.respCode === '75') {
-              this.aioSvc.alertWithGoHome(`Đã vượt quá số lần nhập OTP cho phép`);
+              this.aioSvc.alertWithGoHome(
+                `Đã vượt quá số lần nhập OTP cho phép`
+              );
             }
             if (res.respCode === '36') {
               this.aioSvc.alertWithGoHome(`Phương thức xác thực bị hạn chế`);
             }
             if (res.respCode === '68') {
-              this.aioSvc.alertWithGoHome(`Quá thời gian nhập OTP`);
+              this.aioSvc.alertWithGoHome(`Quá thời gian chờ`);
+            }
+            if (res.respCode === '17') {
+              this.aioSvc.alertWithGoHome(`Quý khách đã hủy xác thực`);
             }
             if (res.respCode === '06') {
               this.aioSvc.alertWithGoHome();

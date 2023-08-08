@@ -39,8 +39,7 @@ export class BackAndStepperComponent {
   stepLines: any;
 
   constructor(private aioSvc: AioService) {
-    // TODO: Remove hard currentSerice
-    this.aioSvc.currentSerice = Service.OnBoarding
+
     let index = this.masterStepper.findIndex(
       (x) => x.service == this.aioSvc.currentSerice
     );

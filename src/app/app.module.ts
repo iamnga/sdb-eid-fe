@@ -75,6 +75,7 @@ import { InputPhoneNumberComponent } from './all-in-one/shared/input-phone-numbe
 import { FooterComponent } from './all-in-one/shared/footer/footer.component';
 import { HandleSmartAuthenComponent } from './all-in-one/shared/handle-smart-authen/handle-smart-authen.component';
 import { TestAPIComponent } from './all-in-one/shared/testAPI/testAPI';
+import { NotFoundComponent } from './all-in-one/shared/404/404.component';
 
 export function playerFactory() {
   return player;
@@ -125,7 +126,8 @@ export function playerFactory() {
     InputPhoneNumberComponent,
     FooterComponent,
     HandleSmartAuthenComponent,
-    TestAPIComponent
+    TestAPIComponent,
+    NotFoundComponent
     
   ],
   imports: [

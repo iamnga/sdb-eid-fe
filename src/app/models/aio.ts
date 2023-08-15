@@ -91,6 +91,39 @@ export class GetAuthMethodRequestData {
   cifNo: string;
 }
 
+// "testCaseID",
+//         "fullName",
+//         "customerID",
+//         "customerIDOld",
+//         "gender",
+//         "dob",
+//         "mobileNo",
+//         "nationality",
+//         "towncountry",
+//         "expireDate",
+//         "issueDate",
+//         "address",
+//         "authInfo "
+
+export class TestCase {
+  testCaseID: string;
+  customerID: string;
+  customerIDOld: string;
+  customerType: string;
+  categoryCustomer: string;
+  fullName: string;
+  gender: string;
+  dob: string;
+  mobileNo: string;
+  issueDate: string;
+  expireDate: string;
+  issuePlace: string;
+  address: string;
+  authInfo: string;
+  nationality: string;
+  towncountry: string;
+}
+
 export class CustomerInfo {
   customerID: string;
   customerIDOld: string;

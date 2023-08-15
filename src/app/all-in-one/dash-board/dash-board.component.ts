@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TestCase } from 'src/app/models/aio';
 import { Service, ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
 import { DashBoardService } from 'src/app/services/all-in-one/dash-board.service';
@@ -37,7 +38,24 @@ export class DashBoardComponent implements OnInit, AfterViewInit {
             this.aioSvc.isProcessing = false;
             this.aioSvc.sessionID = result.data.sessionId;
             this.aioSvc.runIdle();
-            this.aioSvc.next();
+
+            //TODO: this is offical code
+            // this.aioSvc.next();
+
+            //TODO: remove hard for testing
+            // Start hard
+            let testCaseId = prompt('Nhập testCaseId');
+            if (testCaseId != null) {
+              console.log(
+                '🚀 ~ file: dash-board.component.ts:63 ~ DashBoardComponent ~ startService ~ testCaseId:',
+                testCaseId
+              );
+              this.aioSvc.fakeData(testCaseId);
+            } else {
+              this.aioSvc.alert('Troll ???');
+            }
+
+            // End hard
           }
         } else {
           this.aioSvc.alert('Dịch vụ không thể thực hiện lúc này');

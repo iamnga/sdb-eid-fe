@@ -16,6 +16,7 @@ import {
   OpenAccountResponseData,
   RegisterAlert,
   RequestOtpRequestData,
+  TestCase,
   UpdateCustomerRequestData,
   UpdateLogStepData,
   VerifyOtpRequestData,
@@ -58,9 +59,9 @@ export class AioService {
   backCardId = '';
   authenInfo: AuthenInfo[] = [];
   currentAuthType: AuthType = AuthType.None;
-  testCaseURL = 'assets/testCase.json';
   testAPI = false;
   private timerStartSubscription!: Subscription;
+  testCase: TestCase[] = [];
 
   headerDict = {
     'Content-Type': 'application/json;',
@@ -74,7 +75,15 @@ export class AioService {
     @Inject('BASE_URL') private baseUrl: string,
     public dialog: MatDialog,
     private userIdle: UserIdleService
-  ) {}
+  ) {
+    this.loadTestCase().subscribe((res: any) => {
+      this.testCase = res;
+      console.log(
+        '🚀 ~ file: aio.service.ts:82 ~ AioService ~ this.loadTestCase ~ this.testCase:',
+        this.testCase
+      );
+    });
+  }
 
   runIdle() {
     console.log('run idle');
@@ -147,6 +156,11 @@ export class AioService {
 
   testProxy(route: string): Observable<any> {
     return this.http.get(`api/${route}`);
+  }
+
+  loadTestCase() {
+    const jsonFilePath = 'assets/data/testCase.json';
+    return this.http.get(jsonFilePath + '?' + Utils.randomId(10));
   }
 
   getTestCase() {
@@ -423,7 +437,10 @@ export class AioService {
     if (this.currentSerice == Service.OnBoarding) {
       switch (this.currentStep) {
         case ServiceStep.DashBoard: {
-          this.router.navigate(['/aio/shared/input-finger']);
+           //TODO: remove hard for testing
+          if (environment.production)
+            this.router.navigate(['/aio/shared/check-customer-info']);
+          else this.router.navigate(['/aio/shared/input-finger']);
           break;
         }
         case ServiceStep.InputFinger: {
@@ -684,37 +701,38 @@ export class AioService {
     });
   }
 
-  fakeData() {
-    this.http
-      .get(this.testCaseURL + '?' + Utils.randomId(10))
-      .subscribe((testCase: any) => {
-        console.log(testCase);
-        let data = testCase[0];
-        console.log('fake data', data);
-        let customerInfo = new CustomerInfo();
-        customerInfo.fullName = data.fullName;
-        customerInfo.customerID = data.customerID;
-        customerInfo.customerIDOld = data.customerIDOld;
-        customerInfo.gender = data.gender;
-        customerInfo.dob = data.dob;
-        customerInfo.mobileNo = data.mobileNo;
-        customerInfo.nationality = data.nationality;
-        customerInfo.towncountry = data.towncountry;
-        customerInfo.expireDate = data.expireDate;
-        customerInfo.issueDate = data.issueDate;
-        customerInfo.address = data.address;
+  fakeData(testCaseId: string) {
+    let index = this.testCase.findIndex((x) => x.testCaseID === testCaseId);
+    if (index > -1) {
+      let data = this.testCase[index];
+      console.log('fake data', data);
+      let customerInfo = new CustomerInfo();
+      customerInfo.fullName = data.fullName;
+      customerInfo.customerID = data.customerID;
+      customerInfo.customerIDOld = data.customerIDOld;
+      customerInfo.gender = data.gender;
+      customerInfo.dob = data.dob;
+      customerInfo.mobileNo = data.mobileNo;
+      customerInfo.nationality = data.nationality;
+      customerInfo.towncountry = data.towncountry;
+      customerInfo.expireDate = data.expireDate;
+      customerInfo.issueDate = data.issueDate;
+      customerInfo.address = data.address;
 
-        let auths = data.authInfo.split(',');
+      let auths = data.authInfo.split(',');
 
-        for (let i = 0; i < auths.length; i++) {
-          let auth = new AuthenInfo();
-          auth.authType = this.getAuthType(auths[i]);
-          auth.authDesVN = '';
-          this.authenInfo.push(auth);
-        }
+      for (let i = 0; i < auths.length; i++) {
+        let auth = new AuthenInfo();
+        auth.authType = this.getAuthType(auths[i]);
+        auth.authDesVN = '';
+        this.authenInfo.push(auth);
+      }
 
-        this.customerInfo = customerInfo;
-      });
+      this.customerInfo = customerInfo;
+      this.next();
+    } else {
+      this.alert(`Làm gì có testCaseId ${testCaseId} bro ???`);
+    }
   }
 
   getAuthType(value: any) {

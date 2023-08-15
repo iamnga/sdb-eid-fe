@@ -31,7 +31,17 @@ export class CheckCustomerInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.checkCustomer();
+    if (this.checkDateOfExpiry(this.aioSvc.customerInfo.expireDate)) {
+      if (this.checkAge(this.aioSvc.customerInfo.dob)) {
+        this.checkCustomer();
+      } else {
+        this.aioSvc.alertWithGoHome(
+          `Tuổi của Quý khách không hợp lệ để mở TKTT`
+        );
+      }
+    } else {
+      this.aioSvc.alertWithGoHome(`CCCD của Quý khách đã hết hạn`);
+    }
   }
 
   checkCustomer() {
@@ -420,5 +430,30 @@ export class CheckCustomerInfoComponent implements OnInit {
     const maskedMiddle = 'x'.repeat(phoneNumber.length - 6);
 
     return `${prefix}${maskedMiddle}${suffix}`;
+  }
+
+  checkAge(dob: string) {
+    const birthDateParts = dob.split('/');
+
+    const day = parseInt(birthDateParts[0]);
+    const month = parseInt(birthDateParts[1]) - 1;
+    const year = parseInt(birthDateParts[2]);
+
+    const today = new Date();
+    const birthDate = new Date(year, month, day);
+
+    const ageInMilliseconds = today.getTime() - birthDate.getTime();
+    const years = ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
+
+    return years < 18 || years > 70 ? false : true;
+  }
+
+  checkDateOfExpiry(dateOfExpiry: string) {
+    const arr = dateOfExpiry.split('/');
+    const newDateOfExpiry = arr[1] + '/' + arr[0] + '/' + arr[2];
+    const dateExp = new Date(newDateOfExpiry);
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    return dateExp.getTime() - now.getTime() > 0 ? true : false;
   }
 }

@@ -53,13 +53,17 @@ export class InputFingerComponent implements OnInit, OnDestroy {
           if (this.fpResponse.quality > 0) {
             this.isScanning = true;
           }
-          if (this.fpResponse.verifyResponse != null && this.hasIcaoResponse == false) {
+          if (
+            this.fpResponse.verifyResponse != null &&
+            this.hasIcaoResponse == false
+          ) {
             this.isScanning = false;
-            if (
-              this.fpResponse.verifyResponse.success
-            ) {
+            if (this.fpResponse.verifyResponse.success) {
               this.hasIcaoResponse = true;
-              if (this.fpResponse.icaoResponse.success && this.fpResponse.icaoResponse.data.dg13) {
+              if (
+                this.fpResponse.icaoResponse.success &&
+                this.fpResponse.icaoResponse.data.dg13
+              ) {
                 console.log(this.fpResponse);
                 this.fpResponse.image =
                   'data:image/png;base64,' + this.fpResponse.image;
@@ -69,44 +73,44 @@ export class InputFingerComponent implements OnInit, OnDestroy {
 
                 this.mappingData();
                 this.aioSvc.next();
-              }
-              else {
-                this.aioSvc.alertWithGoHome(
-                  `Đọc thông tin không thành công`
-                );
+              } else {
+                this.aioSvc.alertWithGoHome(`Đọc thông tin không thành công`);
               }
             }
             // Lỗi FINGERPRINT READER CANNOT OPENED - do không nhận được thiết bị đọc CCCD chip
-            else if (this.fpResponse.verifyResponse.code === "218") {
-              this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này <br> do không nhận được thiết bị đọc CCCD chip`);
-            }
-            else {
+            else if (this.fpResponse.verifyResponse.code === '218') {
+              this.aioSvc.alertWithGoHome(
+                `Dịch vụ không thể thực hiện lúc này <br> do không nhận được thiết bị đọc CCCD chip`
+              );
+            } else {
               if (this.aioSvc.fpAttemp == 2) {
-
                 this.aioSvc.alertWithGoHome(
                   `Quý khách đã xác thực thất bại <br>quá số lần quy định`
                 );
-
               } else {
-                this.aioSvc.alertWithAction(`Xác thực vân tay không thành công`, ``, `Thoát`, `Thử lại`).subscribe((res: Alert) => {
-                  if (res) {
-                    if (res.action === "pri") {
-                      this.aioSvc.fpAttemp++;
-                      this.recallMkFingerPrint();
-                    }
-                    else {
+                this.aioSvc
+                  .alertWithAction(
+                    `Xác thực vân tay không thành công`,
+                    ``,
+                    `Thoát`,
+                    `Thử lại`
+                  )
+                  .subscribe((res: Alert) => {
+                    if (res) {
+                      if (res.action === 'pri') {
+                        this.aioSvc.fpAttemp++;
+                        this.recallMkFingerPrint();
+                      } else {
+                        this.aioSvc.release();
+                      }
+                    } else {
                       this.aioSvc.release();
                     }
-                  }
-                  else {
-                    this.aioSvc.release();
-                  }
-                })
+                  });
               }
             }
           }
-        }
-        else {
+        } else {
           this.aioSvc.alertWithGoHome(`Dịch vụ không thể thực hiện lúc này`);
         }
       },
@@ -119,33 +123,25 @@ export class InputFingerComponent implements OnInit, OnDestroy {
 
   mappingData() {
     if (this.fpResponse.icaoResponse.data.dg13) {
-      if (
-        this.checkDateOfExpiry(
-          this.fpResponse.icaoResponse.data.dg13.dateOfExpiry
-        )
-      ) {
-        let customerInfo = new CustomerInfo();
-        let dg13 = this.fpResponse.icaoResponse.data.dg13;
+      let customerInfo = new CustomerInfo();
+      let dg13 = this.fpResponse.icaoResponse.data.dg13;
 
-        customerInfo.address = dg13.residenceAddress;
-        customerInfo.dob = dg13.dateOfBirth;
-        customerInfo.gender = dg13.gender;
-        customerInfo.customerID = dg13.idCardNo;
-        customerInfo.customerIDOld = dg13.oldIdCardNumber;
-        customerInfo.nationality = dg13.nationality;
-        customerInfo.towncountry = dg13.placeOfOrigin;
-        customerInfo.fullName = dg13.name;
-        customerInfo.expireDate = dg13.dateOfExpiry;
-        customerInfo.issueDate = dg13.dateOfIssuance;
-        customerInfo.issuePlace = 'CTCCSQLHCVTTXH';
-        customerInfo.customerType = '1'; // 1: CCCD/CMND - 2: Passport
+      customerInfo.address = dg13.residenceAddress;
+      customerInfo.dob = dg13.dateOfBirth;
+      customerInfo.gender = dg13.gender;
+      customerInfo.customerID = dg13.idCardNo;
+      customerInfo.customerIDOld = dg13.oldIdCardNumber;
+      customerInfo.nationality = dg13.nationality;
+      customerInfo.towncountry = dg13.placeOfOrigin;
+      customerInfo.fullName = dg13.name;
+      customerInfo.expireDate = dg13.dateOfExpiry;
+      customerInfo.issueDate = dg13.dateOfIssuance;
+      customerInfo.issuePlace = 'CTCCSQLHCVTTXH';
+      customerInfo.customerType = '1'; // 1: CCCD/CMND - 2: Passport
 
-        this.aioSvc.customerInfo = customerInfo;
+      this.aioSvc.customerInfo = customerInfo;
 
-        console.log(this.aioSvc.customerInfo);
-      } else {
-        this.aioSvc.alertWithGoHome(`CCCD của Quý khách đã hết hạn`);
-      }
+      console.log(this.aioSvc.customerInfo);
     } else {
       this.aioSvc.alertWithGoHome(`Đọc thông tin không thành công`);
     }

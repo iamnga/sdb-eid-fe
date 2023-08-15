@@ -1,0 +1,18 @@
+<div class="container mt-4">
+  <h1>Xin quyền truy cập Camera</h1>
+  <button class="btn btn-primary my-4" (click)="requestCameraAccess()">
+    Xin quyền truy cập Camera
+  </button>
+  <div>
+    <select
+      class="custom-select w-25"
+      *ngIf="cameras.length > 0"
+      (change)="selectCamera($event)"
+    >
+      <option *ngFor="let camera of cameras" [value]="camera.deviceId">
+        {{ camera.label }}
+      </option>
+    </select>
+  </div>
+  <video *ngIf="cameraStream" class="mt-3" autoplay></video>
+</div>

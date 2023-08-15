@@ -2,57 +2,83 @@
 <section>
   <div class="container">
     <div class="text-center">
-      <h4 class="mb-4 font-weight-bold text-sacom-pri">Xác nhận thông tin cập nhật</h4>
+      <h4 class="mb-4 font-weight-bold text-sacom-pri">
+        Xác nhận thông tin cập nhật
+      </h4>
     </div>
     <div class="row p-4 bg-white rounded border">
       <div class="col-8">
         <table class="w-100">
           <tr>
             <td class="w-50">
-              <h5 class="font-weight-bold text-sacom-pri">Thông tin hiện tại</h5>
+              <h5 class="font-weight-bold text-sacom-pri">
+                Thông tin hiện tại
+              </h5>
             </td>
             <td class="font-weight-bold text-sacom-pri">
-              <h5 class="font-weight-bold text-sacom-pri">Thông tin điều chỉnh</h5>
+              <h5 class="font-weight-bold text-sacom-pri">
+                Thông tin điều chỉnh
+              </h5>
             </td>
           </tr>
           <tr>
             <td>
               <h6 class="font-weight-light">Số CMNN</h6>
-              <h5 class="font-weight-bold">231053235256</h5>
+              <h5 class="font-weight-bold">
+                {{ newCustomerInfo.customerIDOld }}
+              </h5>
             </td>
             <td>
               <h6 class="font-weight-light">Số CMNN</h6>
-              <h5 class="font-weight-bold">231053235256</h5>
+              <h5 class="font-weight-bold">
+                {{ newCustomerInfo.customerID }}
+              </h5>
             </td>
           </tr>
           <tr>
             <td>
               <h6 class="font-weight-light">Ngày cấp</h6>
-              <h5 class="font-weight-bold">02/02/2012</h5>
+              <h5 class="font-weight-bold">
+                {{ currentCustomerInfo.customerInfo.issueDate }}
+              </h5>
             </td>
             <td>
               <h6 class="font-weight-light">Ngày cấp</h6>
-              <h5 class="font-weight-bold">06/05/2022</h5>
+              <h5 class="font-weight-bold">
+                {{ newCustomerInfo.issueDate }}
+              </h5>
             </td>
           </tr>
           <tr>
             <td>
               <h6 class="font-weight-light">Nơi cấp</h6>
-              <h5 class="font-weight-bold">CCS QLHC về TTXH</h5>
+              <h5 class="font-weight-bold">
+                {{ currentCustomerInfo.customerInfo.issuePlace }}
+              </h5>
             </td>
             <td>
               <h6 class="font-weight-light">Nơi cấp</h6>
-              <h5 class="font-weight-bold">CCS QLHC về TTXH</h5>
+              <h5 class="font-weight-bold">
+                {{ newCustomerInfo.issuePlace }}
+              </h5>
             </td>
           </tr>
           <tr>
             <td>
               <h6 class="font-weight-light">Địa chỉ thường trú</h6>
-              <h5 class="font-weight-bold">268 Nam Kỳ Khởi Nghĩa, P.8, Q.3, TP.HCM</h5>
+              <h5 class="font-weight-bold">
+                {{
+                  concatAddress(
+                    currentCustomerInfo.customerInfo.residentialAddress
+                  )
+                }}
+              </h5>
             </td>
             <td>
               <h6 class="font-weight-light">Địa chỉ thường trú</h6>
-              <h5 class="font-weight-bold">268 Nam Kỳ Khởi Nghĩa, P.8, Q.3, TP.HCM</h5>
+              <h5 class="font-weight-bold">
+                {{ newCustomerInfo.address }}
+              </h5>
             </td>
           </tr>
         </table>
@@ -60,9 +86,9 @@
       <div class="col-4 rounded border p-3">
         <div class="text-center">
           <h6 class="font-weight-light">Căn cước công dân</h6>
-          <h5 class="font-weight-bold">Phạm Đào Quỳnh Hương</h5>
-          <img src="assets/all-in-one/shared/img/front.jpg" alt="" class="rounded mt-2">
-          <img src="assets/all-in-one/shared/img/front.jpg" alt="" class="rounded mt-3">
+          <h5 class="font-weight-bold">{{ newCustomerInfo.fullName }}</h5>
+          <img [src]="aioSvc.frontCardId" alt="" class="rounded mt-2" />
+          <img [src]="aioSvc.backCardId" alt="" class="rounded mt-3" />
         </div>
       </div>
     </div>
@@ -73,99 +99,3 @@
     </div>
   </div>
 </section>
-<!-- <section>
-  <div class="container">
-    <div class="text-center mb-4">
-      <h3 class="font-weight-bold mb-2">
-        Xin chào,
-        <span class="text-sacom">{{ aioSvc.customerInfo.fullName }}</span>
-      </h3>
-      Quý khách vui lòng kiểm tra lại thông tin
-    </div>
-    <div class="row p-3 bg-white box">
-      <div class="col-6 left">
-        <div>
-          <table>
-            <tr>
-              <td colspan="2">
-                <h5 class="font-weight-bold m-0">Thông tin hiện tại</h5>
-              </td>
-            </tr>
-            <tr>
-              <td>Số CCCD</td>
-              <td class="font-weight-bold">
-                {{ currentDocInfo.customerID }}
-                <ng-container *ngIf="!currentDocInfo.customerID">
-                  <i class="fas fa-spinner fa-pulse"></i>
-                </ng-container>
-              </td>
-            </tr>
-            <tr>
-              <td>Ngày cấp</td>
-              <td class="font-weight-bold">
-                {{ currentDocInfo.issueDate }}
-                <ng-container *ngIf="!currentDocInfo.issueDate">
-                  <i class="fas fa-spinner fa-pulse"></i>
-                </ng-container>
-              </td>
-            </tr>
-            <tr>
-              <td>Nơi cấp</td>
-              <td class="font-weight-bold">
-                {{ currentDocInfo.issuePlace }}
-                <ng-container *ngIf="!currentDocInfo.issuePlace">
-                  <i class="fas fa-spinner fa-pulse"></i>
-                </ng-container>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 35%;">Địa chỉ thường trú</td>
-              <td class="font-weight-bold">
-                {{ currentDocInfo.address }}
-                <ng-container *ngIf="!currentDocInfo.address">
-                  <i class="fas fa-spinner fa-pulse"></i>
-                </ng-container>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-      <div class="col-6">
-        <div>
-          <table>
-            <tr>
-              <td colspan="2">
-                <h5 class="font-weight-bold m-0">Thông tin điều chỉnh</h5>
-              </td>
-            </tr>
-            <tr>
-              <td>Số CCCD</td>
-              <td class="font-weight-bold">
-                {{ aioSvc.customerInfo.customerID }}
-              </td>
-            </tr>
-            <tr>
-              <td>Ngày cấp</td>
-              <td class="font-weight-bold">
-                {{ aioSvc.customerInfo.issueDate }}
-              </td>
-            </tr>
-            <tr>
-              <td>Nơi cấp</td>
-              <td class="font-weight-bold">CTCCSQLHCVTTXH</td>
-            </tr>
-            <tr>
-              <td style="width: 35%;">Địa chỉ thường trú</td>
-              <td class="font-weight-bold">
-                {{ aioSvc.customerInfo.address }}
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div class="text-center pt-5">
-      <button class="btn-next" (click)="confirm()">Xác nhận</button>
-    </div>
-  </div>
-</section> -->

@@ -12,7 +12,7 @@ export class AlertComponent implements OnInit {
   template = Template;
   countDownInterval: any;
   countDownTime = 30;
-
+  pdfSrc = "../../../../../assets/all-in-one/shared/document/OpenAccount_TermsAndConditions.pdf";
   constructor(
     public dialogRef: MatDialogRef<AlertComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Alert,

@@ -14,5 +14,6 @@ export enum Template {
   FingerPrintFailed,
   UpdateCardId,
   GoHome,
-  HasAction
+  HasAction,
+  TermsAndConditions
 }

@@ -45,15 +45,26 @@
 }
 
 .countdown-text {
-  display: table-cell;
-  vertical-align: middle;
-  font-size: 7rem;
-  color: rgb(147, 171, 245);
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  color: white;
+  font-weight: bold;
+}
+
+.count-down {
+  position: absolute;
+  max-width: 60px;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .video-container {
   display: inline-block;
-  border: 1px solid #AABBCC;
+  border: 1px solid #aabbcc;
   padding: 10px;
   background: white;
   border-radius: 20px;
@@ -85,12 +96,16 @@ video {
   z-index: 100;
 }
 
-
-
 .img-face {
   border-radius: 10px;
   max-height: 280px;
   transform: scaleX(-1);
+}
+
+.overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }
 
 .btn-next,

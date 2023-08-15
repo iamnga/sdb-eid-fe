@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Service, ServiceStep } from 'src/app/models/enum';
 import { AioService } from 'src/app/services/all-in-one/aio.service';
 import { DashBoardService } from 'src/app/services/all-in-one/dash-board.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dash-board',
@@ -12,18 +11,12 @@ import { environment } from 'src/environments/environment';
 })
 export class DashBoardComponent implements OnInit, AfterViewInit {
   service = Service;
-  constructor(
-    public aioSvc: AioService,
-    private dbSvc: DashBoardService,
-    private router: Router
-  ) {
+  constructor(public aioSvc: AioService, private dbSvc: DashBoardService) {
     aioSvc.currentStep = ServiceStep.DashBoard;
     aioSvc.isProcessing = true;
   }
 
-  ngOnInit(): void {
-    // this.aioSvc.testHS()
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.aioSvc.isProcessing = false;
@@ -39,7 +32,7 @@ export class DashBoardComponent implements OnInit, AfterViewInit {
           console.log(result);
           if (result.respCode != '00') {
             this.aioSvc.isProcessing = false;
-            this.aioSvc.alertWithGoHome();
+            this.aioSvc.alert('Dịch vụ không thể thực hiện lúc này');
           } else {
             this.aioSvc.isProcessing = false;
             this.aioSvc.sessionID = result.data.sessionId;
@@ -47,16 +40,15 @@ export class DashBoardComponent implements OnInit, AfterViewInit {
             this.aioSvc.next();
           }
         } else {
-          this.aioSvc.alertWithGoHome();
+          this.aioSvc.alert('Dịch vụ không thể thực hiện lúc này');
           this.aioSvc.isProcessing = false;
         }
       },
       (err: any) => {
         this.aioSvc.isProcessing = false;
-        this.aioSvc.alertWithGoHome();
+        this.aioSvc.alert('Dịch vụ không thể thực hiện lúc này');
       }
     );
-
   }
 
   slides = [
@@ -65,7 +57,7 @@ export class DashBoardComponent implements OnInit, AfterViewInit {
     },
     {
       img: 'assets/all-in-one/shared/img/banner_aio_2.png',
-    }
+    },
   ];
 
   slideConfig = {

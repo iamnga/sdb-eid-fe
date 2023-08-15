@@ -4,7 +4,9 @@
     <div class="row">
       <div class="col-12 text-center">
         <ng-container *ngIf="!captured">
-          <h4 class="text-sacom-pri font-weight-bold">Camera đang chụp ảnh...</h4>
+          <h4 class="text-sacom-pri font-weight-bold">
+            Camera đang chụp ảnh...
+          </h4>
           <h6>Quý khách vui lòng không di chuyển</h6>
         </ng-container>
         <ng-container *ngIf="captured">
@@ -15,19 +17,48 @@
     </div>
     <div class="row mt-3">
       <div class="col-12 text-center">
-        <div class="video-container">
-          <video #video [width]="WIDTH" [height]="HEIGHT" autoplay muted [hidden]="captured"></video>
+        <div class="video-container position-relative">
+          <video
+            #video
+            [width]="WIDTH"
+            [height]="HEIGHT"
+            autoplay
+            muted
+            [hidden]="captured"
+          ></video>
           <div #canvas [hidden]></div>
-          <div style="transform: scaleX(-1);">
-            <img *ngIf="captured" class="img-face animate__animated animate__pulse" [src]="captured" alt="">
+          <div style="transform: scaleX(-1)">
+            <img
+              *ngIf="captured"
+              class="img-face animate__animated animate__pulse"
+              [src]="captured"
+              alt=""
+            />
+          </div>
+          <div class="overlay">
+            <img
+              *ngIf="!captured"
+              class="img-face"
+              src="assets/all-in-one/shared/img/capture_face_overlay.png"
+              alt=""
+            />
+          </div>
+          <div class="count-down" *ngIf="!endCountDown && isReadyDetect">
+            <ng-lottie [options]="countDown"></ng-lottie>
+          </div>
+          <div class="countdown-text" *ngIf="!endCountDown && isReadyDetect">
+            {{ countDownTime }}
           </div>
         </div>
       </div>
     </div>
     <div class="row mt-4" *ngIf="!captured">
       <div class="col-12 text-center">
-        <img class="animate__animated animate__flipInX" src="assets/all-in-one/shared/img/capture_face_guide.svg"
-          alt="">
+        <img
+          class="animate__animated animate__flipInX"
+          src="assets/all-in-one/shared/img/capture_face_guide.svg"
+          alt=""
+        />
       </div>
     </div>
     <div class="row mt-4 animate__animated animate__flipInX" *ngIf="captured">

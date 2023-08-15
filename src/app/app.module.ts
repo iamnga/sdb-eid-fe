@@ -51,14 +51,6 @@ import { InputMobileNumberComponent } from './all-in-one/shared/dialog/input-mob
 import { RecheckInfoComponent } from './all-in-one/update-card-id/recheck-info/recheck-info.component';
 import { ProcessingComponent } from './all-in-one/shared/processing/processing.component';
 import { UpdateSuccessComponent } from './all-in-one/update-card-id/update-success/update-success.component';
-import {
-  FontAwesomeModule,
-  FaIconLibrary,
-} from '@fortawesome/angular-fontawesome';
-import {
-  faPhoneSquare
-} from '@fortawesome/free-solid-svg-icons';
-
 import { UserIdleModule } from 'angular-user-idle';
 import { InputSurveyComponent } from './all-in-one/shared/dialog/input-survey/input-survey.component';
 import { SurveyComponent } from './all-in-one/shared/survey/survey.component';
@@ -76,6 +68,8 @@ import { FooterComponent } from './all-in-one/shared/footer/footer.component';
 import { HandleSmartAuthenComponent } from './all-in-one/shared/handle-smart-authen/handle-smart-authen.component';
 import { TestAPIComponent } from './all-in-one/shared/testAPI/testAPI';
 import { NotFoundComponent } from './all-in-one/shared/404/404.component';
+import { AllowCameraComponent } from './allow-camera/allow-camera.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 export function playerFactory() {
   return player;
@@ -127,8 +121,8 @@ export function playerFactory() {
     FooterComponent,
     HandleSmartAuthenComponent,
     TestAPIComponent,
-    NotFoundComponent
-    
+    NotFoundComponent,
+    AllowCameraComponent,
   ],
   imports: [
     SlickCarouselModule,
@@ -149,8 +143,8 @@ export function playerFactory() {
     LottieModule.forRoot({ player: playerFactory }),
     ImageCropperModule,
     ModalModule.forRoot(),
-    FontAwesomeModule,
-    UserIdleModule.forRoot({idle: 60, timeout: 0, ping: undefined})
+    UserIdleModule.forRoot({ idle: 60, timeout: 0, ping: undefined }),
+    PdfViewerModule,
   ],
   providers: [
     WebsocketService,
@@ -162,9 +156,5 @@ export function playerFactory() {
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(library: FaIconLibrary) {
-    library.addIcons(
-      faPhoneSquare
-    );
-  }
+  constructor() {}
 }

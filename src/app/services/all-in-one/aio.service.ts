@@ -8,6 +8,7 @@ import {
   CheckCustomerByIdNoResponseData,
   CheckCustomerRequestData,
   CheckCustomerSDBRequestData,
+  CheckCustomerSDBResponseData,
   CustomerEnroll,
   CustomerInfo,
   GetAuthMethodRequestData,
@@ -50,6 +51,7 @@ export class AioService {
   fpResponse = new FingerResponse();
   openAccountResponseData = new OpenAccountResponseData();
   checkCustomerByIdNoResponseData = new CheckCustomerByIdNoResponseData();
+  checkCustomerSDBResponseData = new CheckCustomerSDBResponseData();
   fpAttemp = 0;
   faceCaptured = '';
   frontCardId = '';
@@ -63,7 +65,7 @@ export class AioService {
   headerDict = {
     'Content-Type': 'application/json;',
     Accept: '*/*',
-    'Access-Control-Allow-Origin': '*'
+    'Access-Control-Allow-Origin': '*',
   };
 
   constructor(
@@ -72,41 +74,45 @@ export class AioService {
     @Inject('BASE_URL') private baseUrl: string,
     public dialog: MatDialog,
     private userIdle: UserIdleService
-  ) { }
-
+  ) {}
 
   runIdle() {
-    console.log("run idle")
+    console.log('run idle');
     this.userIdle.startWatching();
 
-    this.timerStartSubscription = this.userIdle.onTimerStart().subscribe((countdown) => {
-      console.log(`Idle count: ${countdown}`);
-      if (countdown == 1) {
-        this.alertWithAction(`Quý đã không tương tác với thiết bị trong thời gian quá lâu <br> Quý khách có muốn tiếp tục giao dịch không?`, ``, `Hủy`, 'Tiếp tục', 15).subscribe((res: Alert) => {
-          console.log(res);
-          if (res) {
-            if (res.action === "pri") {
-              this.userIdle.stopTimer();
-            }
-            else {
+    this.timerStartSubscription = this.userIdle
+      .onTimerStart()
+      .subscribe((countdown) => {
+        console.log(`Idle count: ${countdown}`);
+        if (countdown == 1) {
+          this.alertWithAction(
+            `Quý đã không tương tác với thiết bị trong thời gian quá lâu <br> Quý khách có muốn tiếp tục giao dịch không?`,
+            ``,
+            `Hủy`,
+            'Tiếp tục',
+            15
+          ).subscribe((res: Alert) => {
+            console.log(res);
+            if (res) {
+              if (res.action === 'pri') {
+                this.userIdle.stopTimer();
+              } else {
+                this.release();
+              }
+            } else {
               this.release();
             }
-          } else {
-            this.release();
-          }
-        })
-      }
-    });
+          });
+        }
+      });
   }
 
   stopWatching() {
     this.userIdle.stopWatching();
-    if (this.timerStartSubscription)
-      this.timerStartSubscription.unsubscribe();
+    if (this.timerStartSubscription) this.timerStartSubscription.unsubscribe();
   }
 
   release() {
-
     this.stopWatching();
     this.dialog.closeAll();
     this.isProcessing = false;
@@ -121,6 +127,7 @@ export class AioService {
     this.openAccountResponseData = new OpenAccountResponseData();
     this.checkCustomerByIdNoResponseData =
       new CheckCustomerByIdNoResponseData();
+    this.checkCustomerSDBResponseData = new CheckCustomerSDBResponseData();
     this.frontCardId = '';
     this.backCardId = '';
     this.faceCaptured = '';
@@ -139,7 +146,7 @@ export class AioService {
   }
 
   testProxy(route: string): Observable<any> {
-    return this.http.get(`api/${route}`)
+    return this.http.get(`api/${route}`);
   }
 
   getTestCase() {
@@ -178,13 +185,8 @@ export class AioService {
     });
   }
 
-  uploadImage(
-    img: string,
-    type: string
-  ) {
-    let req = this.newRequest(
-      { imageBas64: img, imageType: type }
-    );
+  uploadImage(img: string, type: string) {
+    let req = this.newRequest({ imageBas64: img, imageType: type });
 
     return this.postAsync('upload-image', req);
   }
@@ -289,7 +291,26 @@ export class AioService {
     return this.postAsync('find-address-by-text', req);
   }
 
-  alertWithGoHome(title: string = 'Dịch vụ không thể thực hiện lúc này', content: string = '', countDownTime: number = 30) {
+  openTermsAndConditionsDialog() {
+    let data = new Alert();
+
+    data.template = Template.TermsAndConditions;
+    data.title = 'Điều khoản điều kiện mở và sử dụng tài khoản';
+
+    const dialogRef = this.dialog.open(AlertComponent, {
+      data: data,
+      autoFocus: false,
+      panelClass: 'aio-alert',
+    });
+
+    dialogRef.afterClosed().subscribe((result: Alert) => {});
+  }
+
+  alertWithGoHome(
+    title: string = 'Dịch vụ không thể thực hiện lúc này',
+    content: string = '',
+    countDownTime: number = 30
+  ) {
     this.isProcessing = false;
     let data = new Alert();
 
@@ -301,7 +322,7 @@ export class AioService {
     const dialogRef = this.dialog.open(AlertComponent, {
       data: data,
       autoFocus: false,
-      panelClass: 'aio-alert'
+      panelClass: 'aio-alert',
     });
 
     dialogRef.afterClosed().subscribe((result: Alert) => {
@@ -309,7 +330,13 @@ export class AioService {
     });
   }
 
-  alertWithAction(title: string = '', content: string = '', btnSecText: string = '', btnPriText: string = '', countDownTime: number = 30) {
+  alertWithAction(
+    title: string = '',
+    content: string = '',
+    btnSecText: string = '',
+    btnPriText: string = '',
+    countDownTime: number = 30
+  ) {
     this.isProcessing = false;
     let data = new Alert();
 
@@ -323,7 +350,7 @@ export class AioService {
     const dialogRef = this.dialog.open(AlertComponent, {
       data: data,
       autoFocus: false,
-      panelClass: 'aio-alert'
+      panelClass: 'aio-alert',
     });
 
     return dialogRef.afterClosed();
@@ -339,7 +366,7 @@ export class AioService {
     const dialogRef = this.dialog.open(AlertComponent, {
       data: data,
       autoFocus: false,
-      panelClass: 'aio-alert'
+      panelClass: 'aio-alert',
     });
 
     dialogRef.afterClosed().subscribe((result: Alert) => {
@@ -452,35 +479,31 @@ export class AioService {
     if (this.currentSerice == Service.UpdateCardId) {
       switch (this.currentStep) {
         case ServiceStep.DashBoard: {
-          if (environment.production) {
-            //this.router.navigate(['/aio/shared/capture-guide']);
-            this.router.navigate(['/aio/update-card-id/recheck-info']);
-          } else {
-            //this.router.navigate(['/aio/shared/verify-otp']);
-            this.router.navigate(['/aio/update-card-id/recheck-info']);
-          }
-          break;
-        }
-        case ServiceStep.CaptureGuide: {
-          this.router.navigate(['/aio/shared/capture-face']);
-          break;
-        }
-        case ServiceStep.CaptureFace: {
           this.router.navigate(['/aio/shared/input-finger']);
           break;
         }
         case ServiceStep.InputFinger: {
-          this.router.navigate(['/aio/shared/collect-card-id']);
+          this.router.navigate(['/aio/shared/check-customer-info']);
           break;
         }
-        case ServiceStep.CollectCardId: {
+        case ServiceStep.CheckCustomerInfo: {
+          this.router.navigate(['/aio/shared/capture-card-id']);
+          break;
+        }
+        case ServiceStep.CaptureCardId: {
+          this.router.navigate(['/aio/shared/capture-face']);
+          break;
+        }
+        case ServiceStep.CaptureFace: {
           this.router.navigate(['/aio/update-card-id/recheck-info']);
           break;
         }
-
         case ServiceStep.RecheckInfo: {
-          this.router.navigate(['/aio/shared/verify-otp']);
-          //this.router.navigate(['/aio/update-card-id']);
+          this.router.navigate(['/aio/shared/handle-smart-authen']);
+          break;
+        }
+        case ServiceStep.HandleSmartAuthen: {
+          this.router.navigate(['/aio/shared/verify-authen']);
           break;
         }
         case ServiceStep.VerifyAuthen: {
@@ -508,7 +531,7 @@ export class AioService {
     bankData.bankAppId = 1;
     bankData.bankTransactionId = new Date().getTime().toString();
     return this.http.post('http://localhost:7171/moc/faceicao', {
-      image: this.faceCaptured.replace(/^data.*base64,/, ""),
+      image: this.faceCaptured.replace(/^data.*base64,/, ''),
       bankData: bankData,
     });
   }

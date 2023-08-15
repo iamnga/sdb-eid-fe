@@ -33,6 +33,7 @@ import { InputPhoneNumberComponent } from './all-in-one/shared/input-phone-numbe
 import { HandleSmartAuthenComponent } from './all-in-one/shared/handle-smart-authen/handle-smart-authen.component';
 import { TestAPIComponent } from './all-in-one/shared/testAPI/testAPI';
 import { NotFoundComponent } from './all-in-one/shared/404/404.component';
+import { AllowCameraComponent } from './allow-camera/allow-camera.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -171,6 +172,10 @@ const routes: Routes = [
       },
       { path: '**', redirectTo: 'dash-board' },
     ],
+  },
+  {
+    path: 'allow-camera',
+    component: AllowCameraComponent,
   },
   { path: '**', component: NotFoundComponent },
 ];

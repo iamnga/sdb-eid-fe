@@ -81,7 +81,7 @@ export class VerifyOtpComponent implements OnInit {
       data.authType = this.currentAuthType;
       data.customerType = '1';
       data.mobileNo = this.aioSvc.customerInfo.mobileNo;
-      data.channel = 'DigiZone';
+      data.channel = 'AIO';
       data.smsContent = 'Request OTP';
 
       this.aioSvc.requestOtp(data).subscribe(

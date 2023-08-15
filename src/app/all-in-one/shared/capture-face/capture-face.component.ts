@@ -21,15 +21,17 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
     path: 'assets/all-in-one/shared/img/face-load.json',
   };
   isUnderstood = true;
-  // WIDTH = 373.333;
-  // HEIGHT = 280;
+
   WIDTH = 640;
   HEIGHT = 480;
+
   @ViewChild('video', { static: true }) public video: ElementRef;
   @ViewChild('canvas', { static: true }) public canvasRef: ElementRef;
-  constructor(private elRef: ElementRef, private aioSvc: AioService) {
-    aioSvc.currentStep = ServiceStep.CaptureFace;
-  }
+
+  countDown: AnimationOptions = {
+    path: 'assets/all-in-one/shared/img/countdown.json',
+  };
+
   resultDetection: any;
   resizedDetections: any;
   canvas: any;
@@ -45,8 +47,12 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
 
+  constructor(private elRef: ElementRef, private aioSvc: AioService) {
+    aioSvc.currentStep = ServiceStep.CaptureFace;
+  }
+
   ngOnInit() {
-    // this.aioSvc.isProcessing = true;
+    this.aioSvc.isProcessing = true;
     this.aioSvc.faceCaptured = '';
     this.startCapture();
   }
@@ -78,20 +84,21 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
 
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
-      console.log(devices)
-      const videoDevices = devices.filter(x => x.kind === "videoinput");
+      console.log(devices);
+      const videoDevices = devices.filter((x) => x.kind === 'videoinput');
       navigator.mediaDevices
-        .getUserMedia({ video: { deviceId: videoDevices[1].deviceId }, audio: false })
+        .getUserMedia({
+          video: { deviceId: videoDevices[1].deviceId },
+          audio: false,
+        })
         .then((stream) => {
           this.video.nativeElement.srcObject = stream;
         })
         .catch((err) => console.error(err));
-
     } catch (error) {
       console.error('Error listing webcams:', error);
     }
     await this.detect_Faces();
-
   }
 
   async detect_Faces() {
@@ -139,10 +146,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
             new faceapi.Rect(120, 0, 400, this.HEIGHT),
           ]);
 
-          console.log(
-            'canvasFaceBox',
-            canvasFaceBox[0].toDataURL('image/png')
-          );
+          console.log('canvasFaceBox', canvasFaceBox[0].toDataURL('image/png'));
 
           this.aioSvc.faceCaptured = canvasFaceBox[0].toDataURL('image/png');
 
@@ -150,10 +154,7 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
             new faceapi.Rect(0, 0, 640, 480),
           ]);
 
-          console.log(
-            'canvasFullBox',
-            canvasFullBox[0].toDataURL('image/png')
-          );
+          console.log('canvasFullBox', canvasFullBox[0].toDataURL('image/png'));
 
           this.captured = canvasFullBox[0].toDataURL('image/png');
 
@@ -207,82 +208,74 @@ export class CaptureFaceComponent implements OnInit, OnDestroy {
     this.compareFace();
   }
 
-
   compareFace() {
-    this.aioSvc
-      .uploadImage(this.aioSvc.frontCardId, 'front')
-      .subscribe(
-        (res: any) => {
-          if (res.respCode == '00') {
-            console.log('Upload front', res);
+    this.aioSvc.uploadImage(this.aioSvc.frontCardId, 'front').subscribe(
+      (res: any) => {
+        if (res.respCode == '00') {
+          console.log('Upload front', res);
 
-            this.aioSvc
-              .uploadImage(
-                this.aioSvc.backCardId,
-                'back'
-              )
-              .subscribe(
-                (res: any) => {
-                  if (res.respCode == '00') {
-                    console.log('Upload back', res);
-                    this.aioSvc.uploadImage(this.aioSvc.faceCaptured, 'face').subscribe(
-                      (res: any) => {
-                        if (res.respCode == '00') {
-                          console.log('Upload face', res);
-                          this.aioSvc.compareFace().subscribe(
-                            (res: any) => {
-                              console.log('compareFace', res);
-                              if (res.respCode == '00') {
-                                if (res.data.result == '1') {
-                                  if (
-                                    res.data.customerOCRInfo.customerID ==
-                                    this.aioSvc.customerInfo.customerID
-                                  ) {
-                                    this.aioSvc.next();
-                                  } else {
-                                    this.aioSvc.alertWithGoHome(`Số CCCD không trùng khớp`);
-                                  }
-                                  this.aioSvc.isProcessing = false;
+          this.aioSvc.uploadImage(this.aioSvc.backCardId, 'back').subscribe(
+            (res: any) => {
+              if (res.respCode == '00') {
+                console.log('Upload back', res);
+                this.aioSvc
+                  .uploadImage(this.aioSvc.faceCaptured, 'face')
+                  .subscribe(
+                    (res: any) => {
+                      if (res.respCode == '00') {
+                        console.log('Upload face', res);
+                        this.aioSvc.compareFace().subscribe(
+                          (res: any) => {
+                            console.log('compareFace', res);
+                            if (res.respCode == '00') {
+                              if (res.data.result == '1') {
+                                if (
+                                  res.data.customerOCRInfo.customerID ==
+                                  this.aioSvc.customerInfo.customerID
+                                ) {
+                                  this.aioSvc.next();
                                 } else {
-                                  this.aioSvc.alertWithGoHome();
+                                  this.aioSvc.alertWithGoHome(
+                                    `Số CCCD không trùng khớp`
+                                  );
                                 }
+                                this.aioSvc.isProcessing = false;
                               } else {
                                 this.aioSvc.alertWithGoHome();
                               }
-                            },
-                            (err) => {
+                            } else {
                               this.aioSvc.alertWithGoHome();
                             }
-                          );
-                        } else {
-                          this.aioSvc.alertWithGoHome();
-                        }
-                      },
-                      (err) => {
+                          },
+                          (err) => {
+                            this.aioSvc.alertWithGoHome();
+                          }
+                        );
+                      } else {
                         this.aioSvc.alertWithGoHome();
                       }
-                    );
-                  } else {
-                    this.aioSvc.isProcessing = false;
-                    return;
-                  }
-                },
-                (err) => {
-                  this.aioSvc.alertWithGoHome();
-                }
-              );
-          } else {
-            this.aioSvc.alertWithGoHome();
-          }
-        },
-        (err) => {
+                    },
+                    (err) => {
+                      this.aioSvc.alertWithGoHome();
+                    }
+                  );
+              } else {
+                this.aioSvc.isProcessing = false;
+                return;
+              }
+            },
+            (err) => {
+              this.aioSvc.alertWithGoHome();
+            }
+          );
+        } else {
           this.aioSvc.alertWithGoHome();
         }
-      );
-
-
-
-
+      },
+      (err) => {
+        this.aioSvc.alertWithGoHome();
+      }
+    );
   }
 
   async getBase64ImageFromUrl(imageUrl: any) {

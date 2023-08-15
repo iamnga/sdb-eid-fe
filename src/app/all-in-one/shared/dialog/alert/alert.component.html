@@ -10,11 +10,20 @@
 <!-- GoHome template: hiển thị tiêu đề thông báo và nút Về trang chủ -->
 <ng-container *ngIf="data.template == template.GoHome">
   <div class="text-center">
-    <div *ngIf="data.title" class="text-sacom-pri mt-3 title" [innerHTML]="data.title"></div>
-    <div *ngIf="data.content" class="mt-3 content" [innerHTML]="data.content"></div>
+    <div
+      *ngIf="data.title"
+      class="text-sacom-pri mt-3 title"
+      [innerHTML]="data.title"
+    ></div>
+    <div
+      *ngIf="data.content"
+      class="mt-3 content"
+      [innerHTML]="data.content"
+    ></div>
     <button class="btn-pri my-4" (click)="goHome()">Về trang chủ</button>
     <h6 *ngIf="data.countDownTime">
-      Tự động về trang chủ sau <span class="text-sacom-sec">{{data.countDownTime}}</span> giây
+      Tự động về trang chủ sau
+      <span class="text-sacom-sec">{{ data.countDownTime }}</span> giây
     </h6>
   </div>
 </ng-container>
@@ -23,62 +32,49 @@
 <!-- Action template -->
 <ng-container *ngIf="data.template == template.HasAction">
   <div class="mt-3 text-center">
-    <div *ngIf="data.title" class="text-sacom-pri mb-3 title" [innerHTML]="data.title"></div>
-    <div *ngIf="data.content" class="mb-3 content" [innerHTML]="data.content"></div>
+    <div
+      *ngIf="data.title"
+      class="text-sacom-pri mb-3 title"
+      [innerHTML]="data.title"
+    ></div>
+    <div
+      *ngIf="data.content"
+      class="mb-3 content"
+      [innerHTML]="data.content"
+    ></div>
     <div class="my-4">
-      <button class="btn-sec mx-2" (click)="action('sec')">{{data.btnSecText}}</button>
-      <button class="btn-pri mx-2" (click)="action('pri')">{{data.btnPriText}}</button>
+      <button class="btn-sec mx-2" (click)="action('sec')">
+        {{ data.btnSecText }}
+      </button>
+      <button class="btn-pri mx-2" (click)="action('pri')">
+        {{ data.btnPriText }}
+      </button>
     </div>
     <h6 *ngIf="data.countDownTime">
-      Tự động về trang chủ sau <span class="text-sacom-sec">{{data.countDownTime}}</span> giây
+      Tự động về trang chủ sau
+      <span class="text-sacom-sec">{{ data.countDownTime }}</span> giây
     </h6>
   </div>
 </ng-container>
 <!-- End Action template -->
 
-<ng-container *ngIf="data.template == template.ExistAccount">
-  <div class="text-right">
-    <mat-icon matSuffix (click)="dialogRef.close()">close</mat-icon>
-  </div>
-  <div class="text-center .exist-account">
-    <h3>Thông báo</h3>
-    <div class="py-4">
-      Tài khoản Quý khách chọn hiện đã có người sử dụng. <br />
-      Vui lòng chọn số Tài khoản khác
+<!-- T & C template -->
+<ng-container *ngIf="data.template == template.TermsAndConditions">
+  <div class="mt-3 text-center">
+    <div
+      *ngIf="data.title"
+      class="text-sacom-pri mb-3 title"
+      [innerHTML]="data.title"
+    ></div>
+    <div class="my-4 text-center">
+      <pdf-viewer
+        [src]="pdfSrc"
+        [render-text]="true"
+        [original-size]="false"
+        style="width: 500px; height: 500px; margin: 0px auto;"
+      ></pdf-viewer>
+      <button class="btn-pri mt-4" (click)="action('pri')">Đóng</button>
     </div>
-    <button class="btn-sec mx-2" (click)="action('back')">Trở về</button>
-    <button class="btn-pri mx-2" (click)="action('again')">
-      Nhập số khác
-    </button>
   </div>
 </ng-container>
-<ng-container *ngIf="data.template == template.FingerPrintFailed">
-  <div class="text-right">
-    <mat-icon matSuffix (click)="dialogRef.close()">close</mat-icon>
-  </div>
-  <div class="text-center .exist-account">
-    <h3>Thông báo</h3>
-    <div class="py-4">
-      Xác thực vân tay không thành công. <br />
-      Quý khách vui lòng thử lại
-    </div>
-    <button class="btn-sec mx-2" (click)="action('back')">Thoát</button>
-    <button class="btn-pri mx-2" (click)="action('again')">Thử lại</button>
-  </div>
-</ng-container>
-<ng-container *ngIf="data.template == template.UpdateCardId">
-  <div class="text-right">
-    <mat-icon matSuffix (click)="dialogRef.close()">close</mat-icon>
-  </div>
-  <div class="text-center .exist-account">
-    <h3>Thông báo</h3>
-    <div class="py-4">
-      Quý khách đang sử dụng CMND cũ. <br />
-      Vui lòng cập nhật từ CMND sang CCCD để tiếp tục thực hiện giao dịch.
-    </div>
-    <button class="btn-sec mx-2" (click)="action('back')">Thoát</button>
-    <button class="btn-pri mx-2" (click)="action('update')">
-      Cập nhật
-    </button>
-  </div>
-</ng-container>
+<!-- End T & C template -->

@@ -178,7 +178,7 @@ export class CustomerInfoFromCheckCustomerSDB {
   residentialAddress: AddressInfo;
 }
 
-export class CheckCustomerSDBResponsetData {
+export class CheckCustomerSDBResponseData {
   resultCode: string;
   customerInfo: CustomerInfoFromCheckCustomerSDB;
 }

@@ -8,7 +8,10 @@ import { Alert, Template } from 'src/app/models/alert';
 @Component({
   selector: 'app-account-and-alert',
   templateUrl: './account-and-alert.component.html',
-  styleUrls: ['./account-and-alert.component.css', '../../all-in-one.component.css'],
+  styleUrls: [
+    './account-and-alert.component.css',
+    '../../all-in-one.component.css',
+  ],
 })
 export class AccountAndAlertComponent {
   public accountType = AccountType;
@@ -23,10 +26,7 @@ export class AccountAndAlertComponent {
   tc = false;
   errMsg = '';
   err = false;
-  constructor(
-    public aioSvc: AioService,
-    public dialog: MatDialog,
-  ) {
+  constructor(public aioSvc: AioService, public dialog: MatDialog) {
     aioSvc.currentStep = ServiceStep.AccountAndAlert;
   }
 
@@ -58,6 +58,26 @@ export class AccountAndAlertComponent {
     console.log(this.currentAlertType);
   }
 
+  openTermsAndConditionsDialog() {
+    let data = new Alert();
+
+    data.template = Template.TermsAndConditions;
+    data.title = 'Điều khoản điều kiện mở và sử dụng tài khoản';
+
+    const dialogRef = this.dialog.open(AlertComponent, {
+      data: data,
+      autoFocus: false,
+      panelClass: 'aio-alert',
+    });
+
+    dialogRef.afterClosed().subscribe((result: Alert) => {
+      console.log(
+        '🚀 ~ file: account-and-alert.component.ts:75 ~ AccountAndAlertComponent ~ dialogRef.afterClosed ~ result:',
+        result
+      );
+    });
+  }
+
   confirm() {
     if (
       this.currentAccountType != this.accountType.Custom &&
@@ -81,12 +101,10 @@ export class AccountAndAlertComponent {
         this.customAccountTemp.length - 1
       );
       this.validateCustomAccount();
-    }
-    else if (key == 'reset') {
+    } else if (key == 'reset') {
       this.customAccountTemp = '';
       this.validateCustomAccount();
-    }
-    else {
+    } else {
       if (this.customAccountTemp.length >= 12) {
         return;
       } else {
@@ -107,27 +125,23 @@ export class AccountAndAlertComponent {
 
     // Độ dài từ 6 đến 12 chữ số
     if (numberLength < 6 || numberLength > 12) {
-      this.setErrMsg('Độ dài phải từ 6 đến 12 chữ số')
+      this.setErrMsg('Độ dài phải từ 6 đến 12 chữ số');
     }
-    else
-      // Không bắt đầu bằng số 7
-      if (this.customAccountTemp.startsWith('7')) {
-        this.setErrMsg('Không bắt đầu bằng số 7')
-      }
-      else
-        // Không bắt đầu bằng số 1 đến 6 nếu chuỗi số là 10 số
-        if (numberLength === 10 && /^[1-6]/.test(this.customAccountTemp)) {
-          this.setErrMsg('Không bắt đầu bằng số 1 đến 6 nếu số tài khoản là 10 số')
-        }
-        else
-          // Không bắt đầu bằng số 0 nếu chuỗi số là 12 số
-          if (numberLength === 12 && this.customAccountTemp.startsWith('0')) {
-            this.setErrMsg('Không bắt đầu bằng số 0 nếu số tài khoản là 12 số')
-          }
-          else {
-            // Các điều kiện khác thỏa mãn, trả về true
-            this.setErrMsg('');
-          }
+    // Không bắt đầu bằng số 7
+    else if (this.customAccountTemp.startsWith('7')) {
+      this.setErrMsg('Không bắt đầu bằng số 7');
+    }
+    // Không bắt đầu bằng số 1 đến 6 nếu chuỗi số là 10 số
+    else if (numberLength === 10 && /^[1-6]/.test(this.customAccountTemp)) {
+      this.setErrMsg('Không bắt đầu bằng số 1 đến 6 nếu số tài khoản là 10 số');
+    }
+    // Không bắt đầu bằng số 0 nếu chuỗi số là 12 số
+    else if (numberLength === 12 && this.customAccountTemp.startsWith('0')) {
+      this.setErrMsg('Không bắt đầu bằng số 0 nếu số tài khoản là 12 số');
+    } else {
+      // Các điều kiện khác thỏa mãn, trả về true
+      this.setErrMsg('');
+    }
   }
 
   verifyCustomAccount() {
@@ -208,5 +222,4 @@ export class AccountAndAlertComponent {
       console.log(result);
     });
   }
-
 }

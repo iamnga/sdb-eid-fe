@@ -92,7 +92,7 @@
       <div class="col-6 mt-3" (click)="selectAlertType(alertType.OnlySPay)">
         <div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="alertRadio" id="onlySPay">
+            <input [checked]="currentAlertType == alertType.OnlySPay" class="form-check-input" type="radio" name="alertRadio" id="onlySPay">
             <label class="form-check-label" for="onlySPay">
               Ứng dụng Sacombank Pay
             </label>
@@ -107,7 +107,7 @@
       <div class="col-6 mt-3" (click)="selectAlertType(alertType.SmsAndSPay)">
         <div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="alertRadio" id="smsAndSPay">
+            <input [checked]="currentAlertType == alertType.SmsAndSPay" class="form-check-input" type="radio" name="alertRadio" id="smsAndSPay">
             <label class="form-check-label" for="smsAndSPay">
               SMS và Sacombank Pay
             </label>
@@ -121,7 +121,7 @@
     </div>
     <div class="row pt-4 pb-3">
       <div class="col-12 text-center">
-        <mat-checkbox [color]="'primary'" class="example-margin" [(ngModel)]="tc">Tôi đã đọc và đồng ý với Điều
+        <mat-checkbox (click)="openTermsAndConditionsDialog()" [color]="'primary'" class="example-margin" [(ngModel)]="tc">Tôi đã đọc và đồng ý với Điều
           khoản và
           Điều kiện mở và sử dụng tài
           khoản của Sacombank</mat-checkbox>
